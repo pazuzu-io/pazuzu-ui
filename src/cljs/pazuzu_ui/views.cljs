@@ -4,6 +4,6 @@
 
 
 (defn root-component []
-  [:div
+  [:div#root
    [navbar]
    [active-page]])
