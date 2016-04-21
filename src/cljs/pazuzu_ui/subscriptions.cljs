@@ -4,3 +4,6 @@
 
 (register-sub :active-page
               (fn [db _] (reaction (:active-page @db))))
+
+(register-sub :registry
+              (fn [db _] (reaction (:registry @db))))

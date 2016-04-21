@@ -1,26 +1,36 @@
-.signal {
-  width: 30px;
-  height: 30px;
-  border-radius: 30px;
-  opacity: 0;
-  border: 5px solid #333;
-  margin: -15px 0 0 -15px;
-  top: 50%;
-  left: 50%;
-  position: absolute;
-  animation: pulsate 1s ease-out;
-  animation-iteration-count: infinite;
+#app {
+  height: 100%;
 }
-@keyframes pulsate {
-  0% {
-    transform: scale(0.1);
-    opacity: 0.0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1.2);
-    opacity: 0;
-  }
+#app .spinner {
+  height: 100%;
+}
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#page {
+  flex: 1;
+  display: flex;
+}
+#registry {
+  flex-grow: 1;
+}
+#features-pane {
+  display: flex;
+  flex-direction: column;
+}
+#features-pane .features-list {
+  flex: 1;
+  overflow-y: auto;
+  height: 0;
+}
+#features-pane .features-list .feature {
+  width: 100%;
+}
+#features-pane .features-list .feature.selected {
+  background-color: #e4e4e4;
+}
+.code textarea {
+  font-family: 'DejaVu Sans Mono', monospace;
 }
