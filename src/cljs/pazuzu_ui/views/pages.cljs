@@ -1,6 +1,8 @@
 (ns pazuzu-ui.views.pages
+  (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :refer [subscribe]]
-            [pazuzu-ui.views.registry :as registry]))
+            [pazuzu-ui.views.registry :as registry]
+            [taoensso.timbre :as log]))
 
 (defn welcome []
   [:div.ui.vertical.masthead.center.aligned.segment
@@ -19,7 +21,7 @@
    [:p "An evil ancient moster"]])
 
 (defn active-page []
-  (let [page (subscribe [:active-page])]
+  (let [page (subscribe [:ui-state :active-page])]
     (fn []
       [:div#page.ui.container
        (case @page

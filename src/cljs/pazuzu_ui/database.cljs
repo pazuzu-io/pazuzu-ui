@@ -15,6 +15,9 @@
 
 (def default-db
   {:name "pazuzu-ui"
-   :active-page :home-page
-   :registry {:features (into {} (for [f features] [(:name f) f]))
-              :selected (-> features first :name)}})
+   :registry {:features (into {} (for [f features] [(:name f) f]))}
+   :ui-state {:active-page :home-page
+              :registry-page {:search-input ""
+                              :selected-feature-name (-> features first :name)
+                              :feature-pane {:modified (first features)
+                                             :original (first features)}}}})

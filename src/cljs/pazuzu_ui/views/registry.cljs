@@ -4,37 +4,41 @@
             [reagent.core :as r]
             [re-frame.core :refer [subscribe dispatch]]))
 
-(defn feature-details [{:keys [feature]}]
-  [:div.ui.grid.container
-   [:div.row
-    [:div.column
-     [:div.ui.form
-      [:div.field
-       [:div.ui.huge.input.fluid
-        [:input {:type "text" :placeholder "Feature Name"
-                 :value (:name feature)
-                 :on-change (fn [event]
-                              (let [value (-> event .-target .-value)]
-                                (log/debug value)))}]]]
-      [:div.field
-       [:label "Dependencies"]
-       (for [dep (:dependencies feature)] [:div.ui.label {:key dep} dep])]
-      [:div.field.code
-       [:label "Snippet"]
-       [:textarea {:field :textarea
-                   :rows 5
-                   :value (:snippet feature)
-                   :on-change (fn [e] (log/debug e))}]]
-      [:div.field.code
-       [:label "Test Case command"]
-       [:textarea {:field :textarea
-                   :rows 3
-                   :value (:test feature)
-                   :on-change (fn [e] (log/debug e))}]]
-      [:div.field
-       [:label "Attached files"]
-       [:div.ui.label "id-rsa.pub"]
-       [:button.mini.ui.basic.button [:i.icon.upload] "Upload file"]]]]]])
+(defn feature-details []
+  (let [registry (subscribe [:registry])
+        ui-state (subscribe [:ui-state])
+        feature (reaction (first (:features @registry)))]
+    (fn []
+      [:div.ui.grid.container
+       [:div.row
+        [:div.column
+         [:div.ui.form
+          [:div.field
+           [:div.ui.huge.input.fluid
+            [:input {:type "text" :placeholder "Feature Name"
+                     :value (:name feature)
+                     :on-change (fn [event]
+                                  (let [value (-> event .-target .-value)]
+                                    (log/debug value)))}]]]
+          [:div.field
+           [:label "Dependencies"]
+           (for [dep (:dependencies feature)] [:div.ui.label {:key dep} dep])]
+          [:div.field.code
+           [:label "Snippet"]
+           [:textarea {:field :textarea
+                       :rows 5
+                       :value (:snippet feature)
+                       :on-change (fn [e] (log/debug e))}]]
+          [:div.field.code
+           [:label "Test Case command"]
+           [:textarea {:field :textarea
+                       :rows 3
+                       :value (:test feature)
+                       :on-change (fn [e] (log/debug e))}]]
+          [:div.field
+           [:label "Attached files"]
+           [:div.ui.label "id-rsa.pub"]
+           [:button.mini.ui.basic.button [:i.icon.upload] "Upload file"]]]]]])))
 
 (defn feature-list-item [{:keys [is-selected feature]}]
   [:div.ui.card.feature
@@ -47,10 +51,10 @@
     [:div.description "Feature description"]]])
 
 (defn page []
-  (let [state (subscribe [:registry])
-        features (reaction (-> @state :features vals))
-        selected (reaction (get-in @state [:features (:selected @state)]))]
-    (log/debug "Selected" @selected)
+  (let [registry (subscribe [:registry])
+        features (reaction (-> @registry :features vals))
+        ui-state (subscribe [:ui-state])
+        selected (reaction (get-in @registry [:features (:selected @registry)]))]
     (fn []
       [:div#registry.ui.padded.grid
        [:div#features-pane.eight.wide.column
@@ -60,7 +64,7 @@
           [:i.search.link.icon]]
          [:div.right.menu
           [:div.item [:div.ui.primary.button
-                      {:on-click (fn [] )}
+                      {:on-click (fn [] (log/debug "New button clicked"))}
                       "New"]]]]
 
         [:div.features-list.ui.cards
@@ -75,4 +79,4 @@
           [:div.item [:div.ui.labeled.icon.button.positive [:i.save.icon] "Save"]]
           [:div.item [:div.ui.labeled.icon.button.negative [:i.delete.icon] "Delete"]]]]
 
-        [feature-details {:feature @selected}]]])))
+        [feature-details]]])))

@@ -2,8 +2,8 @@
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :refer [register-sub]]))
 
-(register-sub :active-page
-              (fn [db _] (reaction (:active-page @db))))
-
 (register-sub :registry
-              (fn [db _] (reaction (:registry @db))))
+  (fn [db _] (reaction (:registry @db))))
+
+(register-sub :ui-state
+  (fn [db [_ & args]] (reaction (get-in (:ui @db) args))))
