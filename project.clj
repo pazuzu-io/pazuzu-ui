@@ -20,7 +20,7 @@
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
-  :less {:source-paths ["less"]
+  :less {:source-paths ["src/less"]
          :target-path  "resources/public/css/compiled"}
 
   :profiles {:dev {:dependencies [[compojure "1.5.0"]]

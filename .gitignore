@@ -1,6 +1,8 @@
 /*.log
 /target
 /*-init.clj
-/resources/public/js/compiled
+/resources/public/js/compiled/*
+/resources/public/css/compiled/*
 out
-resources/public/css/compiled/site.css
+.nrepl-port
+.lein-repl-history

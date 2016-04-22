@@ -1,6 +1,5 @@
 (ns pazuzu-ui.views.pages
-  (:require [re-frame.core :refer [subscribe dispatch]]
-            [taoensso.timbre :as log]
+  (:require [re-frame.core :refer [subscribe]]
             [pazuzu-ui.views.registry :as registry]))
 
 (defn welcome []
@@ -18,10 +17,6 @@
   [:div.ui.text.container
    [:h2 "About Pazuzu"]
    [:p "An evil ancient moster"]])
-
-
-
-
 
 (defn active-page []
   (let [page (subscribe [:active-page])]

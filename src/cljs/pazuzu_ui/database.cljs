@@ -16,5 +16,5 @@
 (def default-db
   {:name "pazuzu-ui"
    :active-page :home-page
-   :registry {:features features
-              :selected (first features)}})
+   :registry {:features (into {} (for [f features] [(:name f) f]))
+              :selected (-> features first :name)}})
