@@ -1,4 +1,5 @@
 (ns pazuzu-ui.views.navbar
+  "Namespace contains components that are related to navigational bar on top"
   (:require [re-frame.core :refer [subscribe dispatch]]
             [pazuzu-ui.routes :refer [url-for]]))
 

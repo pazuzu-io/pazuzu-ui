@@ -3,7 +3,9 @@
               [pazuzu-ui.views.pages :refer [active-page]]))
 
 
-(defn root-component []
+(defn root-component
+  "This is root component that will render whole application"
+  []
   [:div#root
    [navbar]
    [active-page]])
