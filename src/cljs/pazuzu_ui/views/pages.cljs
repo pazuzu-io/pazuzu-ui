@@ -1,5 +1,8 @@
 (ns pazuzu-ui.views.pages
-  (:require [re-frame.core :refer [subscribe dispatch]]))
+  "Contains top-level navigation for various app's pages and basic route-handling"
+  (:require-macros [reagent.ratom :refer [reaction]])
+  (:require [re-frame.core :refer [subscribe]]
+            [pazuzu-ui.views.registry :as registry]))
 
 (defn welcome []
   [:div.ui.vertical.masthead.center.aligned.segment
@@ -17,19 +20,14 @@
    [:h2 "About Pazuzu"]
    [:p "An evil ancient moster"]])
 
-(defn registry []
-  [:div.ui.text.container
-   [:h2 "Feature Registry"]
-   [:p "CRUD for pazuzu features"]])
-
 (defn active-page []
-  (let [page (subscribe [:active-page])]
+  (let [page (subscribe [:ui-state :active-page])]
     (fn []
-      [:div.ui.container
+      [:div#page.ui.container
        (case @page
          :home-page     [welcome]
          :about-page    [about]
-         :registry-page [registry]
+         :registry-page [registry/page]
          :not-found     [:div [:h1 "404?!"]]
 
          ;; default is wtf, unknown routes should be covered abouve

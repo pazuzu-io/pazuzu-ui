@@ -16,7 +16,7 @@
 
 (defn- dispatch-route [matched-route]
   (let [{handler :handler} matched-route]
-    (log/debug "Mathced route -" handler)
+    (log/debug "Matched route -" handler)
     (dispatch [:set-active-page handler])))
 
 (defn init-routes []

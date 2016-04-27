@@ -1,5 +1,23 @@
 # pazuzu-ui
+
 UI for Pazuzu Registry and Pazuzu, the Docker Maker
+
+This is single-page application implemented in ClojureScript using
+[`Reagent`](https://github.com/reagent-project/reagent) as rendering engine and
+[`re-frame`](https://github.com/Day8/re-frame) as a data-flow managing framework.
+
+# Development
+
+To start hacking checkout this repo and then run
+
+    lein figwheel dev
+
+to start a web server with live reload and
+
+    lein less auto
+
+to build and continuously watch and compile less styles
+
 
 License
 -------
