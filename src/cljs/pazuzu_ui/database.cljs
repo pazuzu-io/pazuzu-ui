@@ -7,7 +7,7 @@
   [name deps]
   {:name name
    :dependencies deps
-   :snippet (s/join "\n" (for [dep deps] (str "RUN apt-get install " dep)))
+   :docker-data (s/join "\n" (for [dep deps] (str "RUN apt-get install " dep)))
    :test "lein -v"
    :files [:name "id-rsa.pub"
            :url "http://example.com/id-rsa.pub"]})
@@ -16,7 +16,6 @@
 (def features (into [(feature-stub "Foo" ["python" "scala" "postgresql"])
                      (feature-stub "Bar" ["java" "ruby" "mongo"])
                      (feature-stub "Baz" ["golang" "cassandra" "redis"])]
-
                     (for [i (range 10)] (feature-stub (str "Feature - " i)
                                                        (for [j (range (min (+ i 1) 10))]
                                                          (str "dependency-" j))))))
@@ -24,7 +23,7 @@
 ; This is default state of the app
 (def default-db
   {:name "pazuzu-ui"
-   :registry {:features (into (sorted-map) (for [f features] [(:name f) f]))}
+   :registry {:features []}
    :ui-state {:active-page :home-page
               :registry-page {:search-input-value ""
                               :selected-feature-name (-> features first :name)

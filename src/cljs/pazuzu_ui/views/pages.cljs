@@ -9,7 +9,7 @@
    {:style {:min-height "500px"}}
    [:div.ui.test.container
     [:h1.header {:style {:margin-top "2em"
-                         :font-size "3em"}}
+                         :font-size  "3em"}}
      "Welcome to Pazuzu UI"]
     [:h3 "Web application to operate docker features"]
     [:a.ui.huge.primary.button {:href "/api/auth"}
@@ -25,10 +25,9 @@
     (fn []
       [:div#page.ui.container
        (case @page
-         :home-page     [welcome]
-         :about-page    [about]
+         :home-page [welcome]
+         :about-page [about]
          :registry-page [registry/page]
-         :not-found     [:div [:h1 "404?!"]]
-
+         :not-found [:div [:h1 "404?!"]]
          ;; default is wtf, unknown routes should be covered abouve
          [:div [:h1 "Internal problem with routes"]])])))

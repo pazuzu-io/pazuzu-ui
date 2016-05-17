@@ -19,24 +19,24 @@
           [:div.field
            (if (:new-feature? @ui-state)
              [:div.ui.huge.input.fluid
-              [:input {:type "text" :placeholder "Feature Name"
-                       :value (:name @feature)
+              [:input {:type      "text" :placeholder "Feature Name"
+                       :value     (:name @feature)
                        :on-change #(update-state-fn % [:name])}]]
              [:h1 (:name @feature)])]
           [:div.field
            [:label "Dependencies"]
            (for [dep (:dependencies @feature)] [:div.ui.label {:key dep} dep])]
           [:div.field.code
-           [:label "Snippet"]
-           [:textarea {:field :textarea
-                       :rows 5
-                       :value (:snippet @feature)
-                       :on-change #(update-state-fn % [:snippet])}]]
+           [:label "Docker file Snippet"]
+           [:textarea {:field     :textarea
+                       :rows      5
+                       :value     (:docker-data @feature)
+                       :on-change #(update-state-fn % [:docker-data])}]]
           [:div.field.code
            [:label "Test Case command"]
-           [:textarea {:field :textarea
-                       :rows 3
-                       :value (:test @feature)
+           [:textarea {:field     :textarea
+                       :rows      3
+                       :value     (:test @feature)
                        :on-change #(update-state-fn % [:test])}]]
           [:div.field
            [:label "Attached files"]
@@ -56,7 +56,7 @@
 (defn feature-list-item [{:keys [is-selected feature]}]
   [:div.ui.card.feature
    {:on-click #(dispatch [:feature-selected feature])
-    :class (if is-selected "selected" "not-selected")}
+    :class    (if is-selected "selected" "not-selected")}
    [:div.content
     [:div.header (:name feature)]
     [:div.meta "Dependencies:"
@@ -66,15 +66,15 @@
 (defn features-list [features selected-name]
   [:div.features-list.ui.cards
    (doall (for [feature features]
-            [feature-list-item {:key (:name feature)
+            [feature-list-item {:key         (:name feature)
                                 :is-selected (= selected-name (:name feature))
-                                :feature feature}]))])
+                                :feature     feature}]))])
 
 (defn feature-list-menu [suffix]
   [:div.ui.secondary.menu
    [:div.ui.icon.input
-    [:input {:type "text" :placeholder "search"
-             :value suffix
+    [:input {:type      "text" :placeholder "search"
+             :value     suffix
              :on-change #(dispatch [:search-input-changed (-> % .-target .-value)])}]
     [:i.search.link.icon]]
    [:div.right.menu
@@ -85,16 +85,17 @@
 (defn page
   "Top-level page layout and state"
   []
-  (let [registry      (subscribe [:registry])
-        all-features  (reaction (-> @registry :features vals))
-        page-state    (subscribe [:ui-state :registry-page])
+  (let [registry (subscribe [:registry])
+        all-features (reaction (-> @registry :features vals))
+        page-state (subscribe [:ui-state :registry-page])
         selected-name (reaction (:selected-feature-name @page-state))
         search-suffix (reaction (-> @page-state :search-input-value s/lower-case))]
+    (dispatch [:load-features])
     (fn []
-      (let [suffix-predicate #(s/includes? (-> % :name s/lower-case) @search-suffix)
-            features (->> @all-features
-                          (filter suffix-predicate)
-                          (sort-by :name))]
+      (let [features [{:dependencies []
+                       :docker_data "hello"
+                       :files [:name "id-rsa.pub"
+                               :url "http://example.com/id-rsa.pub"]}]]
         [:div#registry.ui.padded.grid
          [:div#features-pane.eight.wide.column
           [feature-list-menu @search-suffix]
