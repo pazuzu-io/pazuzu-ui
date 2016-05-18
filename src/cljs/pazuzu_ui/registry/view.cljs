@@ -1,4 +1,4 @@
-(ns pazuzu-ui.r.registry.view
+(ns pazuzu-ui.registry.view
   "Describes components related to registry part of the UI"
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [clojure.string :as s]
@@ -58,10 +58,7 @@
    {:on-click #(dispatch [:feature-selected feature])
     :class    (if is-selected "selected" "not-selected")}
    [:div.content
-    [:div.header (:name feature)]
-    [:div.meta "Dependencies:"
-     (for [dep (:dependencies feature)] [:a {:href "#" :key dep} dep])]
-    [:div.description "Feature description"]]])
+    [:div.header (:name feature)]]])
 
 (defn features-list [features selected-name]
   [:div.features-list.ui.cards
@@ -97,10 +94,10 @@
                           (filter suffix-predicate)
                           (sort-by :name))]
         [:div#registry.ui.padded.grid
-         [:div#features-pane.eight.wide.column
+         [:div#features-pane.five.wide.column
           [feature-list-menu @search-suffix]
           [features-list features @selected-name]]
 
-         [:div#feature-details.eight.wide.column
+         [:div#feature-details.eleven.wide.column
           [feature-details-menu]
           [feature-details]]]))))
