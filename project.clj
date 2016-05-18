@@ -8,6 +8,7 @@
                  [bidi "2.0.6"]                             ; Frontend routing
                  [kibu/pushy "0.3.2"]                       ; HTML5 history
                  [cljs-http "0.1.39"]                       ; HTTP client
+                 [camel-snake-kebab "0.3.0"]                ; Transform snake case to kebab case
                  ]
 
   :min-lein-version "2.5.3"

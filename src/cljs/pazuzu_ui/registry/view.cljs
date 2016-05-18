@@ -1,4 +1,4 @@
-(ns pazuzu-ui.views.registry
+(ns pazuzu-ui.r.registry.view
   "Describes components related to registry part of the UI"
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [clojure.string :as s]
@@ -30,14 +30,14 @@
            [:label "Docker file Snippet"]
            [:textarea {:field     :textarea
                        :rows      5
-                       :value     (:docker-data @feature)
-                       :on-change #(update-state-fn % [:docker-data])}]]
+                       :value     (:docker_data @feature)
+                       :on-change #(update-state-fn % [:docker_data])}]]
           [:div.field.code
            [:label "Test Case command"]
            [:textarea {:field     :textarea
                        :rows      3
-                       :value     (:test @feature)
-                       :on-change #(update-state-fn % [:test])}]]
+                       :value     (:test_instruction @feature)
+                       :on-change #(update-state-fn % [:test_instruction])}]]
           [:div.field
            [:label "Attached files"]
            [:div.ui.label "id-rsa.pub"]
@@ -86,16 +86,16 @@
   "Top-level page layout and state"
   []
   (let [registry (subscribe [:registry])
-        all-features (reaction (-> @registry :features vals))
+        all-features (reaction (-> @registry :features))
         page-state (subscribe [:ui-state :registry-page])
         selected-name (reaction (:selected-feature-name @page-state))
         search-suffix (reaction (-> @page-state :search-input-value s/lower-case))]
     (dispatch [:load-features])
     (fn []
-      (let [features [{:dependencies []
-                       :docker_data "hello"
-                       :files [:name "id-rsa.pub"
-                               :url "http://example.com/id-rsa.pub"]}]]
+      (let [suffix-predicate #(s/includes? (-> % :name s/lower-case) @search-suffix)
+            features (->> @all-features
+                          (filter suffix-predicate)
+                          (sort-by :name))]
         [:div#registry.ui.padded.grid
          [:div#features-pane.eight.wide.column
           [feature-list-menu @search-suffix]

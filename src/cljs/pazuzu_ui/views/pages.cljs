@@ -2,7 +2,7 @@
   "Contains top-level navigation for various app's pages and basic route-handling"
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :refer [subscribe]]
-            [pazuzu-ui.views.registry :as registry]))
+            [pazuzu-ui.r.registry.view :as registry]))
 
 (defn welcome []
   [:div.ui.vertical.masthead.center.aligned.segment
