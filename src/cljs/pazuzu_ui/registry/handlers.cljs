@@ -28,11 +28,30 @@
                           new-feature? (-> db :ui-state :registry-page :feature-pane :new-feature?)]
 
                       ; if creating feature and there is already one with that name, alert and do nothing
-                      (if (and new-feature? (get-in db [:registry :features (:name feature)]))
-                        (do (js/alert "Feature with that name already exists") db)
-                        (-> db
-                            (assoc-in [:registry :features (:name feature)] feature)
-                            (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false))))))
+                      (if new-feature?
+                        (service/add-feature feature #(do
+                                                         (log/debug "added " %)
+                                                         (dispatch [:saved-feature %])))
+
+                        ;(do
+                        ;  (-> db
+                        ;      (assoc-in [:registry :features] feature)
+                        ;      ;(assoc-in [:registry :features (:name feature)] feature)
+                        ;      ;(assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)
+                        ;      )
+                        (do
+                          (service/update-feature feature #(log/debug "updated")))))
+                    db
+                    ))
+
+
+;; update db state after api retures success for adding a feature
+(register-handler :saved-feature
+                  (fn [db [_ feature]]
+                    (log/debug "in handler ")
+                    (-> db
+                        (assoc-in [:registry :features] (conj (-> db :registry :features) feature)))))
+
 
 ;; when new feature button is clicked, push an empty feature to the db flagged new-feature = true
 (register-handler :new-feature-clicked
