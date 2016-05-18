@@ -4,6 +4,14 @@
   (:require [clojure.string :as s]
             [re-frame.core :refer [subscribe dispatch]]))
 
+(defn display-dependencies [dependencies]
+  (if (empty? dependencies)
+    (identity [:div.field
+               [:label "No dependencies"]])
+    (identity [:div.field
+               [:label "Dependencies"]
+               (map #(identity [:div.ui.label {:key (:name %)} (:name %)]) dependencies)])))
+
 (defn feature-details []
   (let [ui-state (subscribe [:ui-state :registry-page :feature-pane])
         feature (reaction (:feature @ui-state))
@@ -23,9 +31,7 @@
                        :value     (:name @feature)
                        :on-change #(update-state-fn % [:name])}]]
              [:h1 (:name @feature)])]
-          [:div.field
-           [:label "Dependencies"]
-           (for [dep (:dependencies @feature)] [:div.ui.label {:key dep} dep])]
+          (display-dependencies (:dependencies @feature))
           [:div.field.code
            [:label "Docker file Snippet"]
            [:textarea {:field     :textarea
@@ -37,11 +43,7 @@
            [:textarea {:field     :textarea
                        :rows      3
                        :value     (:test_instruction @feature)
-                       :on-change #(update-state-fn % [:test_instruction])}]]
-          [:div.field
-           [:label "Attached files"]
-           [:div.ui.label "id-rsa.pub"]
-           [:button.mini.ui.basic.button [:i.icon.upload] "Upload file"]]]]]])))
+                       :on-change #(update-state-fn % [:test_instruction])}]]]]]])))
 
 (defn feature-details-menu []
   [:div.ui.secondary.menu

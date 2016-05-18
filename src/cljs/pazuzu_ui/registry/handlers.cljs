@@ -7,6 +7,14 @@
 ;; whener a feature is clicked in the registry page
 (register-handler :feature-selected
                   (fn [db [_ feature]]
+                    (service/get-feature (:name feature)
+                                         #(do (log/debug "Fetched : " %)
+                                              (dispatch [:feature-selected-loaded %])))
+                    db))
+
+;; whenever the feature selected is loaded, update the db
+(register-handler :feature-selected-loaded
+                  (fn [db [_ feature]]
                     (-> db
                         (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)
                         (assoc-in [:ui-state :registry-page :feature-pane :feature] feature)
@@ -50,7 +58,7 @@
                           (assoc-in [:ui-state :registry-page :feature-pane :feature] {})
                           (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] true)))))
 
-;;when the registry page loads call the backend
+;;when the registry page loads call the backend to list available features
 (register-handler :load-features
                   (fn [db [_ _]]
                     (service/get-features #(do (log/debug "Features received from the backend : " %)
