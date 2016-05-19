@@ -8,7 +8,6 @@
                  [bidi "2.0.6"]                             ; Frontend routing
                  [kibu/pushy "0.3.2"]                       ; HTML5 history
                  [cljs-http "0.1.39"]                       ; HTTP client
-                 [camel-snake-kebab "0.3.0"]                ; Transform snake case to kebab case
                  ]
 
   :min-lein-version "2.5.3"
@@ -25,20 +24,20 @@
          :target-path  "resources/public/css/compiled"}
 
   :profiles {:dev {:dependencies [[compojure "1.5.0"]]
-                   :figwheel {:ring-handler pazuzu-ui.core/app
-                              :css-dirs ["resources/public/css"]}}}
+                   :figwheel     {:ring-handler pazuzu-ui.core/app
+                                  :css-dirs     ["resources/public/css"]}}}
 
   :cljsbuild {:builds {:dev {:source-paths ["src/cljs"]
-                             :figwheel {:on-jsload "pazuzu-ui.core/mount-root"}
-                             :compiler {:main pazuzu-ui.core
-                                        :output-to "resources/public/js/compiled/app.js"
-                                        :output-dir "resources/public/js/compiled/out"
-                                        :asset-path "js/compiled/out"
-                                        :source-map-timestamp true}}
+                             :figwheel     {:on-jsload "pazuzu-ui.core/mount-root"}
+                             :compiler     {:main                 pazuzu-ui.core
+                                            :output-to            "resources/public/js/compiled/app.js"
+                                            :output-dir           "resources/public/js/compiled/out"
+                                            :asset-path           "js/compiled/out"
+                                            :source-map-timestamp true}}
 
                        :min {:source-paths ["src/cljs"]
-                             :compiler {:main pazuzu-ui.core
-                                        :output-to "resources/public/js/compiled/app.js"
-                                        :optimizations :advanced
-                                        :closure-defines {goog.DEBUG false}
-                                        :pretty-print false}}}})
+                             :compiler     {:main            pazuzu-ui.core
+                                            :output-to       "resources/public/js/compiled/app.js"
+                                            :optimizations   :advanced
+                                            :closure-defines {goog.DEBUG false}
+                                            :pretty-print    false}}}})

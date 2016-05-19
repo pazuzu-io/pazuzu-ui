@@ -10,6 +10,13 @@
   (go (let [response (<! (http/get (str conf/registry-api "/api/features") {}))]
         (callback (:body response)))))
 
+(defn get-feature
+  "Get the detailed feature with the given id"
+  [feature-name callback]
+  (go (let [response (<! (http/get (str conf/registry-api (str "/api/features/" feature-name)) {}))]
+        (callback (:body response))))
+  )
+
 (defn add-feature
   "Add a new feature to the registry"
   [feature callback]

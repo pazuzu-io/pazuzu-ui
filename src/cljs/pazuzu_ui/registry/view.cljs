@@ -1,8 +1,16 @@
-(ns pazuzu-ui.r.registry.view
+(ns pazuzu-ui.registry.view
   "Describes components related to registry part of the UI"
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [clojure.string :as s]
             [re-frame.core :refer [subscribe dispatch]]))
+
+(defn display-dependencies [dependencies]
+  (if (empty? dependencies)
+    (identity [:div.field
+               [:label "No dependencies"]])
+    (identity [:div.field
+               [:label "Dependencies"]
+               (map #(identity [:div.ui.label {:key (:name %)} (:name %)]) dependencies)])))
 
 (defn feature-details []
   (let [ui-state (subscribe [:ui-state :registry-page :feature-pane])
@@ -11,7 +19,7 @@
                           (let [value (-> event .-target .-value)
                                 updated (assoc-in @feature path value)]
                             (dispatch [:feature-edited updated])))]
-    (fn []
+    (identity
       [:div.ui.grid.container
        [:div.row
         [:div.column
@@ -23,9 +31,7 @@
                        :value     (:name @feature)
                        :on-change #(update-state-fn % [:name])}]]
              [:h1 (:name @feature)])]
-          [:div.field
-           [:label "Dependencies"]
-           (for [dep (:dependencies @feature)] [:div.ui.label {:key dep} dep])]
+          (display-dependencies (:dependencies @feature))
           [:div.field.code
            [:label "Docker file Snippet"]
            [:textarea {:field     :textarea
@@ -37,11 +43,7 @@
            [:textarea {:field     :textarea
                        :rows      3
                        :value     (:test_instruction @feature)
-                       :on-change #(update-state-fn % [:test_instruction])}]]
-          [:div.field
-           [:label "Attached files"]
-           [:div.ui.label "id-rsa.pub"]
-           [:button.mini.ui.basic.button [:i.icon.upload] "Upload file"]]]]]])))
+                       :on-change #(update-state-fn % [:test_instruction])}]]]]]])))
 
 (defn feature-details-menu []
   [:div.ui.secondary.menu
@@ -58,10 +60,7 @@
    {:on-click #(dispatch [:feature-selected feature])
     :class    (if is-selected "selected" "not-selected")}
    [:div.content
-    [:div.header (:name feature)]
-    [:div.meta "Dependencies:"
-     (for [dep (:dependencies feature)] [:a {:href "#" :key dep} dep])]
-    [:div.description "Feature description"]]])
+    [:div.header (:name feature)]]])
 
 (defn features-list [features selected-name]
   [:div.features-list.ui.cards
@@ -97,10 +96,10 @@
                           (filter suffix-predicate)
                           (sort-by :name))]
         [:div#registry.ui.padded.grid
-         [:div#features-pane.eight.wide.column
+         [:div#features-pane.five.wide.column
           [feature-list-menu @search-suffix]
           [features-list features @selected-name]]
 
-         [:div#feature-details.eight.wide.column
-          [feature-details-menu]
-          [feature-details]]]))))
+         [:div#feature-details.eleven.wide.column
+          [feature-details]
+          [feature-details-menu]]]))))
