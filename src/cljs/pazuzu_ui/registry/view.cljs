@@ -2,19 +2,14 @@
   "Describes components related to registry part of the UI"
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [clojure.string :as s]
-            [re-frame.core :refer [subscribe dispatch]]))
-
-(defn display-dependencies [dependencies]
-  (if (empty? dependencies)
-    (identity [:div.field
-               [:label "No dependencies"]])
-    (identity [:div.field
-               [:label "Dependencies"]
-               (map #(identity [:div.ui.label {:key (:name %)} (:name %)]) dependencies)])))
+            [re-frame.core :refer [subscribe dispatch]]
+            [clojure.string :as str]
+            [taoensso.timbre :as log]))
 
 (defn feature-details []
   (let [ui-state (subscribe [:ui-state :registry-page :feature-pane])
         feature (reaction (:feature @ui-state))
+        dependencies (:dependencies @feature)
         update-state-fn (fn [event path]
                           (let [value (-> event .-target .-value)
                                 updated (assoc-in @feature path value)]
@@ -31,7 +26,24 @@
                        :value     (:name @feature)
                        :on-change #(update-state-fn % [:name])}]]
              [:h1 (:name @feature)])]
-          (display-dependencies (:dependencies @feature))
+          [:div.field
+           (if (empty? (:dependencies @feature))
+             [:div.field
+              [:label "No dependencies" ]]
+             [:div.field
+              [:label "Dependencies"]
+              (map #(identity
+                     [:div.ui.label
+                      {:key (:name %)} (:name %)
+                      [:i.delete.icon
+                       {:on-click (fn [] (dispatch [:delete-dependency-clicked %]))}]]) dependencies)]
+             )
+           [:div
+            [:div.ui.mini.action.input
+             [:input.ui {:type "text" :placeholder "Dependency name" :id "bb"}]
+             [:div.ui.mini.icon.button.positive
+              {:on-click #(dispatch [:add-dependency-clicked (-> % .-target .-value)])}
+              [:i.add.icon] "Add"]]]]
           [:div.field.code
            [:label "Docker file Snippet"]
            [:textarea {:field     :textarea
