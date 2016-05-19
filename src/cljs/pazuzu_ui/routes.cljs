@@ -1,8 +1,8 @@
 (ns pazuzu-ui.routes
-    (:require [taoensso.timbre :as log :include-macros true]
-              [re-frame.core :refer [dispatch]]
-              [bidi.bidi :as bidi]
-              [pushy.core :as pushy]))
+  (:require [taoensso.timbre :as log :include-macros true]
+            [re-frame.core :refer [dispatch]]
+            [bidi.bidi :as bidi]
+            [pushy.core :as pushy]))
 
 (log/debug "Registering routes")
 

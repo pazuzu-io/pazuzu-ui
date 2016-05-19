@@ -24,20 +24,20 @@
          :target-path  "resources/public/css/compiled"}
 
   :profiles {:dev {:dependencies [[compojure "1.5.0"]]
-                   :figwheel {:ring-handler pazuzu-ui.core/app
-                              :css-dirs ["resources/public/css"]}}}
+                   :figwheel     {:ring-handler pazuzu-ui.core/app
+                                  :css-dirs     ["resources/public/css"]}}}
 
   :cljsbuild {:builds {:dev {:source-paths ["src/cljs"]
-                             :figwheel {:on-jsload "pazuzu-ui.core/mount-root"}
-                             :compiler {:main pazuzu-ui.core
-                                        :output-to "resources/public/js/compiled/app.js"
-                                        :output-dir "resources/public/js/compiled/out"
-                                        :asset-path "js/compiled/out"
-                                        :source-map-timestamp true}}
+                             :figwheel     {:on-jsload "pazuzu-ui.core/mount-root"}
+                             :compiler     {:main                 pazuzu-ui.core
+                                            :output-to            "resources/public/js/compiled/app.js"
+                                            :output-dir           "resources/public/js/compiled/out"
+                                            :asset-path           "js/compiled/out"
+                                            :source-map-timestamp true}}
 
                        :min {:source-paths ["src/cljs"]
-                             :compiler {:main pazuzu-ui.core
-                                        :output-to "resources/public/js/compiled/app.js"
-                                        :optimizations :advanced
-                                        :closure-defines {goog.DEBUG false}
-                                        :pretty-print false}}}})
+                             :compiler     {:main            pazuzu-ui.core
+                                            :output-to       "resources/public/js/compiled/app.js"
+                                            :optimizations   :advanced
+                                            :closure-defines {goog.DEBUG false}
+                                            :pretty-print    false}}}})

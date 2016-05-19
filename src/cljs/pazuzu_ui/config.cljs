@@ -4,3 +4,5 @@
 
 (when debug?
   (enable-console-print!))
+
+(def registry-api "http://localhost:8080")
