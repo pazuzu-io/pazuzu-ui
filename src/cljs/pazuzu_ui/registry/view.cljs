@@ -19,7 +19,7 @@
                           (let [value (-> event .-target .-value)
                                 updated (assoc-in @feature path value)]
                             (dispatch [:feature-edited updated])))]
-    (fn []
+    (identity
       [:div.ui.grid.container
        [:div.row
         [:div.column
@@ -101,5 +101,5 @@
           [features-list features @selected-name]]
 
          [:div#feature-details.eleven.wide.column
-          [feature-details-menu]
-          [feature-details]]]))))
+          [feature-details]
+          [feature-details-menu]]]))))
