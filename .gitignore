@@ -6,3 +6,4 @@
 out
 .nrepl-port
 .lein-repl-history
+.idea/
