@@ -37,28 +37,26 @@
 
                       ; if creating feature and there is already one with that name, alert and do nothing
                       (if new-feature?
-                        (service/add-feature feature #(do
-                                                         (log/debug "added " %)
-                                                         (dispatch [:saved-feature %])))
-
-                        ;(do
-                        ;  (-> db
-                        ;      (assoc-in [:registry :features] feature)
-                        ;      ;(assoc-in [:registry :features (:name feature)] feature)
-                        ;      ;(assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)
-                        ;      )
-                        (do
-                          (service/update-feature feature #(log/debug "updated")))))
-                    db
-                    ))
+                        (service/add-feature feature #(dispatch [:saved-feature %]))
+                        (service/update-feature feature #(dispatch [:updated-feature %])))
+                      db)))
 
 
 ;; update db state after api retures success for adding a feature
 (register-handler :saved-feature
                   (fn [db [_ feature]]
-                    (log/debug "in handler ")
-                    (-> db
-                        (assoc-in [:registry :features] (conj (-> db :registry :features) feature)))))
+                    (let [current_features (-> db :registry :features)]
+                      (log/debug "in handler ")
+                      (-> db
+                          (assoc-in [:registry :features] (conj current_features feature))
+                          (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)))))
+
+
+;; update db state after api retures success for updating a feature
+(register-handler :updated-feature
+                  (fn [db [_ feature]]
+                    (#(log/debug "updated feature " %) feature)
+                    db))
 
 
 ;; when new feature button is clicked, push an empty feature to the db flagged new-feature = true
