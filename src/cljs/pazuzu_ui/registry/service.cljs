@@ -39,3 +39,10 @@
                            {:json-params (flatten_dependencies feature)}))]
         (callback (:body response)))))
 
+
+(defn delete-feature
+  "Delete a feature in the registry"
+  [feature callback]
+  (go (let [response (<! (http/delete (str conf/registry-api "/api/features/" (:name feature))))]
+        (callback (:body response)))))
+

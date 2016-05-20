@@ -84,12 +84,21 @@
                         (assoc-in [:ui-state :registry-page :feature-pane :feature] {})
                         (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] true))))
 
-;; when the delete feature button is clicked, remove from the db
+;; when the delete feature button is clicked, make an API call
 (register-handler :delete-feature-clicked
                   (fn [db [_ _]]
                     (let [feature (-> db :ui-state :registry-page :feature-pane :feature)]
+                      (service/delete-feature feature #(dispatch [:deleted-feature]))
+                      db)))
+
+;; when the delete operation was successful, update the db state
+(register-handler :deleted-feature
+                  (fn [db [_ _]]
+                    (let [feature (-> db :ui-state :registry-page :feature-pane :feature)
+                          features (-> db :registry :features)
+                          features_after_removal (vec (filter #(not= (:name %) (:name feature)) features))]
                       (-> db
-                          (update-in [:registry :features] dissoc (:name feature))
+                          (assoc-in [:registry :features] features_after_removal)
                           (assoc-in [:ui-state :registry-page :feature-pane :feature] {})
                           (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] true)))))
 

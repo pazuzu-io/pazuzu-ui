@@ -44,7 +44,8 @@
                          :value (:new-dependency @feature)
                          :on-change #(update-state-fn % [:new-dependency])}]
              [:div.ui.mini.icon.button.positive
-              {:on-click #(dispatch [:add-dependency-clicked])}
+              {:on-click #(dispatch [:add-dependency-clicked])
+               :class (if (empty? (:new-dependency @feature)) :disabled)}
               [:i.add.icon] "Add"]]]]
           [:div.field.code
            [:label "Docker file Snippet"]
