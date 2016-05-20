@@ -46,14 +46,18 @@
                   (fn [db [_ deleted_dep]]
                     (let [dependencies (-> db :ui-state :registry-page :feature-pane :feature :dependencies)
                           dependencies_after_removal (vec (remove #{deleted_dep} dependencies))]
-                        (-> db
-                            (assoc-in [:ui-state :registry-page :feature-pane :feature :dependencies] dependencies_after_removal)))))
+                      (-> db
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :dependencies] dependencies_after_removal)))))
 
 ;; when dependency is removed from the list, only db state is updated
 (register-handler :add-dependency-clicked
-                  (fn [db [_ added_dependency]]
-                      (do (log/debug "added" added_dependency)
-                          db)))
+                  (fn [db [_]]
+                    (let [new_dependency (-> db :ui-state :registry-page :feature-pane :feature :new-dependency)
+                          dependencies (-> db :ui-state :registry-page :feature-pane :feature :dependencies)
+                          extended_dependencies (vec (conj (set dependencies) {:name new_dependency}))]
+                      (-> db
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :dependencies] extended_dependencies)
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :new-dependency] nil)))))
 
 
 ;; update db state after api retures success for adding a feature

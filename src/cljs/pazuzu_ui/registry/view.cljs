@@ -40,9 +40,11 @@
              )
            [:div
             [:div.ui.mini.action.input
-             [:input.ui {:type "text" :placeholder "Dependency name" :id "bb"}]
+             [:input.ui {:type "text" :placeholder "Dependency name"
+                         :value (:new-dependency @feature)
+                         :on-change #(update-state-fn % [:new-dependency])}]
              [:div.ui.mini.icon.button.positive
-              {:on-click #(dispatch [:add-dependency-clicked (-> % .-target .-value)])}
+              {:on-click #(dispatch [:add-dependency-clicked])}
               [:i.add.icon] "Add"]]]]
           [:div.field.code
            [:label "Docker file Snippet"]
