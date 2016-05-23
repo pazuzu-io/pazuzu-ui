@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/zalando/pazuzu-ui.png?label=ready&title=Ready)](https://waffle.io/zalando/pazuzu-ui)
 # pazuzu-ui
 
 UI for Pazuzu Registry and Pazuzu, the Docker Maker
