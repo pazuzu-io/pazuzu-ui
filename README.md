@@ -30,8 +30,22 @@ progress and document usage and functionality
 
 Features
 --------
-- Create new Feature
-- Delete Feature
+* [ ] not implemented
+* [x] implemented
+
+### **As ANONYMOUS user**
+*Currently **no** functionality is available without authentication.
+All below operations are available for ADMIN user*
+ * [ ] I can **view/search list of features**
+ * [ ] I can **fetch specific feature** with their dependencies
+ * [ ] I can **create** new features
+
+### **As ADMIN user**
+  * [x] I can **do everything ANONYMOUS use can do**
+  * [ ] I can **see the list of features to approve**
+  * [ ] I can **approve** a feature
+  * [x] I can **modify** a feature
+  * [x] I can **delete** a feature
 
 TODO
 ----
@@ -54,7 +68,6 @@ To start hacking checkout this repo and then to start a web server with live rel
 
 
 To get content in for the UI you need to have running [`pazuzu-registry`](https://github.com/zalando/pazuzu-registry)
-
 
 License
 -------
