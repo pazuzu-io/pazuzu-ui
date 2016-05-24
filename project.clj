@@ -25,7 +25,7 @@
 
   :profiles {:dev {:dependencies [[compojure "1.5.0"]]
                    :figwheel     {:ring-handler pazuzu-ui.core/app
-                                  :css-dirs     ["resources/public/css"]}}}
+                                  :css-dirs     ["resources/public/css/compiled"]}}}
 
   :cljsbuild {:builds {:dev {:source-paths ["src/cljs"]
                              :figwheel     {:on-jsload "pazuzu-ui.core/mount-root"}
