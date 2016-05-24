@@ -1,22 +1,59 @@
 # pazuzu-ui
+------------------------------------------------------------
 
-UI for Pazuzu Registry and Pazuzu, the Docker Maker
+[![Stories in Ready](https://badge.waffle.io/zalando/pazuzu-ui.png?label=ready&title=Ready)](http://waffle.io/zalando/pazuzu-ui)
+
+<img align="right" height="300" src="/pazuzu-logo.png">
+
+What is Pazuzu?
+---------------
+Pazuzu is a tool that builds Docker images from feature snippets, while
+resolving all dependencies between them. One of the common use cases is
+Continuous Integration environment, where jobs require specific tooling present
+for building and testing. Pazuzu can significantly ease that process, by letting user
+choose from a wide selection of predefined Dockerfile snippets that represent
+those dependencies (e.g. Golang, Python, Android SDK, customized NPM installs).
+
+What is Pazuzu UI?
+------------------------
+
+UI for Pazuzu Registry where you will be able to create new features
 
 This is single-page application implemented in ClojureScript using
 [`Reagent`](https://github.com/reagent-project/reagent) as rendering engine and
 [`re-frame`](https://github.com/Day8/re-frame) as a data-flow managing framework.
 
-# Development
+What is current stage?
+----------------------
+Project is still in early stages - this file will be updated to reflect the
+progress and document usage and functionality
 
-To start hacking checkout this repo and then run
+Features
+--------
+- Create new Feature
+- Delete Feature
+
+TODO
+----
+- Routing
+- Auth and rol management for features
+- ...
+
+
+
+Development
+-----------
+
+To start hacking checkout this repo and then to start a web server with live reload run
 
     lein figwheel dev
 
-to start a web server with live reload and
+ To build and continuously watch and compile less styles
 
     lein less auto
 
-to build and continuously watch and compile less styles
+
+To get content in for the UI you need to have running [`pazuzu-registry`](https://github.com/zalando/pazuzu-registry)
 
 
 License
