@@ -1,33 +1,31 @@
-#app { height: 100%; }
+#app {
+    height: 100%;
+    .logo {
+        background: url('/images/pazuzu-logo.png') no-repeat;
+        background-size: 70px;
+        padding-left: 80px;
+    }
 
-#app .spinner { height: 100% }
+    .spinner { height: 100% }
+}
+
 
 #root {
   height: 100%;
-  display: flex;
-  flex-direction: column;
-}
 
-#page {
-  flex: 1;
-  display: flex;
-}
+  background: url('/images/pazuzu-logo.png') no-repeat right bottom;
+  background-size: 300px;
 
-#registry {
-  flex-grow: 1;
 }
 
 #features-pane {
-  display: flex;
-  flex-direction: column;
 
   .features-list {
-    flex: 1;
     overflow-y: auto;
-    height: 0;
 
     .feature {
       width: 100%;
+      cursor: pointer;
 
       &.selected {
         background-color: #e4e4e4;
