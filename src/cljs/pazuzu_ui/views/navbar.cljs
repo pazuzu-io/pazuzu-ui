@@ -6,8 +6,7 @@
 (defn navbar []
   [:div#navbar.ui.attached.stackable.menu
    [:div.ui.container
-    [:a.item {:href (url-for :home-page)}
-     [:i.fa.fa-bomb {:style {:margin-right 5}}]
+    [:a.item.logo {:href (url-for :home-page)}
      "Pazuzu"]
 
     [:a.item {:href (url-for :registry-page)}
