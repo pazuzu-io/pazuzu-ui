@@ -36,11 +36,46 @@
                           new-feature? (-> db :ui-state :registry-page :feature-pane :new-feature?)]
 
                       ; if creating feature and there is already one with that name, alert and do nothing
-                      (if (and new-feature? (get-in db [:registry :features (:name feature)]))
-                        (do (js/alert "Feature with that name already exists") db)
-                        (-> db
-                            (assoc-in [:registry :features (:name feature)] feature)
-                            (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false))))))
+                      (if new-feature?
+                        (service/add-feature feature #(dispatch [:saved-feature %]))
+                        (service/update-feature feature #(dispatch [:updated-feature %])))
+                      db)))
+
+;; when dependency is removed from the list, only db state is updated
+(register-handler :delete-dependency-clicked
+                  (fn [db [_ deleted_dep]]
+                    (let [dependencies (-> db :ui-state :registry-page :feature-pane :feature :dependencies)
+                          dependencies_after_removal (vec (remove #{deleted_dep} dependencies))]
+                      (-> db
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :dependencies] dependencies_after_removal)))))
+
+;; when dependency is removed from the list, only db state is updated
+(register-handler :add-dependency-clicked
+                  (fn [db [_]]
+                    (let [new_dependency (-> db :ui-state :registry-page :feature-pane :feature :new-dependency)
+                          dependencies (-> db :ui-state :registry-page :feature-pane :feature :dependencies)
+                          extended_dependencies (vec (conj (set dependencies) {:name new_dependency}))]
+                      (-> db
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :dependencies] extended_dependencies)
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :new-dependency] nil)))))
+
+
+;; update db state after api retures success for adding a feature
+(register-handler :saved-feature
+                  (fn [db [_ feature]]
+                    (let [current_features (-> db :registry :features)]
+                      (log/debug "in handler ")
+                      (-> db
+                          (assoc-in [:registry :features] (conj current_features feature))
+                          (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)))))
+
+
+;; update db state after api retures success for updating a feature
+(register-handler :updated-feature
+                  (fn [db [_ feature]]
+                    (#(log/debug "updated feature " %) feature)
+                    db))
+
 
 ;; when new feature button is clicked, push an empty feature to the db flagged new-feature = true
 (register-handler :new-feature-clicked
@@ -49,12 +84,21 @@
                         (assoc-in [:ui-state :registry-page :feature-pane :feature] {})
                         (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] true))))
 
-;; when the delete feature button is clicked, remove from the db
+;; when the delete feature button is clicked, make an API call
 (register-handler :delete-feature-clicked
                   (fn [db [_ _]]
                     (let [feature (-> db :ui-state :registry-page :feature-pane :feature)]
+                      (service/delete-feature feature #(dispatch [:deleted-feature]))
+                      db)))
+
+;; when the delete operation was successful, update the db state
+(register-handler :deleted-feature
+                  (fn [db [_ _]]
+                    (let [feature (-> db :ui-state :registry-page :feature-pane :feature)
+                          features (-> db :registry :features)
+                          features_after_removal (vec (filter #(not= (:name %) (:name feature)) features))]
                       (-> db
-                          (update-in [:registry :features] dissoc (:name feature))
+                          (assoc-in [:registry :features] features_after_removal)
                           (assoc-in [:ui-state :registry-page :feature-pane :feature] {})
                           (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] true)))))
 
