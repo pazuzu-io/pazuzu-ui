@@ -3,11 +3,15 @@
                  [org.clojure/clojurescript "1.7.170"]
                  [com.taoensso/timbre "4.1.4"]              ; Clojure/Script logging
 
+                 [javax.servlet/servlet-api "2.5"] [ring "1.3.2"] [compojure "1.5.0"]
+
                  [reagent "0.5.1"]                          ; React rendering wrapper
                  [re-frame "0.7.0"]                         ; Data-flow library
                  [bidi "2.0.6"]                             ; Frontend routing
                  [kibu/pushy "0.3.2"]                       ; HTML5 history
                  [cljs-http "0.1.39"]                       ; HTTP client
+
+                 [adzerk/env "0.3.0"]                        ;;managing env variables
                  ]
 
   :min-lein-version "2.5.3"
@@ -23,21 +27,37 @@
   :less {:source-paths ["src/less"]
          :target-path  "resources/public/css/compiled"}
 
-  :profiles {:dev {:dependencies [[compojure "1.5.0"]]
-                   :figwheel     {:ring-handler pazuzu-ui.core/app
-                                  :css-dirs     ["resources/public/css"]}}}
+  :profiles {:dev     {:figwheel  {:ring-handler pazuzu-ui.core/app-routes
+                                   :css-dirs     ["resources/public/css"]}
+                       :cljsbuild {:builds [{:id           "dev"
+                                             :source-paths ["src/cljs"]
+                                             :figwheel     {:on-jsload "pazuzu-ui.core/mount-root"}
+                                             :compiler     {:main                 pazuzu-ui.core
+                                                            :output-to            "resources/public/js/compiled/app.js"
+                                                            :output-dir           "resources/public/js/compiled/out"
+                                                            :asset-path           "js/compiled/out"
+                                                            :source-map-timestamp true}}
+                                            {:id           "min"
+                                             :source-paths ["src/cljs"]
+                                             :compiler     {:main            pazuzu-ui.core
+                                                            :output-to       "resources/public/js/compiled/app.js"
+                                                            :optimizations   :none
+                                                            :closure-defines {"goog.DEBUG" false}
+                                                            :pretty-print    false}}]}}
 
-  :cljsbuild {:builds {:dev {:source-paths ["src/cljs"]
-                             :figwheel     {:on-jsload "pazuzu-ui.core/mount-root"}
-                             :compiler     {:main                 pazuzu-ui.core
-                                            :output-to            "resources/public/js/compiled/app.js"
-                                            :output-dir           "resources/public/js/compiled/out"
-                                            :asset-path           "js/compiled/out"
-                                            :source-map-timestamp true}}
+             :uberjar {:aot          :all
+                       :uberjar-name "pazuzu-ui.jar"
+                       :cljsbuild    {:builds [{:source-paths ["src/cljs"]
+                                                :compiler     {:main                 pazuzu-ui.core
+                                                               :output-to            "resources/public/js/compiled/app.js"
+                                                               :output-dir           "resources/public/js/compiled/out"
+                                                               :asset-path           "js/compiled/out"
+                                                               :optimizations        :advanced
+                                                               :closure-defines      {debug? false}
+                                                               :pretty-print         false
+                                                               :source-map-timestamp true}}]}}}
 
-                       :min {:source-paths ["src/cljs"]
-                             :compiler     {:main            pazuzu-ui.core
-                                            :output-to       "resources/public/js/compiled/app.js"
-                                            :optimizations   :advanced
-                                            :closure-defines {goog.DEBUG false}
-                                            :pretty-print    false}}}})
+
+  :uberjar-name "pazuzu-ui.jar"
+  :hooks [leiningen.cljsbuild]
+  :main pazuzu-ui.core)
