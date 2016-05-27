@@ -65,7 +65,7 @@
                   (fn [db [_ feature]]
                     (let [current_features (-> db :registry :features)]
                       (log/debug "in handler ")
-                      (dispatch [:add-message {:type "success" :header "Your feature has been saved"}])
+                      (dispatch [:add-message {:type "success" :header "Your feature has been saved" :time 3}])
                       (-> db
                           (assoc-in [:registry :features] (conj current_features feature))
                           (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)))))
@@ -75,6 +75,7 @@
 (register-handler :updated-feature
                   (fn [db [_ feature]]
                     (#(log/debug "updated feature " %) feature)
+                    (dispatch [:add-message {:type "success" :header "Your feature has been updated" :time 3}])
                     db))
 
 
