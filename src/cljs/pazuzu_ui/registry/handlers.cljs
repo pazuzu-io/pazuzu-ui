@@ -121,12 +121,9 @@
 
 (register-handler :add-message
                   (fn [db [_ msg]]
-                    (let [messages (-> db :ui-state :messages)]
-                      (assoc-in db [:ui-state :messages] (conj messages msg))
-                    )))
+                    (update-in db [:ui-state :messages] conj msg)))
 
 (register-handler :remove-message
                   (fn [db [_ idx]]
-                    (let [messages (-> db :ui-state :messages)]
-                      (assoc-in db [:ui-state :messages] (vec (concat (subvec messages 0 idx) (subvec messages (inc idx)))))
-                    )))
+                      (update-in db [:ui-state :messages] #(vec (concat (subvec % 0 idx) (subvec % (inc idx)))) idx)
+                    ))

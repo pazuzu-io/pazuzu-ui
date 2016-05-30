@@ -19,6 +19,6 @@
   "It will process a list of messages that be expected formed by {type header message time} and render a simple-message for each one"
   [messages]
   [:div.message-list
-    (map-indexed (fn [idx msg] ^{:key idx} [simple-message idx (:type msg) (:header msg) (:message msg) (:time msg)]) messages)
+    (map-indexed (fn [idx msg] ^{:key (str idx "-" (:header msg))} [simple-message idx (:type msg) (:header msg) (:message msg) (:time msg)]) messages)
   ]
 )
