@@ -2,6 +2,7 @@
   "Describes components related to registry part of the UI"
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [clojure.string :as s]
+            [pazuzu-ui.views.loading-component :refer [loading-component]]
             [re-frame.core :refer [subscribe dispatch]]
             [clojure.string :as str]
             [taoensso.timbre :as log]))
@@ -29,23 +30,22 @@
           [:div.field
            (if (empty? (:dependencies @feature))
              [:div.field
-              [:label "No dependencies" ]]
+              [:label "No dependencies"]]
              [:div.field
               [:label "Dependencies"]
               (map #(identity
                      [:div.ui.label
                       {:key (:name %)} (:name %)
                       [:i.delete.icon
-                       {:on-click (fn [] (dispatch [:delete-dependency-clicked %]))}]]) dependencies)]
-             )
+                       {:on-click (fn [] (dispatch [:delete-dependency-clicked %]))}]]) dependencies)])
            [:div
             [:div.ui.mini.action.input
-             [:input.ui {:type "text" :placeholder "Dependency name"
-                         :value (:new-dependency @feature)
+             [:input.ui {:type      "text" :placeholder "Dependency name"
+                         :value     (:new-dependency @feature)
                          :on-change #(update-state-fn % [:new-dependency])}]
              [:div.ui.mini.icon.button.positive
               {:on-click #(dispatch [:add-dependency-clicked])
-               :class (if (empty? (:new-dependency @feature)) :disabled)}
+               :class    (if (empty? (:new-dependency @feature)) :disabled)}
               [:i.add.icon] "Add"]]]]
           [:div.field.code
            [:label "Docker file Snippet"]
@@ -102,6 +102,8 @@
   (let [registry (subscribe [:registry])
         all-features (reaction (-> @registry :features))
         page-state (subscribe [:ui-state :registry-page])
+        features-loading? (reaction (-> @page-state :features-loading?))
+        feature-detail-loading? (reaction (-> @page-state :feature-detail-loading?))
         selected-name (reaction (:selected-feature-name @page-state))
         search-suffix (reaction (-> @page-state :search-input-value s/lower-case))]
     (dispatch [:load-features])
@@ -113,8 +115,7 @@
         [:div#registry.ui.padded.grid
          [:div#features-pane.five.wide.column
           [feature-list-menu @search-suffix]
-          [features-list features @selected-name]]
+          (loading-component @features-loading? [features-list features @selected-name])]
 
          [:div#feature-details.eleven.wide.column
-          [feature-details]
-          [feature-details-menu]]]))))
+          (loading-component @feature-detail-loading? [:div [feature-details] [feature-details-menu]])]]))))
