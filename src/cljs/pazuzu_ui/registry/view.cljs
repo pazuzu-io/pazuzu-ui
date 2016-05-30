@@ -37,8 +37,7 @@
                      [:div.ui.label
                       {:key (:name %)} (:name %)
                       [:i.delete.icon
-                       {:on-click (fn [] (dispatch [:delete-dependency-clicked %]))}]]) dependencies)]
-             )
+                       {:on-click (fn [] (dispatch [:delete-dependency-clicked %]))}]]) dependencies)])
            [:div
             [:div.ui.mini.action.input
              [:input.ui {:type      "text" :placeholder "Dependency name"
@@ -119,5 +118,4 @@
           (loading-component @features-loading? [features-list features @selected-name])]
 
          [:div#feature-details.eleven.wide.column
-          (loading-component @feature-detail-loading? [feature-details])
-          [feature-details-menu]]]))))
+          (loading-component @feature-detail-loading? [:div [feature-details] [feature-details-menu]])]]))))

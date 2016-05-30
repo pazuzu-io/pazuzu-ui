@@ -8,11 +8,10 @@
 (register-handler :feature-selected
                   (fn [db [_ feature]]
                     (do
-                      (assoc-in db [:ui-state :registry-page :feature-detail-loading?] true)
                       (service/get-feature (:name feature)
                                            #(do (log/debug "Fetched : " %)
-                                                (dispatch [:feature-selected-loaded %]))))
-                    db))
+                                                (dispatch [:feature-selected-loaded %])))
+                      (assoc-in db [:ui-state :registry-page :feature-detail-loading?] true))))
 
 ;; whenever the feature selected is loaded, update the db
 (register-handler :feature-selected-loaded
@@ -109,10 +108,9 @@
 (register-handler :load-features
                   (fn [db [_ _]]
                     (do
-                      (assoc-in db [:ui-state :registry-page :features-loading?] true)
                       (service/get-features #(do (log/debug "Features received from the backend : " %)
-                                                 (dispatch [:loaded-features %]))))
-                    db))
+                                                 (dispatch [:loaded-features %])))
+                      (assoc-in db [:ui-state :registry-page :features-loading?] true))))
 
 ;; update the db state by setting the features
 (register-handler :loaded-features
