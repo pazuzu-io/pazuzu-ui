@@ -7,15 +7,18 @@
 ;; whener a feature is clicked in the registry page
 (register-handler :feature-selected
                   (fn [db [_ feature]]
-                    (service/get-feature (:name feature)
-                                         #(do (log/debug "Fetched : " %)
-                                              (dispatch [:feature-selected-loaded %])))
+                    (do
+                      (assoc-in db [:ui-state :registry-page :feature-detail-loading?] true)
+                      (service/get-feature (:name feature)
+                                           #(do (log/debug "Fetched : " %)
+                                                (dispatch [:feature-selected-loaded %]))))
                     db))
 
 ;; whenever the feature selected is loaded, update the db
 (register-handler :feature-selected-loaded
                   (fn [db [_ feature]]
                     (-> db
+                        (assoc-in [:ui-state :registry-page :feature-detail-loading?] false)
                         (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)
                         (assoc-in [:ui-state :registry-page :feature-pane :feature] feature)
                         (assoc-in [:ui-state :registry-page :selected-feature-name] (:name feature)))))
@@ -105,12 +108,15 @@
 ;;when the registry page loads call the backend to list available features
 (register-handler :load-features
                   (fn [db [_ _]]
-                    (service/get-features #(do (log/debug "Features received from the backend : " %)
-                                               (dispatch [:loaded-features %])))
+                    (do
+                      (assoc-in db [:ui-state :registry-page :features-loading?] true)
+                      (service/get-features #(do (log/debug "Features received from the backend : " %)
+                                                 (dispatch [:loaded-features %]))))
                     db))
 
 ;; update the db state by setting the features
 (register-handler :loaded-features
                   (fn [db [_ features]]
                     (-> db
+                        (assoc-in [:ui-state :registry-page :features-loading?] false)
                         (assoc-in [:registry :features] features))))
