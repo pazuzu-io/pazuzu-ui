@@ -2,12 +2,8 @@
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [pazuzu-ui.config :as conf]
             [cljs-http.client :as http]
-            [cljs.core.async :refer [<!]]))
-
-(defn call-response-callback
-  "Check for a response if it successful call the normal callback if not call the error callback"
-  [response callback error-callback]
-  (if (:success response) (callback (:body response)) (error-callback (-> response :body :message))))
+            [cljs.core.async :refer [<!]]
+            [taoensso.timbre :as log]))
 
 (defn flatten_dependencies
   "Takes featrue and changes the dependency objects vector to plane names vector"
@@ -17,9 +13,9 @@
 
 (defn get-features
   "Get the features and execute the callback with the features as argument"
-  [callback error-callback]
+  [callback]
   (go (let [response (<! (http/get (str conf/registry-api "/api/features") {}))]
-      (call-response-callback response  callback error-callback))))
+        (callback (:body response)))))
 
 (defn get-feature
   "Get the detailed feature with the given id"
@@ -30,22 +26,22 @@
 
 (defn add-feature
   "Add a new feature to the registry"
-  [feature callback error-callback]
+  [feature callback]
   (go (let [response (<! (http/post
                            (str conf/registry-api "/api/features") {:json-params (flatten_dependencies feature)}))]
-        (call-response-callback response  callback error-callback))))
+        (callback (:body response)))))
 
 (defn update-feature
   "Update a feature in the registry"
-  [feature callback error-callback]
+  [feature callback]
   (go (let [response (<! (http/put
                            (str conf/registry-api "/api/features/" (:name feature))
                            {:json-params (flatten_dependencies feature)}))]
-        (call-response-callback response  callback error-callback))))
+        (callback (:body response)))))
 
 
 (defn delete-feature
   "Delete a feature in the registry"
-  [feature callback error-callback]
+  [feature callback]
   (go (let [response (<! (http/delete (str conf/registry-api "/api/features/" (:name feature))))]
-        (call-response-callback response callback error-callback))))
+        (callback (:body response)))))

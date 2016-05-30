@@ -2,8 +2,7 @@
   "Contains top-level navigation for various app's pages and basic route-handling"
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [re-frame.core :refer [subscribe]]
-            [pazuzu-ui.registry.view :as registry]
-            [pazuzu-ui.views.message :refer [simple-message-list]]))
+            [pazuzu-ui.registry.view :as registry]))
 
 (defn welcome []
   [:div.ui.vertical.masthead.center.aligned.segment
@@ -22,11 +21,9 @@
    [:p "An evil ancient moster"]])
 
 (defn active-page []
-  (let [page  (subscribe [:ui-state :active-page])
-        messages (subscribe [:ui-state :messages])]
+  (let [page (subscribe [:ui-state :active-page])]
     (fn []
       [:div#page.ui.container
-       [simple-message-list @messages]
        (case @page
          :home-page [welcome]
          :about-page [about]
