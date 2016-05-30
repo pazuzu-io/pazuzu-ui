@@ -6,8 +6,8 @@
 (when debug?
   (enable-console-print!))
 
-;;load environment variable or get the default one
+;;load environment variable or get the default one, will be loaded at compile time
 (env/def
-  API "http://localhost:8080")
+  BACKEND_ENDPOINT "http://localhost:8080")
 
-(def registry-api API)
+(def registry-api BACKEND_ENDPOINT)
