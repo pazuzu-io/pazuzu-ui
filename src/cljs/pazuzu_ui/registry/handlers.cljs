@@ -110,7 +110,7 @@
                     (service/get-features #(do (log/debug "Features received from the backend : " %)
                                                (dispatch [:loaded-features %]))
                                           #(do (log/debug "Fail to retrive features : " % )
-                                               (dispatch [:add-message {:type "error" :header "Error Retriving the features" :message %} ])))
+                                               (dispatch [:add-message {:type "error" :header "Error Retrieving the features" :message %} ])))
                     db))
 
 ;; update the db state by setting the features
@@ -118,12 +118,3 @@
                   (fn [db [_ features]]
                     (-> db
                         (assoc-in [:registry :features] features))))
-
-(register-handler :add-message
-                  (fn [db [_ msg]]
-                    (update-in db [:ui-state :messages] conj msg)))
-
-(register-handler :remove-message
-                  (fn [db [_ idx]]
-                      (update-in db [:ui-state :messages] #(vec (concat (subvec % 0 idx) (subvec % (inc idx)))) idx)
-                    ))
