@@ -39,8 +39,12 @@
 
                       ; if creating feature and there is already one with that name, alert and do nothing
                       (if new-feature?
-                        (service/add-feature feature #(dispatch [:saved-feature %]))
-                        (service/update-feature feature #(dispatch [:updated-feature %])))
+                        (service/add-feature feature
+                          #(dispatch [:saved-feature %])
+                          #(dispatch [:add-message {:type "error" :header "Error Saving the features" :message %}]))
+                        (service/update-feature feature
+                          #(dispatch [:updated-feature %])
+                          #(dispatch [:add-message {:type "error" :header "Error Updating the features" :message %}])))
                       db)))
 
 ;; when dependency is removed from the list, only db state is updated
@@ -66,7 +70,7 @@
 (register-handler :saved-feature
                   (fn [db [_ feature]]
                     (let [current_features (-> db :registry :features)]
-                      (log/debug "in handler ")
+                      (dispatch [:add-message {:type "success" :header "Your feature has been saved" :time 3}])
                       (-> db
                           (assoc-in [:registry :features] (conj current_features feature))
                           (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)))))
@@ -76,6 +80,7 @@
 (register-handler :updated-feature
                   (fn [db [_ feature]]
                     (#(log/debug "updated feature " %) feature)
+                    (dispatch [:add-message {:type "success" :header "Your feature has been updated" :time 3}])
                     db))
 
 
@@ -90,7 +95,9 @@
 (register-handler :delete-feature-clicked
                   (fn [db [_ _]]
                     (let [feature (-> db :ui-state :registry-page :feature-pane :feature)]
-                      (service/delete-feature feature #(dispatch [:deleted-feature]))
+                      (service/delete-feature feature
+                        #(dispatch [:deleted-feature])
+                        #(dispatch [:add-message {:type "error" :header "Error Deleting the feature" :message %}]))
                       db)))
 
 ;; when the delete operation was successful, update the db state
@@ -107,10 +114,11 @@
 ;;when the registry page loads call the backend to list available features
 (register-handler :load-features
                   (fn [db [_ _]]
-                    (do
-                      (service/get-features #(do (log/debug "Features received from the backend : " %)
-                                                 (dispatch [:loaded-features %])))
-                      (assoc-in db [:ui-state :registry-page :features-loading?] true))))
+                    (service/get-features #(do (log/debug "Features received from the backend : " %)
+                                               (dispatch [:loaded-features %]))
+                                          #(do (log/debug "Fail to retrive features : " %)
+                                               (dispatch [:add-message {:type "error" :header "Error Retrieving the features" :message %} ])))
+                    (assoc-in db [:ui-state :registry-page :features-loading?] true)))
 
 ;; update the db state by setting the features
 (register-handler :loaded-features
