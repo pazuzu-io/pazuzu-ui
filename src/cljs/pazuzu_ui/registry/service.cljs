@@ -45,4 +45,3 @@
   [feature callback]
   (go (let [response (<! (http/delete (str conf/registry-api "/api/features/" (:name feature))))]
         (callback (:body response)))))
-
