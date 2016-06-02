@@ -7,7 +7,9 @@
    :ui-state {
               :messages []
               :active-page   :home-page
-              :registry-page {:search-input-value    ""
-                              :selected-feature-name nil
-                              :feature-pane          {:new-feature? false
-                                                      :feature      nil}}}})
+              :registry-page {:search-input-value      ""
+                              :features-loading?       false
+                              :feature-detail-loading? false
+                              :selected-feature-name   nil
+                              :feature-pane            {:new-feature? false
+                                                        :feature      nil}}}})

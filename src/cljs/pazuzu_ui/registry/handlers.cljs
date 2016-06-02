@@ -7,15 +7,17 @@
 ;; whener a feature is clicked in the registry page
 (register-handler :feature-selected
                   (fn [db [_ feature]]
-                    (service/get-feature (:name feature)
-                                         #(do (log/debug "Fetched : " %)
-                                              (dispatch [:feature-selected-loaded %])))
-                    db))
+                    (do
+                      (service/get-feature (:name feature)
+                                           #(do (log/debug "Fetched : " %)
+                                                (dispatch [:feature-selected-loaded %])))
+                      (assoc-in db [:ui-state :registry-page :feature-detail-loading?] true))))
 
 ;; whenever the feature selected is loaded, update the db
 (register-handler :feature-selected-loaded
                   (fn [db [_ feature]]
                     (-> db
+                        (assoc-in [:ui-state :registry-page :feature-detail-loading?] false)
                         (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)
                         (assoc-in [:ui-state :registry-page :feature-pane :feature] feature)
                         (assoc-in [:ui-state :registry-page :selected-feature-name] (:name feature)))))
@@ -37,8 +39,12 @@
 
                       ; if creating feature and there is already one with that name, alert and do nothing
                       (if new-feature?
-                        (service/add-feature feature #(dispatch [:saved-feature %]) #(dispatch [:add-message {:type "error" :header "Error Saving the features" :message %}]) )
-                        (service/update-feature feature #(dispatch [:updated-feature %]) #(dispatch [:add-message {:type "error" :header "Error Updating the features" :message %}])))
+                        (service/add-feature feature
+                          #(dispatch [:saved-feature %])
+                          #(dispatch [:add-message {:type "error" :header "Error Saving the features" :message %}]))
+                        (service/update-feature feature
+                          #(dispatch [:updated-feature %])
+                          #(dispatch [:add-message {:type "error" :header "Error Updating the features" :message %}])))
                       db)))
 
 ;; when dependency is removed from the list, only db state is updated
@@ -64,7 +70,6 @@
 (register-handler :saved-feature
                   (fn [db [_ feature]]
                     (let [current_features (-> db :registry :features)]
-                      (log/debug "in handler ")
                       (dispatch [:add-message {:type "success" :header "Your feature has been saved" :time 3}])
                       (-> db
                           (assoc-in [:registry :features] (conj current_features feature))
@@ -90,7 +95,9 @@
 (register-handler :delete-feature-clicked
                   (fn [db [_ _]]
                     (let [feature (-> db :ui-state :registry-page :feature-pane :feature)]
-                      (service/delete-feature feature #(dispatch [:deleted-feature]) #(dispatch [:add-message {:type "error" :header "Error Deleting the feature" :message %}]))
+                      (service/delete-feature feature
+                        #(dispatch [:deleted-feature])
+                        #(dispatch [:add-message {:type "error" :header "Error Deleting the feature" :message %}]))
                       db)))
 
 ;; when the delete operation was successful, update the db state
@@ -109,12 +116,13 @@
                   (fn [db [_ _]]
                     (service/get-features #(do (log/debug "Features received from the backend : " %)
                                                (dispatch [:loaded-features %]))
-                                          #(do (log/debug "Fail to retrive features : " % )
+                                          #(do (log/debug "Fail to retrive features : " %)
                                                (dispatch [:add-message {:type "error" :header "Error Retrieving the features" :message %} ])))
-                    db))
+                    (assoc-in db [:ui-state :registry-page :features-loading?] true)))
 
 ;; update the db state by setting the features
 (register-handler :loaded-features
                   (fn [db [_ features]]
                     (-> db
+                        (assoc-in [:ui-state :registry-page :features-loading?] false)
                         (assoc-in [:registry :features] features))))

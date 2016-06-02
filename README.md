@@ -69,6 +69,20 @@ To start hacking checkout this repo and then to start a web server with live rel
 
 To get content in for the UI you need to have running [`pazuzu-registry`](https://github.com/zalando/pazuzu-registry)
 
+
+Packaging
+---------
+
+To build a standalone runnable jar
+
+    export BACKEND_ENPOINT=https://backend-registry-endpoint.ok
+    lein uberjar
+    java -jar ./target/pazuzu-ui.jar
+
+if no BACKEND_ENDPOINT environment variable is specified, 
+the default backend endpoint will be http://localhost:8080
+
+
 License
 -------
 
