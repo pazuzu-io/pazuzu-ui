@@ -10,7 +10,8 @@
                     (do
                       (service/get-feature (:name feature)
                                            #(do (log/debug "Fetched : " %)
-                                                (dispatch [:feature-selected-loaded %])))
+                                                (dispatch [:feature-selected-loaded %]))
+                                           #((dispatch [:add-message {:type "error" :header "Error Retrieving the feature" :message %} ])))
                       (assoc-in db [:ui-state :registry-page :feature-detail-loading?] true))))
 
 ;; whenever the feature selected is loaded, update the db
@@ -120,9 +121,38 @@
                                                (dispatch [:add-message {:type "error" :header "Error Retrieving the features" :message %} ])))
                     (assoc-in db [:ui-state :registry-page :features-loading?] true)))
 
+;;load just a page of the registre features
+(register-handler :load-features-page
+                  (fn [db [_ _]]
+                    (let [per-page (-> db :ui-state :registry-page :per-page)
+                          page (-> db :ui-state :registry-page :page)
+                          offset (* (- page 1) per-page)]
+                          (service/get-features-page offset per-page
+                              (fn [features total]
+                                (log/debug "Features received from the backend : " total)
+                                (dispatch [:loaded-features-page (list features total)]))
+                              #(do (log/debug "Fail to retrive features : " %)
+                                   (dispatch [:add-message {:type "error" :header "Error Retrieving the features" :message %} ])))
+                    (assoc-in db [:ui-state :registry-page :features-loading?] true))))
+
+
 ;; update the db state by setting the features
 (register-handler :loaded-features
                   (fn [db [_ features]]
                     (-> db
                         (assoc-in [:ui-state :registry-page :features-loading?] false)
                         (assoc-in [:registry :features] features))))
+
+;;when a page is loaded we got total-features parameter
+(register-handler :loaded-features-page
+                  (fn [db [_ params]]
+                    (-> db
+                        (assoc-in [:ui-state :registry-page :features-loading?] false)
+                        (assoc-in [:ui-state :registry-page :total-features] (nth params 1))
+                        (assoc-in [:registry :features] (nth params 0)))))
+
+;;set a new page and call load-features
+(register-handler :change-feature-page
+                  (fn [db [_ page]]
+                    (dispatch [:load-features-page])
+                    (assoc-in db [:ui-state :registry-page :page] page)))
