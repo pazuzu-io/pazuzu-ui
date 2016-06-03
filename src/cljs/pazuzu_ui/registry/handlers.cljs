@@ -73,7 +73,7 @@
                     (let [current_features (-> db :registry :features)]
                       (dispatch [:add-message {:type "success" :header "Your feature has been saved" :time 3}])
                       (-> db
-                          (assoc-in [:registry :features] (conj current_features feature))
+                          (assoc-in [:registry :features] (conj (butlast current_features) feature))
                           (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)))))
 
 
