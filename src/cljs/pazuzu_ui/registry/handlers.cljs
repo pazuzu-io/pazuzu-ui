@@ -61,10 +61,32 @@
                     (let [new_dependency (-> db :ui-state :registry-page :feature-pane :feature :new-dependency)
                           dependencies (-> db :ui-state :registry-page :feature-pane :feature :dependencies)
                           extended_dependencies (vec (conj (set dependencies) {:name new_dependency}))]
-                      (-> db
-                          (assoc-in [:ui-state :registry-page :feature-pane :feature :dependencies] extended_dependencies)
-                          (assoc-in [:ui-state :registry-page :feature-pane :feature :new-dependency] nil)))))
+                        (-> db
+                            (assoc-in [:ui-state :registry-page :feature-pane :feature :dependencies] extended_dependencies)
+                            (assoc-in [:ui-state :registry-page :feature-pane :feature :new-dependency] nil))
+                        )))
 
+;; when tag was added to a feature
+(register-handler :add-feature-tag-clicked
+                  (fn [db [_]]
+                    (let [new_feature_tag  (-> db :ui-state :registry-page :feature-pane :feature :new-feature-tag)
+                          tags (-> db :ui-state :registry-page :feature-pane :feature :tags)
+                          updated_feature_tags (vec (conj (set tags) {:name new_feature_tag}))]
+
+                      (-> db
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :tags] updated_feature_tags)
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :new-feature-tag] nil)
+                          )
+                      )))
+
+;; when tag delete
+
+(register-handler :delete-feature-tag-clicked
+                  (fn [db [_ deleted_tag]]
+                    (let [tags (-> db :ui-state :registry-page :feature-pane :feature :tags)
+                          updated_feature_tags (vec (remove #{deleted_tag} tags))]
+                      (-> db
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :tags] updated_feature_tags)))))
 
 ;; update db state after api retures success for adding a feature
 (register-handler :saved-feature
