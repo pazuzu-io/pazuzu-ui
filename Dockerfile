@@ -1,4 +1,4 @@
-FROM registry.opensource.zalan.do/stups/openjdk:8u66-b17-1-12
+FROM registry.opensource.zalan.do/stups/openjdk:8-26
 RUN mkdir /usr/pazuzu-ui
 COPY ./target/pazuzu-ui.jar /usr/pazuzu-ui
 WORKDIR /usr/pazuzu-ui
