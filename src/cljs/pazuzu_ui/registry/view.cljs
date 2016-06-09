@@ -3,17 +3,19 @@
   (:require-macros [reagent.ratom :refer [reaction]])
   (:require [clojure.string :as s]
             [pazuzu-ui.views.loading-component :refer [loading-component]]
+            [pazuzu-ui.views.code-editor :refer [code-editor]]
             [re-frame.core :refer [subscribe dispatch]]
             [pazuzu-ui.views.pagination :refer [pagination]]))
+
 
 (defn feature-details []
   (let [ui-state (subscribe [:ui-state :registry-page :feature-pane])
         feature (reaction (:feature @ui-state))
         dependencies (:dependencies @feature)
+        update-state-from-value (fn [value path]
+                                  (dispatch [:feature-edited (assoc-in @feature path value)]))
         update-state-fn (fn [event path]
-                          (let [value (-> event .-target .-value)
-                                updated (assoc-in @feature path value)]
-                            (dispatch [:feature-edited updated])))]
+                          (update-state-from-value (-> event .-target .-value) path))]
     (identity
       [:div.ui.grid.container
        [:div.row
@@ -48,16 +50,10 @@
               [:i.add.icon] "Add"]]]]
           [:div.field.code
            [:label "Docker file Snippet"]
-           [:textarea {:field     :textarea
-                       :rows      5
-                       :value     (:docker_data @feature)
-                       :on-change #(update-state-fn % [:docker_data])}]]
+           [code-editor "dockerfile" (:docker_data @feature) #(update-state-from-value % [:docker_data])]]
           [:div.field.code
            [:label "Test Case command"]
-           [:textarea {:field     :textarea
-                       :rows      3
-                       :value     (:test_instruction @feature)
-                       :on-change #(update-state-fn % [:test_instruction])}]]]]]])))
+           [code-editor "shell" (:test_instruction @feature) #(update-state-from-value % [:test_instruction])]]]]]])))
 
 (defn feature-details-menu []
   [:div.ui.secondary.menu

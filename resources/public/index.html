@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.min.css">
 
+
+    <link href="js/codemirror-5.15.2/lib/codemirror.css" rel="stylesheet" type="text/css">
     <link href="css/compiled/site.css" rel="stylesheet" type="text/css">
   </head>
   <body>
@@ -19,6 +21,10 @@
       <!--<div class="signal"/>-->
     </div>
     <script src="js/compiled/app.js"></script>
+    <!-- Needed by code-editor component TODO: Make load on demand by the component -->
+    <script src="js/codemirror-5.15.2/addon/mode/simple.js"></script>
+    <script src="js/codemirror-5.15.2/mode/dockerfile/dockerfile.js"></script>
+    <script src="js/codemirror-5.15.2/mode/shell/shell.js"></script>
     <script>pazuzu_ui.core.init();</script>
   </body>
 </html>

@@ -5,12 +5,13 @@
 
                  [javax.servlet/servlet-api "2.5"] [ring "1.3.2"] [compojure "1.5.0"] ;;to be able to run compojure as a standalone jar
 
-                 [reagent "0.5.1"]                          ; React rendering wrapper
+                 [reagent "0.6.0-alpha2"]                   ; React rendering wrapper
                  [re-frame "0.7.0"]                         ; Data-flow library
                  [bidi "2.0.6"]                             ; Frontend routing
                  [kibu/pushy "0.3.2"]                       ; HTML5 history
                  [cljs-http "0.1.39"]                       ; HTTP client
                  [adzerk/env "0.3.0"]                       ;;managing env variables
+                 [cljsjs/codemirror "5.11.0-2"]             ; Editor for Docker File higlighting
                  ]
 
   :min-lein-version "2.5.3"
