@@ -108,6 +108,7 @@
         features-loading? (reaction (-> @page-state :features-loading?))
         feature-detail-loading? (reaction (-> @page-state :feature-detail-loading?))
         selected-name (reaction (:selected-feature-name @page-state))
+        new-feature? (subscribe [:ui-state :registry-page :feature-pane :new-feature?])
         search-suffix (reaction (-> @page-state :search-input-value s/lower-case))]
     (dispatch [:load-features-page])
     (fn []
@@ -121,4 +122,6 @@
           (loading-component @features-loading? [features-list features @selected-name])]
 
          [:div#feature-details.eleven.wide.column
-          (loading-component @feature-detail-loading? [:div [feature-details] [feature-details-menu]])]]))))
+           (if (or (not (empty? @selected-name)) @new-feature?)
+             (loading-component @feature-detail-loading? [:div [feature-details] [feature-details-menu]])
+             [:h1 "Welcome to Pazuzu Registry"])]])))) ;;Insert nice text here
