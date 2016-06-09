@@ -12,4 +12,7 @@
                               :feature-detail-loading? false
                               :selected-feature-name   nil
                               :feature-pane            {:new-feature? false
-                                                        :feature      nil}}}})
+                                                        :feature      nil}
+                              :total-features         0
+                              :per-page               10
+                              :page                   1}}})

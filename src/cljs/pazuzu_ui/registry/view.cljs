@@ -4,8 +4,7 @@
   (:require [clojure.string :as s]
             [pazuzu-ui.views.loading-component :refer [loading-component]]
             [re-frame.core :refer [subscribe dispatch]]
-            [clojure.string :as str]
-            [taoensso.timbre :as log]))
+            [pazuzu-ui.views.pagination :refer [pagination]]))
 
 (defn feature-details []
   (let [ui-state (subscribe [:ui-state :registry-page :feature-pane])
@@ -78,11 +77,15 @@
     [:div.header (:name feature)]]])
 
 (defn features-list [features selected-name]
-  [:div.features-list.ui.cards
-   (doall (for [feature features]
-            [feature-list-item {:key         (:name feature)
-                                :is-selected (= selected-name (:name feature))
-                                :feature     feature}]))])
+  (let [total-features (subscribe [:ui-state :registry-page :total-features])
+        per-page (subscribe [:ui-state :registry-page :per-page])
+        page (subscribe [:ui-state :registry-page :page])]
+    [:div.features-list.ui.cards
+     (doall (for [feature features]
+              [feature-list-item {:key         (:name feature)
+                                  :is-selected (= selected-name (:name feature))
+                                  :feature     feature}]))
+      [pagination @total-features @per-page @page :change-feature-page]]))
 
 (defn feature-list-menu [suffix]
   [:div.ui.secondary.menu
@@ -106,7 +109,7 @@
         feature-detail-loading? (reaction (-> @page-state :feature-detail-loading?))
         selected-name (reaction (:selected-feature-name @page-state))
         search-suffix (reaction (-> @page-state :search-input-value s/lower-case))]
-    (dispatch [:load-features])
+    (dispatch [:load-features-page])
     (fn []
       (let [suffix-predicate #(s/includes? (-> % :name s/lower-case) @search-suffix)
             features (->> @all-features
