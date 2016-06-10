@@ -73,10 +73,13 @@
 ;; update db state after api retures success for adding a feature
 (register-handler :saved-feature
                   (fn [db [_ feature]]
-                    (let [current_features (-> db :registry :features)]
+                    (let [current_features (-> db :registry :features)
+                          per-page (-> db :ui-state :registry-page :per-page)
+                          total-features (-> db :ui-state :registry-page :total-features)]
                       (dispatch [:add-message {:type "success" :header "Your feature has been saved" :time 3}])
                       (-> db
-                          (assoc-in [:registry :features] (conj (butlast current_features) feature))
+                          (assoc-in [:registry :features] (conj (if (< (count current_features) per-page) current_features (butlast current_features)) feature))
+                          (assoc-in [:ui-state :registry-page :total-features] (inc (int total-features)))
                           (assoc-in [:ui-state :registry-page :selected-feature-name] (:name feature))
                           (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] false)
                           (stop-loading :feature-detail-loading?)))))
