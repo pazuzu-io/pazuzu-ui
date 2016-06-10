@@ -1,5 +1,5 @@
 # pazuzu-ui
-------------------------------------------------------------
+[![Travis BuildStatus](https://travis-ci.org/zalando/pazuzu-ui.svg?branch=master)](https://travis-ci.org/zalando/pazuzu-ui)
 
 [![Stories in Ready](https://badge.waffle.io/zalando/pazuzu-ui.png?label=ready&title=Ready)](http://waffle.io/zalando/pazuzu-ui)
 
