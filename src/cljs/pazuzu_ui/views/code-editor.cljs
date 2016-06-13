@@ -1,8 +1,7 @@
 (ns pazuzu-ui.views.code-editor
   (:require
     [reagent.core :as reagent]
-    [cljsjs.codemirror]
-    [taoensso.timbre :as log]))
+    [cljsjs.codemirror]))
 
 (defn code-editor
   [mode text change-callback]
@@ -15,12 +14,17 @@
                :mode mode
                :lineNumbers   true
              })]
-             ;(reagent/set-state comp (assoc (reagent/state comp) :editor cm))
+             (reagent/set-state comp (assoc (reagent/state comp) :editor cm))
              (.on cm "change" (fn [cm change] (change-callback (.getValue cm))))))
         :display-name  (str "code-editor-" mode)
-        ;:component-did-update
-          ;(fn [comp _] (println (.getValue (reagent/dom-node comp))))
-          ;(fn [comp _] (.setValue (:editor (reagent/state comp)) (get-in (reagent/props comp) [:text] "")))
+        :componentWillReceiveProps
+          (fn [comp [_ _ textProp]]
+            (let [editor (:editor (reagent/state comp))]
+            (if
+              (not= (.getValue editor) textProp)
+              (.setValue
+                editor
+                (if (nil? textProp) "" textProp)))))
         :reagent-render
           (fn [mode text change-callback]
             [:textarea {:field     :textarea
