@@ -8,7 +8,9 @@
 
 (def routes ["/" {""         :home-page
                   "about"    :about-page
-                  "registry" :registry-page
+                  "registry" {"" :registry-page
+                              "/" :registry-page
+                              ["/" :name] :registry-page-feature}
                   true       :not-found}])
 
 (defn- parse-url [url]
@@ -16,8 +18,7 @@
 
 (defn- dispatch-route [matched-route]
   (let [{handler :handler} matched-route]
-    (log/debug "Matched route -" handler)
-    (dispatch [:set-active-page handler])))
+    (dispatch [:set-active-page matched-route])))
 
 (defn init-routes []
   (log/debug "Initializing routes")
