@@ -1,7 +1,10 @@
 (ns pazuzu-ui.views.code-editor
   (:require
     [reagent.core :as reagent]
-    [cljsjs.codemirror]))
+    [cljsjs.codemirror]
+    [cljsjs.codemirror.addon.mode.simple]
+    [cljsjs.codemirror.mode.dockerfile]
+    [cljsjs.codemirror.mode.shell]))
 
 (defn code-editor
   [mode text change-callback]
@@ -28,6 +31,5 @@
         :reagent-render
           (fn [mode text change-callback]
             [:textarea {:field     :textarea
-                        :rows      3
                         :value     text
                         :on-change #(identity %)}])}))

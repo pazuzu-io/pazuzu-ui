@@ -36,6 +36,7 @@
                                                             :output-to            "resources/public/js/compiled/app.js"
                                                             :output-dir           "resources/public/js/compiled/out"
                                                             :asset-path           "js/compiled/out"
+                                                            :externs ["fu.js"]
                                                             :source-map-timestamp true}}
                                             {:id           "min"
                                              :source-paths ["src/cljs"]
