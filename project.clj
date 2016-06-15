@@ -5,7 +5,7 @@
 
                  [javax.servlet/servlet-api "2.5"] [ring "1.3.2"] [compojure "1.5.0"] ;;to be able to run compojure as a standalone jar
 
-                 [reagent "0.6.0-alpha2"]                   ; React rendering wrapper
+                 [reagent "0.6.0-rc"]                       ; React rendering wrapper
                  [re-frame "0.7.0"]                         ; Data-flow library
                  [bidi "2.0.6"]                             ; Frontend routing
                  [kibu/pushy "0.3.2"]                       ; HTML5 history
