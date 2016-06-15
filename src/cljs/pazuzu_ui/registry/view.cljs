@@ -14,6 +14,7 @@
   (let [ui-state (subscribe [:ui-state :registry-page :feature-pane])
         feature (reaction (:feature @ui-state))
         dependencies (:dependencies @feature)
+        tags (:tags @feature)
         update-state-from-value (fn [value path]
                                   (dispatch [:feature-edited (assoc-in @feature path value)]))
         update-state-fn (fn [event path]
@@ -30,10 +31,42 @@
                        :value     (:name @feature)
                        :on-change #(update-state-fn % [:name])}]]
              [:h1 (:name @feature)])]
+
+          [:div.field
+           (if (empty? (:tags @feature))
+             [:div.field
+              [:label "No tags"]]
+
+             [:div.field
+              [:label "Tags"]
+              (map #(identity
+                     [:div.ui.label
+                      {:key (:name %)} (:name %)
+                      [:i.delete.icon
+                       {:on-click (fn [] (dispatch [:delete-feature-tag-clicked %]))}]]) tags)])
+           [:div
+            [:div.ui.mini.action.input
+             [:input.ui {:type      "text" :placeholder "tag"
+                         :value     (:new-feature-tag @feature)
+                         :on-change #(update-state-fn % [:new-feature-tag])}]
+             [:div.ui.mini.icon.button.positive
+              {:on-click #(dispatch [:add-feature-tag-clicked])
+               :class    (if (empty? (:new-feature-tag @feature)) :disabled)}
+              [:i.add.icon] "Add"]]]]
+
+          [:div.field
+           [:label "Description"]
+           [:input {:type "text"
+                    :placeholder "Feature Description"
+                    :value (:description @feature)
+                    :on-change #(update-state-fn % [:description])
+                    }]]
+
           [:div.field
            (if (empty? (:dependencies @feature))
              [:div.field
               [:label "No dependencies"]]
+
              [:div.field
               [:label "Dependencies"]
               (map #(identity
