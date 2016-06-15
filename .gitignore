@@ -8,3 +8,4 @@ out
 .lein-repl-history
 .idea/
 /*.iml
+.DS_Store

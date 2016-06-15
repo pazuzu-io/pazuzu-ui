@@ -21,12 +21,18 @@
   (go (let [response (<! (http/get (str conf/registry-api "/api/features") {}))]
       (call-response-callback response  callback error-callback))))
 
+(defn get-features-page
+  "Get a features page and execute the callback with the features as argument"
+  [offset limit callback error-callback]
+  (go (let [response (<! (http/get (str conf/registry-api "/api/features?offset=" offset "&limit=" limit)  {}))
+            headers (-> response :headers)]
+        (if (:success response) (callback (:body response) (get headers "x-total-count")) (error-callback (-> response :body :message))))))
+
 (defn get-feature
   "Get the detailed feature with the given id"
-  [feature-name callback]
+  [feature-name callback error-callback]
   (go (let [response (<! (http/get (str conf/registry-api (str "/api/features/" feature-name)) {}))]
-        (callback (:body response))))
-  )
+        (call-response-callback response callback error-callback))))
 
 (defn add-feature
   "Add a new feature to the registry"
