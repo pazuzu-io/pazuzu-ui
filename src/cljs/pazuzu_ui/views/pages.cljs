@@ -27,10 +27,11 @@
     (fn []
       [:div#page.ui.container
        [simple-message-list @messages]
-       (case @page
+       (case (:handler @page)
          :home-page [welcome]
          :about-page [about]
          :registry-page [registry/page]
+         :registry-page-feature [registry/page]
          :not-found [:div [:h1 "404?!"]]
          ;; default is wtf, unknown routes should be covered abouve
          [:div [:h1 "Internal problem with routes"]])])))

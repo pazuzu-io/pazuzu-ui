@@ -171,6 +171,12 @@
                     (dispatch [:load-features-page])
                     (assoc-in db [:ui-state :registry-page :page] page)))
 
+(register-handler :check-initial-page
+                  (fn [db]
+                    (let [name (get-in db [:ui-state :active-page :route-params])]
+                      (if name (dispatch [:feature-selected name]))
+                    db)))
+
 ;;Loading hadnlers
 (register-handler :stop-loading
                   (fn [db [_ type]]

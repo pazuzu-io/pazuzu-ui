@@ -5,6 +5,8 @@
             [pazuzu-ui.views.loading-component :refer [loading-component]]
             [pazuzu-ui.views.code-editor :refer [code-editor]]
             [re-frame.core :refer [subscribe dispatch]]
+            [pazuzu-ui.routes :refer [url-for]]
+            [pazuzu-ui.views.loading-component :refer [loading-component]]
             [pazuzu-ui.views.pagination :refer [pagination]]))
 
 
@@ -66,11 +68,12 @@
                 [:i.delete.icon] "Delete"]]]])
 
 (defn feature-list-item [{:keys [is-selected feature]}]
-  [:div.ui.card.feature
+  [:a.ui.card.feature
    {:on-click #(dispatch [:feature-selected feature])
-    :class    (if is-selected "selected" "not-selected")}
-   [:div.content
-    [:div.header (:name feature)]]])
+    :class    (if is-selected "selected" "not-selected")
+    :href (url-for :registry-page-feature :name (:name feature))}
+    [:div.content
+      [:div.header (:name feature)]]])
 
 (defn features-list [features selected-name]
   (let [total-features (subscribe [:ui-state :registry-page :total-features])
@@ -91,8 +94,9 @@
              :on-change #(dispatch [:search-input-changed (-> % .-target .-value)])}]
     [:i.search.link.icon]]
    [:div.right.menu
-    [:div.item [:div.ui.primary.button
-                {:on-click #(dispatch [:new-feature-clicked])}
+    [:div.item [:a.ui.primary.button
+                {:href (url-for :registry-page)
+                 :on-click #(dispatch [:new-feature-clicked])}
                 "New"]]]])
 
 (defn page
@@ -107,6 +111,7 @@
         new-feature? (subscribe [:ui-state :registry-page :feature-pane :new-feature?])
         search-suffix (reaction (-> @page-state :search-input-value s/lower-case))]
     (dispatch [:load-features-page])
+    (dispatch [:check-initial-page])
     (fn []
       (let [suffix-predicate #(s/includes? (-> % :name s/lower-case) @search-suffix)
             features (->> @all-features
