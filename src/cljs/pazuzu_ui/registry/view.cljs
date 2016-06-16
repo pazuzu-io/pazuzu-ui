@@ -48,7 +48,10 @@
             [:div.ui.mini.action.input
              [:input.ui {:type      "text" :placeholder "tag"
                          :value     (:new-feature-tag @feature)
-                         :on-change #(update-state-fn % [:new-feature-tag])}]
+                         :on-change #(update-state-fn % [:new-feature-tag])
+                         :on-key-up #(when (and (= 13 (-> % .-keyCode))
+                                                (not (empty? (:new-feature-tag @feature))))
+                                        (dispatch [:add-feature-tag-clicked]))}]
              [:div.ui.mini.icon.button.positive
               {:on-click #(dispatch [:add-feature-tag-clicked])
                :class    (if (empty? (:new-feature-tag @feature)) :disabled)}
