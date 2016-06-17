@@ -7,12 +7,14 @@
             [re-frame.core :refer [subscribe dispatch]]
             [pazuzu-ui.routes :refer [url-for]]
             [pazuzu-ui.views.loading-component :refer [loading-component]]
-            [pazuzu-ui.views.pagination :refer [pagination]]))
+            [pazuzu-ui.views.pagination :refer [pagination]]
+            [taoensso.timbre :as log]))
 
 
 (defn feature-details []
   (let [ui-state (subscribe [:ui-state :registry-page :feature-pane])
         feature (reaction (:feature @ui-state))
+
         dependencies (:dependencies @feature)
         tags (:tags @feature)
         update-state-from-value (fn [value path]
@@ -49,16 +51,27 @@
              [:input.ui {:type      "text" :placeholder "tag"
                          :value     (:new-feature-tag @feature)
                          :on-change #(dispatch [:search-tag-started (-> % .-target .-value)])
-                         :on-key-up #(if (and (= 13 (-> % .-keyCode))
-                                                (not (empty? (:new-feature-tag @feature))))
-                                        (dispatch [:add-feature-tag-clicked])
-                                        )}]
+                         :on-key-down #((case (-> % .-keyCode)
+                                          40 (dispatch [:tag-list-index-change (inc (:tag-index @feature))])))
+                                    :on-key-up #(if (and (= 13 (-> % .-keyCode))
+                                                         (not (empty? (:new-feature-tag @feature))))
+                                                 (dispatch [:add-feature-tag-clicked])
+                                                 )}]
              [:div.ui.mini.icon.button.positive
               {:on-click #(dispatch [:add-feature-tag-clicked])
                :class    (if (empty? (:new-feature-tag @feature)) :disabled)}
               [:i.add.icon] "Add"]]
-               [:ul
-                  (map #(identity [:li {:key (:name %)}  [:a {:href "#"} (:name %)]]) (:tag-list @feature))
+               [:ul.autocomplete-container
+                  (map-indexed (fn [idx item] (let [name (:name item)]
+                                    [:li.autocomplete-item
+                                     {:key      name
+                                      :class (if (= idx (:tag-index @feature)) "selected" "")
+                                      :on-click (fn [] (dispatch [:search-tag-started name]))
+                                       :on-mouse-over (fn [] (dispatch [:tag-list-index-change idx]))
+                                       :on-mouse-leave (fn [] (dispatch [:tag-list-index-change -1]))
+                                      }
+                                     [:a.autocomplete-link {:href "#"}
+                                      name]])) (:tag-list @feature))
                 ]]]
 
           [:div.field

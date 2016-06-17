@@ -37,3 +37,34 @@
 .CodeMirror.cm-s-default {
   border: 1px solid lightgray;
 }
+
+.autocomplete-container {
+  list-style: none inside;
+  position: absolute;
+  left: 0;
+  width: 92%;
+  margin: 0 auto 2em;
+  padding: 0;
+  text-align: left;
+  color: #777;
+  background: #fff;
+  border: 1px solid #ddd;
+
+  .autocomplete-item {
+    cursor: pointer;
+    padding: .5em;
+    border-bottom: 1px solid #eee;
+    &:hover {
+      background-color: #e4e4e4;
+    }
+    &.selected {
+      background-color: #e4e4e4;
+    }
+
+    .autocomplete-link {
+       text-decoration: none;
+    }
+  }
+
+
+}
