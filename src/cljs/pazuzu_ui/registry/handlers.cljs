@@ -207,3 +207,25 @@
 (register-handler :start-loading
                   (fn [db [_ type]]
                     (assoc-in db [:ui-state :registry-page type] true)))
+
+(register-handler :search-tag-started
+                  (fn [db [_ query]]
+                    (do
+                      (log/debug (str "changed field tag :" query))
+
+                      (service/search-tags query
+                                           #(do (log/debug "Tags received from the backend : " %)
+                                                (dispatch [:search-tag-end %]))
+                                           #(do (log/debug "Fail to retrive tags : " %)
+                                                (dispatch [:add-message {:type "error" :header  (str  "Error searching the tags by query '" query "'") :message %} ])))
+                      (assoc-in db [:ui-state :registry-page :feature-pane :feature :new-feature-tag] query)
+                    )))
+
+(register-handler :search-tag-end
+                  (fn [db [_ search-tags]]
+                    (case (count search-tags)
+                      0 (assoc-in db [:ui-state :registry-page :feature-pane :feature :tag-list] [])
+                      1  (-> db
+                             (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list] [])
+                             (assoc-in [:ui-state :registry-page :feature-pane :feature :new-feature-tag] (:name (first search-tags))))
+                      (assoc-in db [:ui-state :registry-page :feature-pane :feature :tag-list] search-tags))))
