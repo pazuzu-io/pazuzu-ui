@@ -51,8 +51,7 @@
              [:input.ui {:type      "text" :placeholder "tag"
                          :value     (:new-feature-tag @feature)
                          :on-change #(dispatch [:search-tag-started (-> % .-target .-value)])
-                         :on-key-down #((case (-> % .-keyCode)
-                                          40 (dispatch [:tag-list-index-change (inc (:tag-index @feature))])))
+                         :on-key-down #(when navigation? (dispatch [:tag-list-index-change (key->navigation (-> % .-keyCode))]))
                                     :on-key-up #(if (and (= 13 (-> % .-keyCode))
                                                          (not (empty? (:new-feature-tag @feature))))
                                                  (dispatch [:add-feature-tag-clicked])
@@ -68,7 +67,7 @@
                                       :class (if (= idx (:tag-index @feature)) "selected" "")
                                       :on-click (fn [] (dispatch [:search-tag-started name]))
                                        :on-mouse-over (fn [] (dispatch [:tag-list-index-change idx]))
-                                       :on-mouse-leave (fn [] (dispatch [:tag-list-index-change -1]))
+                                       :on-mouse-leave (fn [] (dispatch [:tag-list-index-change :reset-tag]))
                                       }
                                      [:a.autocomplete-link {:href "#"}
                                       name]])) (:tag-list @feature))

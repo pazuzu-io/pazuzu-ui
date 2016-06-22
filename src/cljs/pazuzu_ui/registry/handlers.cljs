@@ -237,6 +237,22 @@
                           (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] -1)))))
 
 (register-handler :tag-list-index-change
-                  (fn [db [_ tag-index]]
-                    (assoc-in db [:ui-state :registry-page :feature-pane :feature :tag-index] tag-index)
+                  (fn [db [_ navigation]]
+                    (let [tag-length (count (-> db :ui-state :registry-page :feature-pane :feature :tag-list))
+                          current-index (-> db :ui-state :registry-page :feature-pane :feature :tag-list-index)
+                          cycle-index (fn [index length] ((if pos? index) (if (= index length) 0 index) (dec length)))
+                          navigation->index (fn [event length]
+                                                 (if (number? event) event
+                                                  (case equiv-sequential
+                                                    :tag-first 0
+                                                    :tag-last (dec tag-length)
+                                                    :tag-next (cycle-index (inc current-index) length)
+                                                    :tag-last (cycle-index (dec current-index) length)
+                                                    :tag-current current-index
+                                                    -1
+                                                    )))]
+                          ()
+
+                      (assoc-in db [:ui-state :registry-page :feature-pane :feature :tag-index] (navigation->index navigation tag-length))
+                      )
                     ))
