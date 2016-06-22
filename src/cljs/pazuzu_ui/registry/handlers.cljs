@@ -249,7 +249,6 @@
                                                     :tag-next (cycle-index (inc current-index) length)
                                                     :tag-last (cycle-index (dec current-index) length)
                                                     :tag-current current-index
-                                                    -1
                                                     )))]
                           ()
 
