@@ -236,22 +236,35 @@
                           (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list] search-tags)
                           (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] -1)))))
 
-(register-handler :tag-list-index-change
-                  (fn [db [_ navigation]]
-                    (let [tag-length (count (-> db :ui-state :registry-page :feature-pane :feature :tag-list))
-                          current-index (-> db :ui-state :registry-page :feature-pane :feature :tag-list-index)
-                          cycle-index (fn [index length] ((if pos? index) (if (= index length) 0 index) (dec length)))
-                          navigation->index (fn [event length]
-                                                 (if (number? event) event
-                                                  (case equiv-sequential
-                                                    :tag-first 0
-                                                    :tag-last (dec tag-length)
-                                                    :tag-next (cycle-index (inc current-index) length)
-                                                    :tag-last (cycle-index (dec current-index) length)
-                                                    :tag-current current-index
-                                                    )))]
-                          ()
+(defn navigation->list-index [event length current-index]
+  (let [cycle-index (fn [index length] (if (neg? index) (dec length) (if (= index length) 0 index) ))]
+          (do
+            (log/debug (str event "-> len :" length  "current " current-index "next " (cycle-index (inc current-index) length) "prev " (cycle-index (dec current-index) length)))
+            (if (number? event) event
+                                (case event
+                                  :list-item-first 0
+                                  :list-item-last (dec length)
+                                  :list-item-next (cycle-index (inc current-index) length)
+                                  :list-item-prev (cycle-index (dec current-index) length)
+                                  :list-item-current current-index
+                                  :list-item-reset -1)))))
 
-                      (assoc-in db [:ui-state :registry-page :feature-pane :feature :tag-index] (navigation->index navigation tag-length))
-                      )
-                    ))
+(register-handler :tag-list-navigation-change
+                  (fn [db [_ navigation]]
+                    (do
+                      (log/debug (str " handler " :tag-list-navigation-change " nav " navigation))
+                      (let [search-tags (-> db :ui-state :registry-page :feature-pane :feature :tag-list)
+                            tags-length (count search-tags)
+                            current-tag-list-index (-> db :ui-state :registry-page :feature-pane :feature :tag-list-index)
+                            ]
+                        (if (and (= :list-item-current navigation) (not (neg? current-tag-list-index)) (< current-tag-list-index tags-length))
+                          (do
+                            (log/debug "enter processing ")
+                            (-> db
+                                (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list] [])
+                                (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] -1)
+                                (assoc-in [:ui-state :registry-page :feature-pane :feature :new-feature-tag] (:name (nth search-tags current-tag-list-index)))))
+
+                          (do
+                            (log/debug (str ":tag-list-index-change with [" navigation "] nav index is " (navigation->list-index navigation tags-length current-tag-list-index)))
+                            (assoc-in db [:ui-state :registry-page :feature-pane :feature :tag-list-index] (navigation->list-index navigation tags-length current-tag-list-index))))))))

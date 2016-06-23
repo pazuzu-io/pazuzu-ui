@@ -12,7 +12,7 @@
                               :feature-detail-loading? false
                               :selected-feature-name   nil
                               :feature-pane            {:new-feature? false
-                                                        :tag-index -1
+                                                        :tag-list-index -1
                                                         :feature      nil}
                               :total-features         0
                               :per-page               10

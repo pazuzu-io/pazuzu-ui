@@ -10,6 +10,18 @@
             [pazuzu-ui.views.pagination :refer [pagination]]
             [taoensso.timbre :as log]))
 
+(defn key-code->navigation [key-code]
+  (let [key-codes {13 :list-item-current
+                   9  :list-item-current
+                   40 :list-item-next
+                   38 :list-item-prev
+                   34 :list-item-next
+                   33 :list-item-prev
+                   36 :list-item-first
+                   35 :list-item-last
+                   }]
+    (if (contains? key-codes key-code)
+      (key-codes key-code))))
 
 (defn feature-details []
   (let [ui-state (subscribe [:ui-state :registry-page :feature-pane])
@@ -17,6 +29,7 @@
 
         dependencies (:dependencies @feature)
         tags (:tags @feature)
+
         update-state-from-value (fn [value path]
                                   (dispatch [:feature-edited (assoc-in @feature path value)]))
         update-state-fn (fn [event path]
@@ -48,14 +61,19 @@
                        {:on-click (fn [] (dispatch [:delete-feature-tag-clicked %]))}]]) tags)])
            [:div
             [:div.ui.mini.action.input
-             [:input.ui {:type      "text" :placeholder "tag"
+             [:input.ui {:type        "text"
+                         :placeholder "tag"
                          :value     (:new-feature-tag @feature)
                          :on-change #(dispatch [:search-tag-started (-> % .-target .-value)])
-                         :on-key-down #(when navigation? (dispatch [:tag-list-index-change (key->navigation (-> % .-keyCode))]))
-                                    :on-key-up #(if (and (= 13 (-> % .-keyCode))
-                                                         (not (empty? (:new-feature-tag @feature))))
-                                                 (dispatch [:add-feature-tag-clicked])
-                                                 )}]
+                         :on-key-up #(let [key-navigation (key-code->navigation  (-> % .-keyCode))]
+                                          (if key-navigation
+                                              (let [tag-list-shown? (pos? (:tag-list-index @feature))
+                                                    has-new-feature-tag? (not (empty? (:new-feature-tag @feature)))]
+                                                (if (and (= :list-item-current key-navigation) (not tag-list-shown?) has-new-feature-tag?)
+                                                  (dispatch [:add-feature-tag-clicked])
+                                                  (dispatch [:tag-list-navigation-change key-navigation])))))
+                         }
+              ]
              [:div.ui.mini.icon.button.positive
               {:on-click #(dispatch [:add-feature-tag-clicked])
                :class    (if (empty? (:new-feature-tag @feature)) :disabled)}
@@ -64,10 +82,10 @@
                   (map-indexed (fn [idx item] (let [name (:name item)]
                                     [:li.autocomplete-item
                                      {:key      name
-                                      :class (if (= idx (:tag-index @feature)) "selected" "")
+                                      :class (if (= idx (:tag-list-index @feature)) "selected" "")
                                       :on-click (fn [] (dispatch [:search-tag-started name]))
-                                       :on-mouse-over (fn [] (dispatch [:tag-list-index-change idx]))
-                                       :on-mouse-leave (fn [] (dispatch [:tag-list-index-change :reset-tag]))
+                                       :on-mouse-over (fn [] (dispatch [:tag-list-navigation-change idx]))
+                                       :on-mouse-leave (fn [] (dispatch [:tag-list-navigation-change :list-item-reset]))
                                       }
                                      [:a.autocomplete-link {:href "#"}
                                       name]])) (:tag-list @feature))
