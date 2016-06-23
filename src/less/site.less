@@ -41,6 +41,7 @@
 .autocomplete-container {
   list-style: none inside;
   position: absolute;
+  display: none;
   left: 0;
   width: 92%;
   margin: 0 auto 2em;
@@ -49,6 +50,11 @@
   color: #777;
   background: #fff;
   border: 1px solid #ddd;
+
+  &.shown {
+    display: block;
+  }
+
 
   .autocomplete-item {
     cursor: pointer;

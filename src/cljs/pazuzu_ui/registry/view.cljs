@@ -19,6 +19,7 @@
                    33 :list-item-prev
                    36 :list-item-first
                    35 :list-item-last
+                   27 :list-item-reset
                    }]
     (if (contains? key-codes key-code)
       (key-codes key-code))))
@@ -78,7 +79,7 @@
               {:on-click #(dispatch [:add-feature-tag-clicked])
                :class    (if (empty? (:new-feature-tag @feature)) :disabled)}
               [:i.add.icon] "Add"]]
-               [:ul.autocomplete-container
+               [:ul.autocomplete-container {:class (if (pos? (:tag-list-index @feature)) "shown")}
                   (map-indexed (fn [idx item] (let [name (:name item)]
                                     [:li.autocomplete-item
                                      {:key      name
