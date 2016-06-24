@@ -79,12 +79,12 @@
               {:on-click #(dispatch [:add-feature-tag-clicked])
                :class    (if (empty? (:new-feature-tag @feature)) :disabled)}
               [:i.add.icon] "Add"]]
-               [:ul.autocomplete-container {:class (if (pos? (:tag-list-index @feature)) "shown")}
+               [:ul.autocomplete-container
                   (map-indexed (fn [idx item] (let [name (:name item)]
                                     [:li.autocomplete-item
                                      {:key      name
                                       :class (if (= idx (:tag-list-index @feature)) "selected" "")
-                                      :on-click (fn [] (dispatch [:search-tag-started name]))
+                                      :on-click (fn [] (dispatch [:search-tag-end [name] ]))
                                        :on-mouse-over (fn [] (dispatch [:tag-list-navigation-change idx]))
                                        :on-mouse-leave (fn [] (dispatch [:tag-list-navigation-change :list-item-reset]))
                                       }

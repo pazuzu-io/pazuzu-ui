@@ -28,7 +28,6 @@
          :target-path  "resources/public/css/compiled"}
 
   :profiles {:dev     {:figwheel  {:ring-handler pazuzu-ui.core/app-routes
-                                   :server-port 5309
                                    :css-dirs     ["resources/public/css"]}
                        :cljsbuild {:builds [{:id           "dev"
                                              :source-paths ["src/cljs"]

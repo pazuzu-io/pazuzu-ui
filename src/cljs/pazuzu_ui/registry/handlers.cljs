@@ -229,9 +229,8 @@
                             (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] -1)
                             )
                       1  (-> db
-                             (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list] [])
-                             (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] 0)
-                             (assoc-in [:ui-state :registry-page :feature-pane :feature :new-feature-tag] (:name (first search-tags))))
+                             (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list] search-tags)
+                             (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] 0))
                       (-> db
                           (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list] search-tags)
                           (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] -1)))))
