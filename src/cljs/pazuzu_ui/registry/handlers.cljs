@@ -207,3 +207,63 @@
 (register-handler :start-loading
                   (fn [db [_ type]]
                     (assoc-in db [:ui-state :registry-page type] true)))
+
+(register-handler :search-tag-started
+                  (fn [db [_ query]]
+                    (do
+                      (log/debug (str "changed field tag :" query))
+
+                      (service/search-tags query
+                                           #(do (log/debug "Tags received from the backend : " %)
+                                                (dispatch [:search-tag-end %]))
+                                           #(do (log/debug "Fail to retrive tags : " %)
+                                                (dispatch [:add-message {:type "error" :header  (str  "Error searching the tags by query '" query "'") :message %} ])))
+                      (assoc-in db [:ui-state :registry-page :feature-pane :feature :new-feature-tag] query)
+                    )))
+
+(register-handler :search-tag-end
+                  (fn [db [_ search-tags]]
+                    (case (count search-tags)
+                      0 (-> db
+                          (assoc-in  [:ui-state :registry-page :feature-pane :feature :tag-list] [])
+                            (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] -1)
+                            )
+                      1  (-> db
+                             (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list] search-tags)
+                             (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] 0))
+                      (-> db
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list] search-tags)
+                          (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] -1)))))
+
+(defn navigation->list-index [event length current-index]
+  (let [cycle-index (fn [index length] (if (neg? index) (dec length) (if (= index length) 0 index) ))]
+          (do
+            (log/debug (str event "-> len :" length  "current " current-index "next " (cycle-index (inc current-index) length) "prev " (cycle-index (dec current-index) length)))
+            (if (number? event) event
+                                (case event
+                                  :list-item-first 0
+                                  :list-item-last (dec length)
+                                  :list-item-next (cycle-index (inc current-index) length)
+                                  :list-item-prev (cycle-index (dec current-index) length)
+                                  :list-item-current current-index
+                                  :list-item-reset -1)))))
+
+(register-handler :tag-list-navigation-change
+                  (fn [db [_ navigation]]
+                    (do
+                      (log/debug (str " handler " :tag-list-navigation-change " nav " navigation))
+                      (let [search-tags (-> db :ui-state :registry-page :feature-pane :feature :tag-list)
+                            tags-length (count search-tags)
+                            current-tag-list-index (-> db :ui-state :registry-page :feature-pane :feature :tag-list-index)
+                            ]
+                        (if (and (= :list-item-current navigation) (not (neg? current-tag-list-index)) (< current-tag-list-index tags-length))
+                          (do
+                            (log/debug "enter processing ")
+                            (-> db
+                                (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list] [])
+                                (assoc-in [:ui-state :registry-page :feature-pane :feature :tag-list-index] -1)
+                                (assoc-in [:ui-state :registry-page :feature-pane :feature :new-feature-tag] (:name (nth search-tags current-tag-list-index)))))
+
+                          (do
+                            (log/debug (str ":tag-list-index-change with [" navigation "] nav index is " (navigation->list-index navigation tags-length current-tag-list-index)))
+                            (assoc-in db [:ui-state :registry-page :feature-pane :feature :tag-list-index] (navigation->list-index navigation tags-length current-tag-list-index))))))))

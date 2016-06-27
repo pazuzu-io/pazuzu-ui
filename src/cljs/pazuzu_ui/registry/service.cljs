@@ -55,3 +55,9 @@
   [feature callback error-callback]
   (go (let [response (<! (http/delete (str conf/registry-api "/api/features/" (:name feature))))]
         (call-response-callback response callback error-callback))))
+
+(defn search-tags [query callback error-callback]
+  "Fetch tags by query"
+  (let [query-url (str conf/registry-api "/api/tags" "/query/" query)]
+    (when (not (empty? query)) (go (let [response (<! (http/get query-url {}))]
+                        (call-response-callback response  callback error-callback))))))
