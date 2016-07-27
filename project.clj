@@ -64,7 +64,7 @@
      :figwheel     {:on-jsload "pazuzu-ui.core/mount-root"}
      :compiler     {:main                 pazuzu-ui.core
                     :output-to            "resources/public/js/compiled/app.js"
-                    :output-dir           "resources/public/js/compiled/out"
+                    :output-dir           "resources/public/js/compiled/out-noauth"
                     :asset-path           "js/compiled/out"
                     :source-map-timestamp true}}
     {:id           "min"
