@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+( cd /ssl && ./gen-cert.sh $HOSTNAME )
+
+while read -r line; do
+    echo $line \
+        | sed "s/\${BACKEND_IP}/${BACKEND_IP}/g"
+done < /tmp/nginx.conf.tmpl > /etc/nginx/nginx.conf
+
+cat /etc/nginx/nginx.conf
+
+exec nginx -g "daemon off;"

@@ -53,22 +53,58 @@ TODO
 - Auth and rol management for features
 - ...
 
-
-
 Development
 -----------
 
-To start hacking checkout this repo and then to start a web server with live reload run
+### nginx
 
-    lein figwheel dev
+In order to work with the OAuth authentication we need an SSL terminating proxy
+between the locally running UI process. There is a Docker container prepared
+that you can simply build locally:
 
- To build and continuously watch and compile less styles
+    $ cd nginx
+    $ make build
+
+In order to get the container running correctly the backend IP needs to be set
+correctly. By default it tries to read the IP using `ip addr show en0`. In order
+to overwrite this set the environment variable `BACKEND_IP`.
+
+    $ # optional:
+    $ export BACKEND_IP=123.456.789.0
+    $ make run
+
+### LESS compiling
+
+To build and continuously watch and compile less styles
 
     lein less auto
 
+### Starting in development mode
 
-To get content in for the UI you need to have running [`pazuzu-registry`](https://github.com/zalando/pazuzu-registry)
+To start hacking checkout this repo and then to start a web server with live
+reload run:
 
+    lein figwheel dev
+
+Developing locally without authentication is possible using a locally running
+registry in dev profile and with:
+
+    lein figwheel dev-noauth
+
+### EMACS
+
+If you choose to run the REPL inside emacs don't forget to add this to your
+emacs config:
+
+    (setq cider-cljs-lein-repl
+          "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
+
+Then just call `cider-jack-in-clojurescript`.
+
+### Registry
+
+To get content in for the UI you need to have running
+[`pazuzu-registry`](https://github.com/zalando/pazuzu-registry).
 
 Packaging
 ---------
@@ -79,7 +115,7 @@ To build a standalone runnable jar
     lein uberjar
     java -jar ./target/pazuzu-ui.jar
 
-if no BACKEND_ENDPOINT environment variable is specified, 
+if no BACKEND_ENDPOINT environment variable is specified,
 the default backend endpoint will be http://localhost:8080
 
 
