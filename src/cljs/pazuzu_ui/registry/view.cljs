@@ -6,7 +6,6 @@
             [pazuzu-ui.views.code-editor :refer [code-editor]]
             [re-frame.core :refer [subscribe dispatch]]
             [pazuzu-ui.routes :refer [url-for]]
-            [pazuzu-ui.views.loading-component :refer [loading-component]]
             [pazuzu-ui.views.pagination :refer [pagination]]
             [taoensso.timbre :as log]))
 
@@ -35,98 +34,97 @@
                                   (dispatch [:feature-edited (assoc-in @feature path value)]))
         update-state-fn (fn [event path]
                           (update-state-from-value (-> event .-target .-value) path))]
-    (identity
-      [:div.ui.grid.container
-       [:div.row
-        [:div.column
-         [:div.ui.form
-          [:div.field
-           (if (:new-feature? @ui-state)
-             [:div.ui.huge.input.fluid
-              [:input {:type      "text" :placeholder "Feature Name"
-                       :value     (:name @feature)
-                       :on-change #(update-state-fn % [:name])}]]
-             [:h1 (:name @feature)])]
+    [:div.ui.grid.container
+     [:div.row
+      [:div.column
+       [:div.ui.form
+        [:div.field
+         (if (:new-feature? @ui-state)
+           [:div.ui.huge.input.fluid
+            [:input {:type      "text" :placeholder "Feature Name"
+                     :value     (:name @feature)
+                     :on-change #(update-state-fn % [:name])}]]
+           [:h1 (:name @feature)])]
 
-          [:div.field
-           (if (empty? (:tags @feature))
-             [:div.field
-              [:label "No tags"]]
+        [:div.field
+         (if (empty? (:tags @feature))
+           [:div.field
+            [:label "No tags"]]
 
-             [:div.field
-              [:label "Tags"]
-              (map #(identity
-                     [:div.ui.label
-                      {:key (:name %)} (:name %)
-                      [:i.delete.icon
-                       {:on-click (fn [] (dispatch [:delete-feature-tag-clicked %]))}]]) tags)])
-           [:div
-            [:div.ui.mini.action.input
-             [:input.ui {:type        "text"
-                         :placeholder "tag"
-                         :value     (:new-feature-tag @feature)
-                         :on-change #(dispatch [:search-tag-started (-> % .-target .-value)])
-                         :on-key-up #(let [key-navigation (key-code->navigation  (-> % .-keyCode))]
-                                          (if key-navigation
-                                              (let [tag-list-shown? (pos? (:tag-list-index @feature))
-                                                    has-new-feature-tag? (not (empty? (:new-feature-tag @feature)))]
-                                                (if (and (= :list-item-current key-navigation) (not tag-list-shown?) has-new-feature-tag?)
-                                                  (dispatch [:add-feature-tag-clicked])
-                                                  (dispatch [:tag-list-navigation-change key-navigation])))))
-                         }
-              ]
-             [:div.ui.mini.icon.button.positive
-              {:on-click #(dispatch [:add-feature-tag-clicked])
-               :class    (if (empty? (:new-feature-tag @feature)) :disabled)}
-              [:i.add.icon] "Add"]]
-               [:ul.autocomplete-container
-                  (map-indexed (fn [idx item] (let [name (:name item)]
-                                    [:li.autocomplete-item
-                                     {:key      name
-                                      :class (if (= idx (:tag-list-index @feature)) "selected" "")
-                                      :on-click (fn [] (dispatch [:search-tag-end [name] ]))
-                                       :on-mouse-over (fn [] (dispatch [:tag-list-navigation-change idx]))
-                                       :on-mouse-leave (fn [] (dispatch [:tag-list-navigation-change :list-item-reset]))
-                                      }
-                                     [:a.autocomplete-link {:href "#"}
-                                      name]])) (:tag-list @feature))
-                ]]]
+           [:div.field
+            [:label "Tags"]
+            (map #(identity
+                   [:div.ui.label
+                    {:key (:name %)} (:name %)
+                    [:i.delete.icon
+                     {:on-click (fn [] (dispatch [:delete-feature-tag-clicked %]))}]]) tags)])
+         [:div
+          [:div.ui.mini.action.input
+           [:input.ui {:type        "text"
+                       :placeholder "tag"
+                       :value     (:new-feature-tag @feature)
+                       :on-change #(dispatch [:search-tag-started (-> % .-target .-value)])
+                       :on-key-up #(let [key-navigation (key-code->navigation  (-> % .-keyCode))]
+                                     (if key-navigation
+                                       (let [tag-list-shown? (pos? (:tag-list-index @feature))
+                                             has-new-feature-tag? (not (empty? (:new-feature-tag @feature)))]
+                                         (if (and (= :list-item-current key-navigation) (not tag-list-shown?) has-new-feature-tag?)
+                                           (dispatch [:add-feature-tag-clicked])
+                                           (dispatch [:tag-list-navigation-change key-navigation])))))
+                       }
+            ]
+           [:div.ui.mini.icon.button.positive
+            {:on-click #(dispatch [:add-feature-tag-clicked])
+             :class    (if (empty? (:new-feature-tag @feature)) :disabled)}
+            [:i.add.icon] "Add"]]
+          [:ul.autocomplete-container
+           (map-indexed (fn [idx item] (let [name (:name item)]
+                                         [:li.autocomplete-item
+                                          {:key      name
+                                           :class (if (= idx (:tag-list-index @feature)) "selected" "")
+                                           :on-click (fn [] (dispatch [:search-tag-end [name] ]))
+                                           :on-mouse-over (fn [] (dispatch [:tag-list-navigation-change idx]))
+                                           :on-mouse-leave (fn [] (dispatch [:tag-list-navigation-change :list-item-reset]))
+                                           }
+                                          [:a.autocomplete-link {:href "#"}
+                                           name]])) (:tag-list @feature))
+           ]]]
 
-          [:div.field
-           [:label "Description"]
-           [:input {:type "text"
-                    :placeholder "Feature Description"
-                    :value (:description @feature)
-                    :on-change #(update-state-fn % [:description])
-                    }]]
+        [:div.field
+         [:label "Description"]
+         [:input {:type "text"
+                  :placeholder "Feature Description"
+                  :value (:description @feature)
+                  :on-change #(update-state-fn % [:description])
+                  }]]
 
-          [:div.field
-           (if (empty? (:dependencies @feature))
-             [:div.field
-              [:label "No dependencies"]]
+        [:div.field
+         (if (empty? (:dependencies @feature))
+           [:div.field
+            [:label "No dependencies"]]
 
-             [:div.field
-              [:label "Dependencies"]
-              (map #(identity
-                     [:div.ui.label
-                      {:key (:name %)} (:name %)
-                      [:i.delete.icon
-                       {:on-click (fn [] (dispatch [:delete-dependency-clicked %]))}]]) dependencies)])
-           [:div
-            [:div.ui.mini.action.input
-             [:input.ui {:type      "text" :placeholder "Dependency name"
-                         :value     (:new-dependency @feature)
-                         :on-change #(update-state-fn % [:new-dependency])}]
-             [:div.ui.mini.icon.button.positive
-              {:on-click #(dispatch [:add-dependency-clicked])
-               :class    (if (empty? (:new-dependency @feature)) :disabled)}
-              [:i.add.icon] "Add"]]]]
-          [:div.field.code
-           [:label "Docker file Snippet"]
-           [code-editor "dockerfile" (:docker_data @feature) #(update-state-from-value % [:docker_data])]]
-          [:div.field.code
-           [:label "Test Case command"]
-           [code-editor "shell" (:test_instruction @feature) #(update-state-from-value % [:test_instruction])]]]]]])))
+           [:div.field
+            [:label "Dependencies"]
+            (map #(identity
+                   [:div.ui.label
+                    {:key (:name %)} (:name %)
+                    [:i.delete.icon
+                     {:on-click (fn [] (dispatch [:delete-dependency-clicked %]))}]]) dependencies)])
+         [:div
+          [:div.ui.mini.action.input
+           [:input.ui {:type      "text" :placeholder "Dependency name"
+                       :value     (:new-dependency @feature)
+                       :on-change #(update-state-fn % [:new-dependency])}]
+           [:div.ui.mini.icon.button.positive
+            {:on-click #(dispatch [:add-dependency-clicked])
+             :class    (if (empty? (:new-dependency @feature)) :disabled)}
+            [:i.add.icon] "Add"]]]]
+        [:div.field.code
+         [:label "Docker file Snippet"]
+         [code-editor "dockerfile" (:docker_data @feature) #(update-state-from-value % [:docker_data])]]
+        [:div.field.code
+         [:label "Test Case command"]
+         [code-editor "shell" (:test_instruction @feature) #(update-state-from-value % [:test_instruction])]]]]]]))
 
 (defn feature-details-menu []
   [:div.ui.secondary.menu
@@ -157,7 +155,7 @@
                                   :feature     feature}]))
       [pagination @total-features @per-page @page :change-feature-page]]))
 
-(defn feature-list-menu [suffix]
+(defn feature-list-menu [suffix authenticated?]
   [:div.ui.secondary.menu
    [:div.ui.icon.input
     [:input {:type      "text" :placeholder "search"
@@ -165,10 +163,11 @@
              :on-change #(dispatch [:search-input-changed (-> % .-target .-value)])}]
     [:i.search.link.icon]]
    [:div.right.menu
-    [:div.item [:a.ui.primary.button
-                {:href (url-for :registry-page)
-                 :on-click #(dispatch [:new-feature-clicked])}
-                "New"]]]])
+    (when authenticated?
+      [:div.item [:a.ui.primary.button
+                  {:href (url-for :registry-page)
+                   :on-click #(dispatch [:new-feature-clicked])}
+                  "New"]])]])
 
 (defn page
   "Top-level page layout and state"
@@ -180,7 +179,8 @@
         feature-detail-loading? (reaction (-> @page-state :feature-detail-loading?))
         selected-name (reaction (:selected-feature-name @page-state))
         new-feature? (subscribe [:ui-state :registry-page :feature-pane :new-feature?])
-        search-suffix (reaction (-> @page-state :search-input-value s/lower-case))]
+        search-suffix (reaction (-> @page-state :search-input-value s/lower-case))
+        authenticated? (reaction (:authentication :token))]
     (dispatch [:load-features-page])
     (dispatch [:check-initial-page])
     (fn []
@@ -190,7 +190,7 @@
                           (sort-by :name))]
         [:div#registry.ui.padded.grid
          [:div#features-pane.five.wide.column
-          [feature-list-menu @search-suffix]
+          [feature-list-menu @search-suffix @authenticated?]
           (loading-component @features-loading? [features-list features @selected-name])]
 
          [:div#feature-details.eleven.wide.column

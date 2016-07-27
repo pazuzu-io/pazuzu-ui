@@ -8,10 +8,11 @@
 (register-handler :feature-selected
                   (fn [db [_ feature]]
                       (dispatch [:start-loading :feature-detail-loading?])
-                      (service/get-feature (:name feature)
-                                            #(do (log/debug "Fetched : " %)
-                                                (dispatch [:feature-selected-loaded %]))
-                                            #(do (dispatch [:stop-loading :feature-detail-loading?])
+                    (service/get-feature (get-in db [:authentication :token])
+                                         (:name feature)
+                                         #(do (log/debug "Fetched : " %)
+                                              (dispatch [:feature-selected-loaded %]))
+                                         #(do (dispatch [:stop-loading :feature-detail-loading?])
                                               (dispatch [:add-message {:type "error" :header "Error Retrieving the feature" :message %} ])))
                       db))
 
@@ -37,15 +38,16 @@
 (register-handler :save-feature-clicked
                   (fn [db [_ _]]
                     (let [feature (-> db :ui-state :registry-page :feature-pane :feature)
-                          new-feature? (-> db :ui-state :registry-page :feature-pane :new-feature?)]
+                          new-feature? (-> db :ui-state :registry-page :feature-pane :new-feature?)
+                          token (get-in db [:authentication :token])]
                       (dispatch [:start-loading :feature-detail-loading?])
                       (if new-feature?
-                        (service/add-feature feature
+                        (service/add-feature token feature
                           #(dispatch [:saved-feature %])
                           #(do
                             (dispatch [:stop-loading :feature-detail-loading?])
                             (dispatch [:add-message {:type "error" :header "Error Saving the features" :message %}])))
-                        (service/update-feature feature
+                        (service/update-feature token feature
                           #(dispatch [:updated-feature %])
                           #(do
                             (dispatch [:stop-loading :feature-detail-loading?])
@@ -126,9 +128,10 @@
 ;; when the delete feature button is clicked, make an API call
 (register-handler :delete-feature-clicked
                   (fn [db [_ _]]
-                    (let [feature (-> db :ui-state :registry-page :feature-pane :feature)]
+                    (let [feature (-> db :ui-state :registry-page :feature-pane :feature)
+                          token (get-in db [:authentication :token])]
                       (dispatch [:start-loading :feature-detail-loading?])
-                      (service/delete-feature feature
+                      (service/delete-feature token feature
                         #(dispatch [:deleted-feature])
                         #(do
                           (dispatch [:stop-loading :feature-detail-loading?])
@@ -147,30 +150,23 @@
                           (assoc-in [:ui-state :registry-page :feature-pane :feature] {})
                           (assoc-in [:ui-state :registry-page :feature-pane :new-feature?] true)))))
 
-;;when the registry page loads call the backend to list available features
-(register-handler :load-features
-                  (fn [db [_ _]]
-                    (service/get-features #(do (log/debug "Features received from the backend : " %)
-                                               (dispatch [:loaded-features %]))
-                                          #(do (log/debug "Fail to retrive features : " %)
-                                               (dispatch [:add-message {:type "error" :header "Error Retrieving the features" :message %} ])))
-                    (dispatch [:start-loading :features-loading?])))
-
 ;;load just a page of the registre features
 (register-handler :load-features-page
                   (fn [db [_ _]]
                     (let [per-page (-> db :ui-state :registry-page :per-page)
                           page (-> db :ui-state :registry-page :page)
-                          offset (* (- page 1) per-page)]
-                          (dispatch [:start-loading :features-loading?])
-                          (service/get-features-page offset per-page
-                              (fn [features total]
-                                (log/debug "Features received from the backend : " total)
-                                (dispatch [:loaded-features-page (list features total)]))
-                              #(do (log/debug "Fail to retrive features : " %)
-                                   (dispatch [:stop-loading :features-loading?])
-                                   (dispatch [:add-message {:type "error" :header "Error Retrieving the features" :message %} ])))
-                          db)))
+                          offset (* (- page 1) per-page)
+                          token (get-in db [:authentication :token])]
+                      (dispatch [:start-loading :features-loading?])
+                      (service/get-features-page
+                       token offset per-page
+                       (fn [features total]
+                         (log/debug "Features received from the backend : " total)
+                         (dispatch [:loaded-features-page (list features total)]))
+                       #(do (log/debug "Fail to retrive features : " %)
+                            (dispatch [:stop-loading :features-loading?])
+                            (dispatch [:add-message {:type "error" :header "Error Retrieving the features" :message %} ])))
+                      db)))
 
 
 ;; update the db state by setting the features
@@ -210,16 +206,17 @@
 
 (register-handler :search-tag-started
                   (fn [db [_ query]]
-                    (do
-                      (log/debug (str "changed field tag :" query))
+                    (let [token (get-in db [:authentication :token])]
+                      (do
+                        (log/debug (str "changed field tag :" query))
 
-                      (service/search-tags query
-                                           #(do (log/debug "Tags received from the backend : " %)
-                                                (dispatch [:search-tag-end %]))
-                                           #(do (log/debug "Fail to retrive tags : " %)
-                                                (dispatch [:add-message {:type "error" :header  (str  "Error searching the tags by query '" query "'") :message %} ])))
-                      (assoc-in db [:ui-state :registry-page :feature-pane :feature :new-feature-tag] query)
-                    )))
+                        (service/search-tags token query
+                                             #(do (log/debug "Tags received from the backend : " %)
+                                                  (dispatch [:search-tag-end %]))
+                                             #(do (log/debug "Fail to retrive tags : " %)
+                                                  (dispatch [:add-message {:type "error" :header  (str  "Error searching the tags by query '" query "'") :message %} ])))
+                        (assoc-in db [:ui-state :registry-page :feature-pane :feature :new-feature-tag] query)
+                        ))))
 
 (register-handler :search-tag-end
                   (fn [db [_ search-tags]]

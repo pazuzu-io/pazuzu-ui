@@ -10,3 +10,7 @@
 ; Allows you to subscribe to certain subset of UI state
 (register-sub :ui-state
   (fn [db [_ & path]] (reaction (get-in (:ui-state @db) path))))
+
+(register-sub
+ :authentication
+ (fn [db [_ & path]] (reaction (get-in (:authentication @db) path))))
