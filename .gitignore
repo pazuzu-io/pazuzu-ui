@@ -2,7 +2,7 @@
 /target
 /*-init.clj
 /resources/public/js/compiled/*
-/resources/public/css/compiled/*
+/resources/public/css/*
 out
 .nrepl-port
 .lein-repl-history
