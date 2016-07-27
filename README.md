@@ -106,6 +106,16 @@ Then just call `cider-jack-in-clojurescript`.
 To get content in for the UI you need to have running
 [`pazuzu-registry`](https://github.com/zalando/pazuzu-registry).
 
+### Tokens
+
+When developing locally the authentication tokens need to be fetched from
+`mint`. For this run:
+
+    berry -a pazuzu-ui-dev -m $MINT_BUCKET --once -f /dev/null credentials
+
+This will store the `client.json` and `user.json` in the `credentials`
+directory from where the backend handler will set the `client_id` as cookie.
+
 Packaging
 ---------
 

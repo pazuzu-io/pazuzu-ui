@@ -9,3 +9,4 @@ out
 .idea/
 /*.iml
 .DS_Store
+credentials/
