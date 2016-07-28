@@ -15,4 +15,18 @@ http {
       proxy_redirect default;
     }
   }
+
+  server {
+    listen 8081;
+
+    ssl on;
+    ssl_certificate /ssl/cert.crt;
+    ssl_certificate_key /ssl/cert.key;
+    proxy_set_header Upgrade $http_upgrade;
+
+    location / {
+      proxy_pass http://${BACKEND_IP}:8082;
+      proxy_redirect default;
+    }
+  }
 }

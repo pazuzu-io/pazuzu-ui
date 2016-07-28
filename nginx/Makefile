@@ -22,6 +22,7 @@ remove:
 run: remove
 	docker run -dit --name=${CONTAINER} \
 		-p 8080:8080 \
+		-p 8081:8081 \
 		-e HOSTNAME=${HOSTNAME} \
 		-e BACKEND_IP=${BACKEND_IP} \
 		${IMAGE}
