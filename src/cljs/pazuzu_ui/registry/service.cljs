@@ -33,18 +33,18 @@
 
 (defn features
   [token
-   {:keys [offset limit name method json-params]
-    :or {offset 0 limit 10 name "" method http/get json-params {}}}]
-  (method (registry-url {:path (str "/api/features" name)})
+   {:keys [offset limit name method query-params json-params]
+    :or {name "" method http/get query-params {} json-params {}}}]
+  (method (registry-url {:path (str "/api/features/" name)})
           (-> (authentication-header token)
-              (assoc :query-params {:offset offset :limit limit})
+              (assoc :query-params query-params)
               (assoc :json-params json-params))))
 
 (defn get-features-page
   "Get a features page and execute the callback with the features as argument"
   [token offset limit callback error-callback]
   (go
-    (let [response (<! (features token {:offset offset :limit limit}))]
+    (let [response (<! (features token {:query-params {:offset offset :limit limit}}))]
       (if (:success response)
         (callback (:body response) (get-in response [:headers "x-total-count"]))
         (error-callback (get-in response [:body :title]))))))
