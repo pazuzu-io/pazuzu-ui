@@ -28,7 +28,6 @@
   (GET "/*" request (index-page request)))
 
 (defn read-client-id-from-fs []
-  (println credentials-dir)
   (some-> credentials-dir
           (str "/client.json")
           slurp
