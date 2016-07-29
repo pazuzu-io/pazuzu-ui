@@ -126,6 +126,8 @@ enabled.
 
 1. Clone both repositories
 
+In one base directory run:
+
     git clone git@github.com:zalando/pazuzu-ui.git
     git clone git@github.com:zalando/pazuzu-registry.git
 
