@@ -4,6 +4,7 @@
 (def default-db
   {:name     "pazuzu-ui"
    :registry {:features []}
+   :authentication {:token "not-found"}
    :ui-state {
               :messages []
               :active-page   :home-page
