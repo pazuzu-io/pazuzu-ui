@@ -86,6 +86,6 @@
   "Fetch tags by query"
   (when (not (empty? query))
     (go
-      (let [query-url (registry-url {:path (str "/api/tags/query" query)})
+      (let [query-url (registry-url {:path (str "/api/tags/query/" query)})
             response (<! (http/get query-url (authentication-header token)))]
         (call-response-callback response callback error-callback)))))
