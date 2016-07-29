@@ -13,7 +13,8 @@
        :query {:realm "employees"
                :redirect_uri "https://localhost:8080/"
                :response_type "token"
-               :client_id client-id}}))))
+               :client_id client-id
+               :scope "uid"}}))))
 
 (defn authenticate []
   (set! js/window.location (auth-endpoint)))
