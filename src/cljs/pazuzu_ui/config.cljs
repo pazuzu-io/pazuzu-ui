@@ -8,7 +8,7 @@
 
 ;;load environment variable or get the default one, will be loaded at compile time
 (env/def
-  BACKEND_ENDPOINT "pazuzu-registry.mentoring.zalan.do"
+  BACKEND_ENDPOINT "localhost:8081"
   BACKEND_PROTOCOL "https")
 
 (def registry-api BACKEND_ENDPOINT)
