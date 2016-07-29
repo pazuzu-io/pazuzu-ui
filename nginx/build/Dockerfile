@@ -8,7 +8,8 @@ ADD nginx.conf.tmpl /tmp/nginx.conf.tmpl
 
 ADD ca.crt /ssl/ca.crt
 ADD ca.key /ssl/ca.key
-ADD gen-cert.sh /ssl/
+ADD cert.crt /ssl/cert.crt
+ADD cert.key /ssl/cert.key
 
 ADD start /start
 
