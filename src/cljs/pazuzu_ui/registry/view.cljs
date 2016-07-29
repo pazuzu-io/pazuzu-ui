@@ -190,7 +190,7 @@
                           (sort-by :name))]
         [:div#registry.ui.padded.grid
          [:div#features-pane.five.wide.column
-          [feature-list-menu @search-suffix @authenticated?]
+          [feature-list-menu @search-suffix authenticated?]
           (loading-component @features-loading? [features-list features @selected-name])]
 
          [:div#feature-details.eleven.wide.column
