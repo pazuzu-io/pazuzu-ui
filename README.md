@@ -145,7 +145,15 @@ This will create an nginx proxy that forwards traffic from
 figwheel repl. It will also forward traffic from `https://localhost:8081` to
 `http://$YOUR_EXTERNAL_IP:8082`, i.e. the running registry.
 
-3. Start the registry
+3. Request client tokens from mint
+
+In order to get both running we need client ids from mint:
+
+    berry -a pazuzu-registry -m $MINT_BUCKET --once -f /dev/null ~/.berry/pazuzu-registry
+    cd pazuzu-ui
+    berry -a pazuzu-ui-dev -m $MINT_BUCKET --once -f /dev/null credentials
+
+4. Start the registry
 
 First, make sure your LDAP uid is in
 `pazuzu-registry/src/main/resources/config/application-dev.yml`:
@@ -163,7 +171,7 @@ Now build and start the registry:
 You can also run the registry inside your IDE with the equivalent command line
 args.
 
-4. Start the UI
+5. Start the UI
 
 Inside EMACS simply call `cider-jack-in-clojurescript`. In the command line
 this will result in similar experience:
