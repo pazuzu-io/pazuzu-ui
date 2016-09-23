@@ -1,4 +1,4 @@
-FROM registry.opensource.zalan.do/stups/openjdk:8-26
+FROM registry.opensource.zalan.do/stups/openjdk:8-42
 COPY ./target/pazuzu-ui.jar /
 COPY scm-source.json /
 EXPOSE 8080
