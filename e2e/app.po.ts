@@ -6,6 +6,6 @@ export class PazuzuUiPage {
   }
 
   getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+    return element(by.css('app-pazuzu h1')).getText();
   }
 }

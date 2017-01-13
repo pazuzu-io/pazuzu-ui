@@ -73,7 +73,7 @@ ToDos
 Development
 -----------
 
-*to be written*
+Please have a look at [DEVELOPMENT.md](DEVELOPMENT.md).
 
 License
 -------

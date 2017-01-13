@@ -1,6 +1,6 @@
 import { PazuzuUiPage } from './app.po';
 
-describe('pazuzu-ui App', function() {
+describe('Pazuzu UI App', function() {
   let page: PazuzuUiPage;
 
   beforeEach(() => {
