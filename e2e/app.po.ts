@@ -5,7 +5,7 @@ export class PazuzuUiPage {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-pazuzu h1')).getText();
+  getToolbarTitle() {
+    return element(by.css('app-pazuzu md-toolbar md-toolbar-row span:first-child')).getText();
   }
 }

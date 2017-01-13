@@ -23,16 +23,17 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   }));
 
-  it(`should have as title 'app works!'`, async(() => {
+  it(`should have as app title 'Pazuzu UI'`, async(() => {
     let fixture = TestBed.createComponent(AppComponent);
     let app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('app works!');
+    expect(app.title).toEqual('Pazuzu UI');
   }));
 
-  it('should render title in a h1 tag', async(() => {
+  it('should render a toolbar containing the app title', async(() => {
     let fixture = TestBed.createComponent(AppComponent);
+    let app = fixture.debugElement.componentInstance;
     fixture.detectChanges();
     let compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('app works!');
+    expect(compiled.querySelector('md-toolbar').textContent).toContain(app.title);
   }));
 });

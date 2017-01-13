@@ -7,8 +7,8 @@ describe('Pazuzu UI App', function() {
     page = new PazuzuUiPage();
   });
 
-  it('should display message saying app works', () => {
+  it(`should display app title 'Pazuzu UI'`, () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getToolbarTitle()).toEqual('Pazuzu UI');
   });
 });
