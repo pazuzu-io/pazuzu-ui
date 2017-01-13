@@ -1,6 +1,7 @@
 import './polyfills.ts';
 
 import {} from 'jasmine';
+import 'hammerjs';
 
 import 'zone.js/dist/long-stack-trace-zone';
 import 'zone.js/dist/proxy.js';

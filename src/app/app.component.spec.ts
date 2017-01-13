@@ -1,6 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
+import { MaterialModule } from '@angular/material';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -9,6 +10,9 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      imports: [
+        MaterialModule.forRoot()
+      ]
     });
     TestBed.compileComponents();
   });
