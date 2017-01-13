@@ -134,6 +134,10 @@ Add `hammerjs` to `types` section of `src/tsconfig.json`:
 }
 ```
 
+## Adding Angular Material Theme
+
+
+
 Developing locally
 ------------------
 
