@@ -13,12 +13,12 @@ choose from a wide selection of predefined Dockerfile snippets that represent
 those dependencies (e.g. Golang, Python, Android SDK, customized NPM installs).
 
 What is Pazuzu UI?
-------------------------
+------------------
 
 UI for Pazuzu Registry where you will be able to create new features as well as
 approve them.
 
-This is single-page application implemented in TypeScript using
+This is a single-page application implemented in TypeScript using
 [`Angular 2`](https://angular.io).
 
 What is current stage?
@@ -74,83 +74,6 @@ Development
 -----------
 
 *to be written*
-
-Developing locally
-------------------
-
-This is a small guide that hopefully demonstrates how to get the
-[pazuzu-registry](https://github.com/zalando/pazuzu-registry) and the
-[pazuzu-ui](https://github.com/zalando/pazuzu-ui) running locally with OAuth
-enabled.
-
-1. Clone both repositories
-
-In one base directory run:
-
-    git clone git@github.com:zalando/pazuzu-ui.git
-    git clone git@github.com:zalando/pazuzu-registry.git
-
-2. Create NGINX docker container
-
-In order to get the SSL working we need nginx to terminate the ssl requests and
-forward them to our running UI and registry processes.
-
-    cd pazuzu-ui/nginx
-    sudo make build
-    sudo BACKEND_IP=$YOUR_EXTERNAL_IP make run
-
-This will create an nginx proxy that forwards traffic from
-`https://localhost:8080` to `http://$YOUR_EXTERNAL_IP:3449`, i.e. the running
-figwheel repl. It will also forward traffic from `https://localhost:8081` to
-`http://$YOUR_EXTERNAL_IP:8082`, i.e. the running registry.
-
-3. Request client tokens from mint
-
-In order to get both running we need client ids from mint:
-
-    berry -a pazuzu-registry -m $MINT_BUCKET --once -f /dev/null ~/.berry/pazuzu-registry
-    cd pazuzu-ui
-    berry -a pazuzu-ui-dev -m $MINT_BUCKET --once -f /dev/null credentials
-
-4. Start the registry
-
-First, make sure your LDAP uid is in
-`pazuzu-registry/src/main/resources/config/application-dev.yml`:
-
-    pazuzu:
-        registry:
-            admins:
-                dtruemper
-
-Now build and start the registry:
-
-    mvn package
-    java -Dserver.port=8082 -Dspring.profiles.active=dev,oauth
-
-You can also run the registry inside your IDE with the equivalent command line
-args.
-
-5. Start the UI
-
-Inside EMACS simply call `cider-jack-in-clojurescript`. In the command line
-this will result in similar experience:
-
-    lein figwheel dev
-
-Happy hacking!
-
-Packaging
----------
-
-To build a standalone runnable jar
-
-    export BACKEND_ENPOINT=https://backend-registry-endpoint.ok
-    lein uberjar
-    java -jar ./target/pazuzu-ui.jar
-
-if no BACKEND_ENDPOINT environment variable is specified,
-the default backend endpoint will be http://localhost:8080
-
 
 License
 -------
