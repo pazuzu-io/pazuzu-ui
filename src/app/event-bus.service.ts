@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
-export const APP_TITLE_CHANGE: string = 'APP_TITLE_CHANGE';
+export const APP_TITLE_CHANGE = 'APP_TITLE_CHANGE';
 
 export interface EventBusArgs {
-  type: string,
-  data: any
+  type: string;
+  data: any;
 }
 
 @Injectable()

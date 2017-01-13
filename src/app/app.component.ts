@@ -23,7 +23,6 @@ export class AppComponent implements OnInit {
     this.eventBusService
       .observe(APP_TITLE_CHANGE)
       .subscribe(title => {
-        //this.title = title;
         this.titleService.setTitle(title + ' | ' + this.title);
       });
   }
