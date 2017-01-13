@@ -1,19 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+
+import { EventBusService, APP_TITLE_CHANGE } from './event-bus.service';
 
 @Component({
   selector: 'app-pazuzu',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   title = 'Pazuzu UI';
 
   constructor(
+    private eventBusService: EventBusService,
     private titleService: Title
   ) {
-    this.titleService.setTitle(this.title);
+
+  }
+
+  ngOnInit() {
+    this.eventBusService
+      .observe(APP_TITLE_CHANGE)
+      .subscribe(title => {
+        //this.title = title;
+        this.titleService.setTitle(title + ' | ' + this.title);
+      });
   }
 
 }
