@@ -1,20 +1,32 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
 import { MaterialModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
+import { FeatureListComponent } from './feature-list/feature-list.component';
+import { FeatureDetailComponent } from './feature-detail/feature-detail.component';
 
-// disabled due to issue with zone.js
-// @see https://github.com/angular/zone.js/issues/427
-xdescribe('AppComponent', () => {
+import { APP_BASE_HREF } from '@angular/common';
+import { APP_PROVIDERS } from './app.providers';
+import { APP_ROUTES } from './app.routes';
+
+describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        FeatureListComponent,
+        FeatureDetailComponent
       ],
       imports: [
+        RouterModule.forRoot(APP_ROUTES),
         MaterialModule.forRoot()
+      ],
+      providers: [
+        APP_PROVIDERS,
+        {provide: APP_BASE_HREF, useValue : '/'}
       ]
     });
     TestBed.compileComponents();
