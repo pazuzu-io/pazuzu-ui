@@ -1,7 +1,31 @@
-<md-card>
-  Feature Details for "{{name}}"
-</md-card>
-<md-card>
-  <a routerLink="/features/list">Back</a>
-  <pre>{{ feature | json }}</pre>
-</md-card>
+<p>
+ <a routerLink="/features/list">← View all features</a>
+</p>
+
+<div class="row">
+  <div class="col s10">
+    <h5>{{ heading }}</h5>
+  </div>
+  <div class="col s2 right-align">
+    <a class="btn grey lighten-3 black-text disabled" title="Delete feature"
+       routerLink="/features/delete/{{ name }}"><i class="material-icons">clear</i></a>
+  </div>
+</div>
+
+<!--
+<form>
+  <div class="card">
+    <div class="card-content grey-text text-darken-4">
+      <div class="input-field">
+        <i class="material-icons prefix">account_circle</i>
+        <input id="name" name="name" type="text" class="validate" [(ngModel)]="feature.meta.name">
+        <label class="active" for="name">Name</label>
+      </div>
+    </div>
+    <div class="card-action">
+      <button type="button" class="btn waves-effect waves-light" (click)="cancel(contact)">Cancel</button>
+      <button type="button" class="btn waves-effect waves-light" (click)="save(contact)">Save</button>
+    </div>
+  </div>
+</form>
+ -->

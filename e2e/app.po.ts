@@ -6,6 +6,6 @@ export class PazuzuUiPage {
   }
 
   getToolbarTitle() {
-    return element(by.css('app-pazuzu md-toolbar md-toolbar-row span:first-child')).getText();
+    return element(by.css('pazuzu-ui-app a.brand-logo')).getText();
   }
 }

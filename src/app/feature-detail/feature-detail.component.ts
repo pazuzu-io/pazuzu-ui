@@ -13,6 +13,7 @@ import { FeatureService } from '../feature.service';
 export class FeatureDetailComponent implements OnInit {
 
   name: string;
+  heading: string;
   feature: Feature;
 
   constructor(
@@ -23,7 +24,8 @@ export class FeatureDetailComponent implements OnInit {
 
   ngOnInit() {
     this.name = this.route.snapshot.params['name'];
-    this.eventBusService.emit(APP_TITLE_CHANGE, 'Feature Details');
+    this.heading = `Feature details for ${this.name}`;
+    this.eventBusService.emit(APP_TITLE_CHANGE, this.heading);
     this.feature = this.featureService.getFeature(this.name);
   }
 

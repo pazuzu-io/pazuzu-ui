@@ -4,6 +4,20 @@
   font-family: 'Roboto', sans-serif;
 }
 
-body {
-  margin: 0;
+a {
+  color: #ff5722;
+}
+
+nav .brand-logo {
+  margin: 0 10px;
+}
+
+main {
+  padding-top: 10px;
+  padding-bottom: 40px;
+}
+
+.row h5 {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }

@@ -3,9 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from '@angular/material';
 
 import 'hammerjs';
+
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
 
 import { APP_PROVIDERS } from './app.providers';
 import { APP_ROUTES } from './app.routes';
@@ -24,10 +26,9 @@ import { FeatureDetailComponent } from './feature-detail/feature-detail.componen
     BrowserModule,
     RouterModule.forRoot(APP_ROUTES),
     FormsModule,
-    HttpModule,
-    MaterialModule.forRoot()
+    HttpModule
   ],
   providers: APP_PROVIDERS,
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class PazuzuUIAppModule { }

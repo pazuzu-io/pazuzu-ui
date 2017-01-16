@@ -4,7 +4,7 @@ import { Title } from '@angular/platform-browser';
 import { EventBusService, APP_TITLE_CHANGE } from './event-bus.service';
 
 @Component({
-  selector: 'app-pazuzu',
+  selector: 'pazuzu-ui-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

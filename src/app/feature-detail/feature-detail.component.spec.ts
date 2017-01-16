@@ -3,7 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MaterialModule } from '@angular/material';
+import { BaseRequestOptions, Http, HttpModule } from '@angular/http';
+import { MockBackend } from '@angular/http/testing';
 
 import { FeatureDetailComponent } from './feature-detail.component';
 import { EventBusService } from '../event-bus.service';
@@ -22,11 +23,18 @@ describe('FeatureDetailComponent', () => {
         RouterTestingModule.withRoutes([
           {path: 'features/detail/test', component: FeatureDetailComponent}
         ]),
-        MaterialModule.forRoot()
+        HttpModule
       ],
       providers: [
         EventBusService,
-        FeatureService
+        FeatureService,
+        MockBackend,
+        BaseRequestOptions,
+        {
+          provide: Http,
+          useFactory: (backend, options) => new Http(backend, options),
+          deps: [MockBackend, BaseRequestOptions]
+        }
       ]
     })
     .compileComponents();

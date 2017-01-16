@@ -3,6 +3,9 @@ import './polyfills.ts';
 import {} from 'jasmine';
 import 'hammerjs';
 
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+
 import 'zone.js/dist/long-stack-trace-zone';
 import 'zone.js/dist/proxy.js';
 import 'zone.js/dist/sync-test';

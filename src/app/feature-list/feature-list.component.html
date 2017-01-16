@@ -1,7 +1,48 @@
-<md-card>
-  Feature List
-</md-card>
-<md-card *ngFor="let feature of features">
-  <a routerLink="/features/detail/{{ feature.meta.name }}">{{ feature.meta.name }}</a>
-  <pre>{{ feature | json }}</pre>
-</md-card>
+<p>
+  &nbsp;
+</p>
+
+<div class="row">
+  <div class="col s10">
+    <h5>{{ heading }}</h5>
+  </div>
+  <div class="col s2 right-align">
+    <a class="btn grey lighten-3 black-text disabled" title="Create new feature"
+       routerLink="/feature/create"><i class="material-icons">add</i></a>
+  </div>
+</div>
+
+<form>
+  <div class="input-field">
+    <input id="search" type="search" required>
+    <label for="search"><i class="material-icons">search</i></label>
+    <i class="material-icons">close</i>
+  </div>
+</form>
+
+<table class="bordered striped responsive-table">
+  <thead>
+    <tr>
+      <th data-field="name">Name</th>
+      <th data-field="description">Author</th>
+      <th data-field="description">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let feature of features">
+      <td><a routerLink="/features/detail/{{ feature.meta.name }}">{{ feature.meta.name }}</a></td>
+      <td>{{ feature.meta.author }}</td>
+      <td class="truncate">{{ feature.meta.description }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul class="pagination">
+  <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+  <li class="active grey"><a href="#!">1</a></li>
+  <li class="waves-effect"><a href="#!">2</a></li>
+  <li class="waves-effect"><a href="#!">3</a></li>
+  <li class="waves-effect"><a href="#!">4</a></li>
+  <li class="waves-effect"><a href="#!">5</a></li>
+  <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+</ul>

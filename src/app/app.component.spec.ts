@@ -2,7 +2,6 @@
 
 import { TestBed, async } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
-import { MaterialModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { FeatureListComponent } from './feature-list/feature-list.component';
@@ -21,8 +20,7 @@ describe('AppComponent', () => {
         FeatureDetailComponent
       ],
       imports: [
-        RouterModule.forRoot(APP_ROUTES),
-        MaterialModule.forRoot()
+        RouterModule.forRoot(APP_ROUTES)
       ],
       providers: [
         APP_PROVIDERS,
@@ -49,6 +47,6 @@ describe('AppComponent', () => {
     let app = fixture.debugElement.componentInstance;
     fixture.detectChanges();
     let compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('md-toolbar').textContent).toContain(app.title);
+    expect(compiled.querySelector('a.brand-logo').textContent).toContain(app.title);
   }));
 });

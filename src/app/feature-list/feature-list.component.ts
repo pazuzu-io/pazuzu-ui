@@ -11,6 +11,7 @@ import { FeatureService } from '../feature.service';
 })
 export class FeatureListComponent implements OnInit {
 
+  heading: string;
   features: Array<Feature>;
 
   constructor(
@@ -19,7 +20,8 @@ export class FeatureListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.eventBusService.emit(APP_TITLE_CHANGE, 'Feature List');
+    this.heading = 'Feature list';
+    this.eventBusService.emit(APP_TITLE_CHANGE, this.heading);
     this.features = this.featureService.getFeatures();
   }
 
