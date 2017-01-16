@@ -2,15 +2,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MaterialModule } from '@angular/material';
 
 import { FeatureDetailComponent } from './feature-detail.component';
-import { FeatureListComponent } from '../feature-list/feature-list.component';
-
-import { APP_BASE_HREF } from '@angular/common';
-import { APP_PROVIDERS } from '../app.providers';
-import { APP_ROUTES } from '../app.routes';
+import { EventBusService } from '../event-bus.service';
 
 describe('FeatureDetailComponent', () => {
   let component: FeatureDetailComponent;
@@ -19,16 +15,16 @@ describe('FeatureDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        FeatureDetailComponent,
-        FeatureListComponent
+        FeatureDetailComponent
       ],
       imports: [
-        RouterModule.forRoot(APP_ROUTES),
+        RouterTestingModule.withRoutes([
+          {path: 'features/detail/test', component: FeatureDetailComponent}
+        ]),
         MaterialModule.forRoot()
       ],
       providers: [
-        APP_PROVIDERS,
-        {provide: APP_BASE_HREF, useValue : '/'}
+        EventBusService
       ]
     })
     .compileComponents();
