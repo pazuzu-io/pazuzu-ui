@@ -21,7 +21,7 @@ export class FeatureService {
   }
 
   getFeature(name: string) {
-    return this.features.find(feature => feature.meta.name.toString() == name);
+    return this.features.find(feature => feature.meta.name.toString() === name);
     /*
     return this.http.get(`http://localhost:8080/api/features/${id}`)
       .map(res => res.json())
