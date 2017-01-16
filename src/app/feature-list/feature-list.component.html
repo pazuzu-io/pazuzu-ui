@@ -1,6 +1,7 @@
 <md-card>
   Feature List
 </md-card>
-<md-card>
-  <pre>{{ features | json }}</pre>
+<md-card *ngFor="let feature of features">
+  <a routerLink="/features/detail/{{ feature.meta.name }}">{{ feature.meta.name }}</a>
+  <pre>{{ feature | json }}</pre>
 </md-card>
