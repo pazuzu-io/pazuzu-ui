@@ -21,3 +21,22 @@ main {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+.textarea-field label {
+  font-size: 0.8rem;
+  -webkit-transform: translateY(-140%);
+  transform: translateY(-140%);
+}
+
+/* label focus color */
+.input-field input[type=text]:focus + label,
+.input-field textarea.materialize-textarea:focus + label {
+  color: #ff5722;
+}
+
+/* label underline focus color */
+.input-field input[type=text]:focus,
+.input-field textarea.materialize-textarea:focus {
+  border-bottom: 1px solid #ff5722;
+  box-shadow: 0 1px 0 0 #ff5722;
+}

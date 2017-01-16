@@ -5,6 +5,10 @@ import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BaseRequestOptions, Http, HttpModule } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
+import { FormsModule } from '@angular/forms';
+
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 
 import { FeatureDetailComponent } from './feature-detail.component';
 import { EventBusService } from '../event-bus.service';
@@ -21,9 +25,10 @@ describe('FeatureDetailComponent', () => {
       ],
       imports: [
         RouterTestingModule.withRoutes([
-          {path: 'features/detail/test', component: FeatureDetailComponent}
+          {path: 'features/detail/java', component: FeatureDetailComponent}
         ]),
-        HttpModule
+        HttpModule,
+        FormsModule
       ],
       providers: [
         EventBusService,
@@ -34,6 +39,14 @@ describe('FeatureDetailComponent', () => {
           provide: Http,
           useFactory: (backend, options) => new Http(backend, options),
           deps: [MockBackend, BaseRequestOptions]
+        },
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            snapshot: {
+              params: Observable.from([{'name': 'java'}])
+            }
+          }
         }
       ]
     })
@@ -46,7 +59,7 @@ describe('FeatureDetailComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', async(() => {
     expect(component).toBeTruthy();
-  });
+  }));
 });

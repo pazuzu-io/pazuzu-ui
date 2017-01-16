@@ -5,6 +5,7 @@ import { DebugElement } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { BaseRequestOptions, Http, HttpModule } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
+import { FormsModule } from '@angular/forms';
 
 import { FeatureListComponent } from './feature-list.component';
 import { EventBusService } from '../event-bus.service';
@@ -23,7 +24,8 @@ describe('FeatureListComponent', () => {
         RouterTestingModule.withRoutes([
           {path: 'features/list', component: FeatureListComponent}
         ]),
-        HttpModule
+        HttpModule,
+        FormsModule
       ],
       providers: [
         EventBusService,
@@ -46,7 +48,7 @@ describe('FeatureListComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', async(() => {
     expect(component).toBeTruthy();
-  });
+  }));
 });

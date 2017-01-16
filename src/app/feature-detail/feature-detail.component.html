@@ -3,29 +3,64 @@
 </p>
 
 <div class="row">
-  <div class="col s10">
+  <div class="col s8 m10">
     <h5>{{ heading }}</h5>
   </div>
-  <div class="col s2 right-align">
+  <div class="col s4 m2 right-align">
     <a class="btn grey lighten-3 black-text disabled" title="Delete feature"
        routerLink="/features/delete/{{ name }}"><i class="material-icons">clear</i></a>
   </div>
 </div>
 
-<!--
-<form>
+<form *ngIf="feature">
   <div class="card">
     <div class="card-content grey-text text-darken-4">
       <div class="input-field">
-        <i class="material-icons prefix">account_circle</i>
         <input id="name" name="name" type="text" class="validate" [(ngModel)]="feature.meta.name">
         <label class="active" for="name">Name</label>
       </div>
+      <div class="input-field">
+        <input id="author" name="author" type="text" class="validate" [(ngModel)]="feature.meta.author">
+        <label class="active" for="author">Author</label>
+      </div>
+      <div class="input-field textarea-field">
+        <textarea id="description" class="materialize-textarea">{{ feature.meta.description }}</textarea>
+        <label for="description">Description</label>
+      </div>
+      <div class="input-field">
+        <input id="snippet" name="snippet" type="text" class="validate" [(ngModel)]="feature.snippet">
+        <label class="active" for="snippet">Snippet</label>
+      </div>
+      <div class="input-field">
+        <input id="test-snippet" name="test-snippet" type="text" class="validate" [(ngModel)]="feature.test_snippet">
+        <label class="active" for="test-snippet">Test snippet</label>
+      </div>
+      <!--
+      <div class="input-field">
+        <input id="dependency" name="dependency" type="text" class="validate" [(ngModel)]="dependencyToAdd">
+        <label class="active" for="dependency">Add dependency</label>
+      </div>
+       -->
+      <p>
+        <label class="active">Dependencies</label>
+      </p>
+      <p *ngIf="feature.meta.dependencies.length > 0">
+        <span class="chip" *ngFor="let dependency of feature.meta.dependencies">
+          <a routerLink="/features/detail/{{ dependency }}">{{ dependency }}</a>
+          <!--
+          <i class="close material-icons">close</i>
+           -->
+        </span>
+      </p>
+      <p *ngIf="feature.meta.dependencies.length === 0">
+        No dependencies defined
+      </p>
     </div>
+    <!--
     <div class="card-action">
       <button type="button" class="btn waves-effect waves-light" (click)="cancel(contact)">Cancel</button>
       <button type="button" class="btn waves-effect waves-light" (click)="save(contact)">Save</button>
     </div>
+     -->
   </div>
 </form>
- -->

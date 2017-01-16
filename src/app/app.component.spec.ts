@@ -1,31 +1,23 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
-import { FeatureListComponent } from './feature-list/feature-list.component';
-import { FeatureDetailComponent } from './feature-detail/feature-detail.component';
-
-import { APP_BASE_HREF } from '@angular/common';
 import { APP_PROVIDERS } from './app.providers';
-import { APP_ROUTES } from './app.routes';
 
 describe('AppComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent,
-        FeatureListComponent,
-        FeatureDetailComponent
+        AppComponent
       ],
       imports: [
-        RouterModule.forRoot(APP_ROUTES)
+        RouterTestingModule.withRoutes([
+          {path: '', component: AppComponent}
+        ])
       ],
-      providers: [
-        APP_PROVIDERS,
-        {provide: APP_BASE_HREF, useValue : '/'}
-      ]
+      providers: APP_PROVIDERS
     });
     TestBed.compileComponents();
   });
