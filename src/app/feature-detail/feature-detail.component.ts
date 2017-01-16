@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { EventBusService, APP_TITLE_CHANGE } from '../event-bus.service';
+import { Feature } from '../models/feature';
+import { FeatureService } from '../feature.service';
 
 @Component({
   selector: 'app-feature-detail',
@@ -10,16 +12,19 @@ import { EventBusService, APP_TITLE_CHANGE } from '../event-bus.service';
 })
 export class FeatureDetailComponent implements OnInit {
 
-  id: string;
+  name: string;
+  feature: Feature;
 
   constructor(
+    private route: ActivatedRoute,
     private eventBusService: EventBusService,
-    private route: ActivatedRoute
+    private featureService: FeatureService
   ) { }
 
   ngOnInit() {
+    this.name = this.route.snapshot.params['name'];
     this.eventBusService.emit(APP_TITLE_CHANGE, 'Feature Details');
-    this.id = this.route.snapshot.params['id'];
+    this.feature = this.featureService.getFeature(this.name);
   }
 
 }

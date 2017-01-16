@@ -7,6 +7,7 @@ import { MaterialModule } from '@angular/material';
 
 import { FeatureDetailComponent } from './feature-detail.component';
 import { EventBusService } from '../event-bus.service';
+import { FeatureService } from '../feature.service';
 
 describe('FeatureDetailComponent', () => {
   let component: FeatureDetailComponent;
@@ -24,7 +25,8 @@ describe('FeatureDetailComponent', () => {
         MaterialModule.forRoot()
       ],
       providers: [
-        EventBusService
+        EventBusService,
+        FeatureService
       ]
     })
     .compileComponents();
