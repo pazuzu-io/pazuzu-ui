@@ -21,35 +21,6 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
   feature: Observable<Feature>;
 
   /**
-   * update internal state
-   * @returns {void} nothing
-   */
-  update() {
-
-    // get name parameter
-    this.name = this.route.snapshot.params['name'];
-
-    // get feature by name
-    this.feature =
-      this.featureService.get(this.name)
-        .map((feature) => {
-
-          // if feature was not found redirect to list
-          if (!this.feature) {
-            this.router.navigate(['/features/list']);
-          }
-
-          return feature;
-
-        });
-
-    // update heading and title
-    this.heading = `Feature details for ${this.name}`;
-    this.eventBusService.emit(APP_TITLE_CHANGE, this.heading);
-
-  }
-
-  /**
    * go back using Location API
    * @returns {void} nothing
    */
@@ -79,7 +50,7 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
 
   /**
    * on init handler
-   * subscribe to parameter changes
+   * load feature
    * @returns {void} nothing
    */
   ngOnInit() {
@@ -89,7 +60,21 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
 
       // if event is of type NavigationEnd update internal state
       if (val instanceof NavigationEnd) {
-        this.update();
+
+        // get name parameter
+        this.name = this.route.snapshot.params['name'];
+
+        // update heading and title
+        this.heading = `Feature details for ${this.name}`;
+        this.eventBusService.emit(APP_TITLE_CHANGE, this.heading);
+
+        // get feature
+        this.featureService.get(this.name)
+          .subscribe(
+            feature => this.feature = feature,
+            () => this.router.navigate(['/features/list'])
+          );
+
       }
 
     });

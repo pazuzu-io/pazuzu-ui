@@ -12,7 +12,6 @@
   </div>
 </div>
 
-<!--
 <form *ngIf="feature">
   <div class="card">
     <div class="card-content grey-text text-darken-4">
@@ -25,7 +24,7 @@
         <label class="active" for="author">Author</label>
       </div>
       <div class="input-field textarea-field">
-        <textarea id="description" class="materialize-textarea">{{ feature.meta.description }}</textarea>
+        <textarea id="description" class="materialize-textarea">{{ feature?.meta.description }}</textarea>
         <label for="description">Description</label>
       </div>
       <div class="input-field">
@@ -39,15 +38,14 @@
       <p>
         <label class="active">Dependencies</label>
       </p>
-      <p *ngIf="feature.meta.dependencies.length > 0">
+      <p *ngIf="feature?.meta.dependencies.length > 0">
         <span class="chip" *ngFor="let dependency of feature.meta.dependencies">
-          <a routerLink="/features/detail/{{ dependency }}">{{ dependency }}</a>
+          <a [routerLink]="['/features/detail', dependency]">{{ dependency }}</a>
         </span>
       </p>
-      <p *ngIf="feature.meta.dependencies.length === 0">
+      <p *ngIf="feature?.meta.dependencies.length === 0">
         No dependencies defined
       </p>
     </div>
   </div>
 </form>
- -->
