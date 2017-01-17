@@ -47,8 +47,10 @@ Be aware to not overwrite `README.md`.
 Open application with live reload capabilities:
 
 ```bash
-$ ng serve
+$ ng start
 ```
+
+This command executes `ng serve --proxy-config proxy.conf.json` to proxy API calls to the running server.
 
 ## Test application
 

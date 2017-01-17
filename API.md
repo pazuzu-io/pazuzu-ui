@@ -39,7 +39,7 @@ Database: jdbc:hsqldb:mem:pazuzudb;sql.syntax_pgs=true (HSQL Database Engine 2.3
 ##### Create
 
 ```bash
-curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{ "meta": { "name": "java", "description": "opendjk", "author": "mlehmann1" }, "snippet": "FROM openjdk:7" }' 'http://localhost:8080/api/features'
+curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{ "meta": { "name": "java", "description": "openjdk", "author": "mlehmann1" }, "snippet": "FROM openjdk:7" }' 'http://localhost:8080/api/features'
 curl -s -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{ "meta": { "name": "scala", "description": "scala", "author": "mlehmann1", "dependencies": ["java"] }, "snippet": "FROM hseeberger/scala-sbt" }' 'http://localhost:8080/api/features'
 ```
 

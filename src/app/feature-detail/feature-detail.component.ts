@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Location } from '@angular/common';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 import { EventBusService, APP_TITLE_CHANGE } from '../event-bus.service';
 import { Feature } from '../models/feature';
@@ -18,7 +18,7 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
   sub: Subscription;
   name: string;
   heading: string;
-  feature: Feature;
+  feature: Observable<Feature>;
 
   /**
    * update internal state
@@ -30,12 +30,18 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
     this.name = this.route.snapshot.params['name'];
 
     // get feature by name
-    this.feature = this.featureService.getFeature(this.name);
+    this.feature =
+      this.featureService.get(this.name)
+        .map((feature) => {
 
-    // if feature was not found redirect to list
-    if (!this.feature) {
-      this.router.navigate(['/features/list']);
-    }
+          // if feature was not found redirect to list
+          if (!this.feature) {
+            this.router.navigate(['/features/list']);
+          }
+
+          return feature;
+
+        });
 
     // update heading and title
     this.heading = `Feature details for ${this.name}`;

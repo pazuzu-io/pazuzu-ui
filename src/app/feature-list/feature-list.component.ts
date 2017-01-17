@@ -28,8 +28,8 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   pages: number[];
 
   features: Observable<Array<Feature>>;
-  featuresCount: number;
-  featuresPageCount: number;
+  featureCount: number;
+  pageCount: number;
 
   /**
    * retrieve features for one page (value of `this.page`)
@@ -37,16 +37,33 @@ export class FeatureListComponent implements OnInit, OnDestroy {
    */
   getData() {
 
+    /*
     this.features =
       this.featureService.search(this.term$, 400)
         .merge(this.featureService.getAll(this.page));
+    */
 
-    this.featuresCount = this.featureService.getFeatureCount();
-    this.featuresPageCount = this.featureService.getPageCount();
+    this.features =
+      this.featureService.getAll(this.page)
+        .map((features) => {
 
-    // TODO: cut out pages in between first, current page and last page if there are more than 5
-    this.pages =
-      Array.apply(null, new Array(this.featuresPageCount)).map((_, i) => i + 1);
+          // update feature and page count
+          this.featureCount = this.featureService.getFeatureCount();
+          this.pageCount = this.featureService.getPageCount();
+
+          // limit page to valid values
+          if (this.page < 1 || this.page > this.pageCount) {
+            this.page = Math.max(this.page, 1);
+            this.page = Math.min(this.page, this.pageCount);
+            this.goTo(this.page);
+          }
+
+          // TODO: cut out pages in between first, current page and last page if there are more than 5
+          this.pages =
+            Array.apply(null, new Array(this.pageCount)).map((_, i) => i + 1);
+
+          return features;
+        });
 
   }
 
@@ -107,10 +124,8 @@ export class FeatureListComponent implements OnInit, OnDestroy {
     this.sub = this.route.queryParams
       .subscribe(params => {
 
-        // convert param to number and limit it to valid values
+        // convert page param to number
         this.page = +params['page'] || 1;
-        this.page = Math.max(this.page, 1);
-        this.page = Math.min(this.page, this.featuresPageCount);
 
         // in case we sanitized page value update query parameter
         if (this.page !== +params['page'] && typeof params['page'] !== 'undefined') {

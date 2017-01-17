@@ -7,7 +7,7 @@
     <h5>{{ heading }}</h5>
     <!--
     TODO: should show something like „Feature 1 to 19 of 22“
-    <h5>{{ features.length | i18nPlural: featureHeadlineMapping }}</h5>
+    <h5>{{ featureCount | i18nPlural: featureHeadlineMapping }}</h5>
      -->
   </div>
   <div class="col s4 m2 right-align">
@@ -36,7 +36,7 @@
     <tr *ngFor="let feature of features | async">
       <td><a routerLink="/features/detail/{{ feature.meta.name }}">{{ feature.meta.name }}</a></td>
       <td>{{ feature.meta.author }}</td>
-      <td class="truncate">{{ feature.meta.description }}</td>
+      <td><span class="truncate">{{ feature.meta.description }}</span></td>
     </tr>
   </tbody>
 </table>
@@ -50,7 +50,7 @@
   <li *ngFor="let p of pages" [ngClass]="{'active grey': p === page }">
     <a href="javascript:void(0)" (click)="goTo(p)" title="Go to Page {{ p }}">{{ p }}</a>
   </li>
-  <li [class.disabled]="page >= featuresPageCount">
+  <li [class.disabled]="page >= pageCount">
     <a href="javascript:void(0)" (click)="goTo(page + 1)" title="Next page">
       <i class="material-icons">chevron_right</i>
     </a>

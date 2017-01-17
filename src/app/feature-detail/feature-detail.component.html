@@ -12,6 +12,7 @@
   </div>
 </div>
 
+<!--
 <form *ngIf="feature">
   <div class="card">
     <div class="card-content grey-text text-darken-4">
@@ -35,32 +36,18 @@
         <input id="test-snippet" name="test-snippet" type="text" class="validate" [(ngModel)]="feature.test_snippet">
         <label class="active" for="test-snippet">Test snippet</label>
       </div>
-      <!--
-      <div class="input-field">
-        <input id="dependency" name="dependency" type="text" class="validate" [(ngModel)]="dependencyToAdd">
-        <label class="active" for="dependency">Add dependency</label>
-      </div>
-       -->
       <p>
         <label class="active">Dependencies</label>
       </p>
       <p *ngIf="feature.meta.dependencies.length > 0">
         <span class="chip" *ngFor="let dependency of feature.meta.dependencies">
           <a routerLink="/features/detail/{{ dependency }}">{{ dependency }}</a>
-          <!--
-          <i class="close material-icons">close</i>
-           -->
         </span>
       </p>
       <p *ngIf="feature.meta.dependencies.length === 0">
         No dependencies defined
       </p>
     </div>
-    <!--
-    <div class="card-action">
-      <button type="button" class="btn waves-effect waves-light" (click)="cancel(contact)">Cancel</button>
-      <button type="button" class="btn waves-effect waves-light" (click)="save(contact)">Save</button>
-    </div>
-     -->
   </div>
 </form>
+ -->

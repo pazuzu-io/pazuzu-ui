@@ -9,8 +9,9 @@ import { FEATURE_DATA } from './data/feature-data';
 @Injectable()
 export class FeatureService {
 
-  private size: number = 10;
-  private features: Array<Feature> = FEATURE_DATA;
+  private limit: number = 2;
+  private count: number = 0;
+  private pages: number = 0;
 
   /**
    * constructor
@@ -27,28 +28,37 @@ export class FeatureService {
    * @returns {Observable<Array<Feature>>}
    */
   getAll(page = 1) {
-    let offset = (page - 1) * this.size;
-    return Observable.of(this.features.slice(offset * this.size, offset * this.size + this.size));
-    /*
-    return this.http.get('http://localhost:8080/api/features')
-      .map(res => res.json());
-    */
+
+    // set offset
+    let offset = (page - 1) * this.limit;
+
+    return this.http.get(`/api/features?limit=${this.limit}&offset=${offset}`)
+      .map(res => {
+
+        // update count and pages
+        this.count = +res.headers.get('x-total-count') || 0;
+        this.pages = Math.max(Math.ceil(this.count / this.limit), 1);
+
+        // return features as json
+        return res.json();
+
+      });
   }
 
   /**
-   * get number of features
+   * get features count
    * @returns {number}
    */
   getFeatureCount() {
-    return this.features.length;
+    return this.count;
   }
 
   /**
-   * get number of pages
+   * get page count
    * @returns {number}
    */
   getPageCount() {
-    return Math.ceil(this.features.length / this.size);
+    return this.pages;
   }
 
   /**
@@ -57,11 +67,9 @@ export class FeatureService {
    * @returns {Feature}
    */
   get(name: string) {
-    return this.features.find(feature => feature.meta.name.toString() === name);
-    /*
-    return this.http.get(`http://localhost:8080/api/features/${name}`)
+    // return this.features.find(feature => feature.meta.name.toString() === name);
+    return this.http.get(`/api/features/${name}`)
       .map(res => res.json());
-    */
   }
 
   /**
@@ -73,13 +81,13 @@ export class FeatureService {
     let params: URLSearchParams = new URLSearchParams();
     params.set('q', term);
 
+    /*
     return Observable.of(
       this.features.filter(feature => feature.meta.name.indexOf(params.get('q')) !== -1)
     );
-    /*
+    */
     return this.http.get(`http://localhost:8080/api/features`, {search: params})
       .map(res => res.json());
-    */
   }
 
   /**
