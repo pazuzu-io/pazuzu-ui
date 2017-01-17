@@ -41,18 +41,22 @@ export class FeatureService {
   }
 
   /**
-   * get all features for given page
+   * get all features for given page and limit
    * @param {number} page
+   * @param {number} limit
    * @returns {Observable<Array<Feature>>}
    */
-  getAll(page = 1) {
+  getAll(page = 1, limit = 10) {
+
+    // set limit
+    this.limit = limit;
 
     // set offset
-    let offset = (page - 1) * this.limit;
+    let offset = (page - 1) * limit;
 
     // set search params
     let params: URLSearchParams = new URLSearchParams();
-    params.set('limit', this.limit.toString());
+    params.set('limit', limit.toString());
     params.set('offset', offset.toString());
 
     // trigger request

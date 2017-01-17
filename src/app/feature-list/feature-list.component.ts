@@ -26,6 +26,8 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   page: number = 1;
   pages: number[];
 
+  limit: number = 10;
+
   features$: Observable<Array<Feature>>;
 
   featureCount: number;
@@ -38,7 +40,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   getData() {
 
     this.features$ =
-      this.featureService.getAll(this.page)
+      this.featureService.getAll(this.page, this.limit)
         .map((features) => {
 
           // update feature and page count
@@ -69,12 +71,27 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   goTo(page: number) {
 
     // update query parameter
-    this.router.navigate(['/features/list'], {queryParams: {page: page}}).then(() => {
+    this.router.navigate(['/features/list'], {queryParams: {page: page, limit: this.limit}}).then(() => {
 
       // get features and pagination info
       this.getData();
 
     });
+
+  }
+
+  /**
+   * set limit to given value
+   * @param {number} limit
+   * @returns {void} nothing
+   */
+  limitTo(limit: number) {
+
+    // set new limit
+    this.limit = limit;
+
+    // update data
+    this.goTo(this.page);
 
   }
 
@@ -93,9 +110,13 @@ export class FeatureListComponent implements OnInit, OnDestroy {
     private featureService: FeatureService
   ) {
 
-    // update page if query parameter already exists
+    // update query parameters if they already exist
     if (typeof this.route.snapshot.queryParams['page'] !== 'undefined') {
       this.page = +this.route.snapshot.queryParams['page'];
+    }
+
+    if (typeof this.route.snapshot.queryParams['limit'] !== 'undefined') {
+      this.limit = +this.route.snapshot.queryParams['limit'];
     }
 
     // get features and pagination info

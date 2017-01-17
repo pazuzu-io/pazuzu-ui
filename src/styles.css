@@ -29,6 +29,11 @@ main {
   font-size: 50%;
 }
 
+.row h5 small a.active {
+  color: #000;
+  font-weight: bold;
+}
+
 .textarea-field label {
   font-size: 0.8rem;
   -webkit-transform: translateY(-140%);

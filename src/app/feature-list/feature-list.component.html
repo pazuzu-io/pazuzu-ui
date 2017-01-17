@@ -4,7 +4,14 @@
 
 <div class="row">
   <div class="col s8 m10">
-    <h5>{{ featureCount | i18nPlural: featureHeadlineMapping }}<small>showing page {{ page }}</small></h5>
+    <h5>
+      {{ featureCount | i18nPlural: featureHeadlineMapping }}
+      <small>showing page {{ page }} with
+        <a href="javascript:void(0)" (click)="limitTo(10)" [class.active]="limit === 10">10</a> /
+        <a href="javascript:void(0)" (click)="limitTo(20)" [class.active]="limit === 20">20</a> /
+        <a href="javascript:void(0)" (click)="limitTo(50)" [class.active]="limit === 50">50</a> items
+      </small>
+    </h5>
   </div>
   <div class="col s4 m2 right-align">
     <a class="btn grey lighten-3 black-text disabled" title="Create new feature"
