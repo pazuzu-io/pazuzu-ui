@@ -5,6 +5,10 @@
 <div class="row">
   <div class="col s8 m10">
     <h5>{{ heading }}</h5>
+    <!--
+    TODO: should show something like „Feature 1 to 19 of 22“
+    <h5>{{ features.length | i18nPlural: featureHeadlineMapping }}</h5>
+     -->
   </div>
   <div class="col s4 m2 right-align">
     <a class="btn grey lighten-3 black-text disabled" title="Create new feature"
@@ -38,11 +42,17 @@
 </table>
 
 <ul class="pagination">
-  <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-  <li class="active grey"><a href="#!">1</a></li>
-  <li class="waves-effect"><a href="#!">2</a></li>
-  <li class="waves-effect"><a href="#!">3</a></li>
-  <li class="waves-effect"><a href="#!">4</a></li>
-  <li class="waves-effect"><a href="#!">5</a></li>
-  <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+  <li [class.disabled]="page <= 1">
+    <a href="javascript:void(0)" (click)="goTo(page - 1)" title="Previous page">
+      <i class="material-icons">chevron_left</i>
+    </a>
+  </li>
+  <li *ngFor="let p of pages" [ngClass]="{'active grey': p === page }">
+    <a href="javascript:void(0)" (click)="goTo(p)" title="Go to Page {{ p }}">{{ p }}</a>
+  </li>
+  <li [class.disabled]="page >= featuresPageCount">
+    <a href="javascript:void(0)" (click)="goTo(page + 1)" title="Next page">
+      <i class="material-icons">chevron_right</i>
+    </a>
+  </li>
 </ul>
