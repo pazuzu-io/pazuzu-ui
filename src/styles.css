@@ -31,6 +31,15 @@ main {
   font-size: 50%;
 }
 
+@media only screen and (max-width: 600px) {
+
+  .row h5 small {
+    display: block;
+    margin-left: 0;
+  }
+
+}
+
 .row h5 small a.active {
   color: #000;
   font-weight: bold;
