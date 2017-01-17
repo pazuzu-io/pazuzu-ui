@@ -1,16 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Http, URLSearchParams } from '@angular/http';
 
-import { Observable } from 'rxjs';
-
 import { Feature } from './models/feature';
+
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class FeatureService {
 
-  private limit: number = 10;
-  private count: number = 0;
-  private pages: number = 0;
+  // total number of features
+  private _total = new Subject<number>();
+
+  /**
+   * get total number of features
+   * @returns {number}
+   */
+  total() {
+    return this._total;
+  }
 
   /**
    * constructor
@@ -22,30 +29,12 @@ export class FeatureService {
   ) { }
 
   /**
-   * trigger request with given search params
-   * @param {URLSearchParams} params
-   * @returns {Observable<Array<Feature>>}
-   */
-  request(params: URLSearchParams) {
-    return this.http.get(`/api/features`, {search: params})
-      .map(res => {
-
-        // update count and pages
-        this.count = +res.headers.get('x-total-count') || 0;
-        this.pages = Math.max(Math.ceil(this.count / this.limit), 1);
-
-        // return features as json
-        return res.json();
-
-      });
-  }
-
-  /**
    * get all features for given page and limit
    * @param {number} page
    * @param {number} limit
    * @returns {Observable<Array<Feature>>}
    */
+  /*
   getAll(page = 1, limit = 10) {
 
     // set limit
@@ -60,24 +49,36 @@ export class FeatureService {
     params.set('offset', offset.toString());
 
     // trigger request
-    return this.request(params);
+    return this.http.get(`/api/features`, {search: params})
+      .map(res => {
+
+        // update count and pages
+        this.count = +res.headers.get('x-total-count') || 0;
+        this.pages = Math.max(Math.ceil(this.count / this.limit), 1);
+
+        // return features as json
+        return res.json();
+
+      });
 
   }
+  */
 
   /**
-   * get features count
-   * @returns {number}
+   * get features by parameters
+   * @param {URLSearchParams} params
+   * @returns {Observable<Array<Feature>>}
    */
-  getFeatureCount() {
-    return this.count;
-  }
+  list(params: URLSearchParams) {
 
-  /**
-   * get page count
-   * @returns {number}
-   */
-  getPageCount() {
-    return this.pages;
+    // trigger request
+    return this.http.get(`/api/features`, {search: params})
+      .map(res => {
+        // TODO: rework this as soon as API is changed
+        this._total.next(+res.headers.get('x-total-count') || 0);
+        return res.json();
+      });
+
   }
 
   /**
@@ -86,9 +87,11 @@ export class FeatureService {
    * @returns {Feature}
    */
   get(name: string) {
-    // return this.features.find(feature => feature.meta.name.toString() === name);
+
+    // trigger request
     return this.http.get(`/api/features/${name}`)
       .map(res => res.json());
+
   }
 
 }

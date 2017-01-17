@@ -15,7 +15,8 @@ import { FeatureService } from '../feature.service';
 })
 export class FeatureDetailComponent implements OnInit, OnDestroy {
 
-  sub: Subscription;
+  private _routerEventsSub: Subscription;
+
   name: string;
   heading: string;
   feature: Observable<Feature>;
@@ -56,38 +57,41 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     // subscribe to param changes if somebody manually changes them
-    this.sub = this.router.events.subscribe((val) => {
+    this._routerEventsSub = this.router.events
+      .subscribe(event => {
 
-      // if event is of type NavigationEnd update internal state
-      if (val instanceof NavigationEnd) {
+        // if event is of type NavigationEnd update internal state
+        if (event instanceof NavigationEnd) {
 
-        // get name parameter
-        this.name = this.route.snapshot.params['name'];
+          // get name parameter
+          this.name = this.route.snapshot.params['name'];
 
-        // update heading and title
-        this.heading = `Feature details for ${this.name}`;
-        this.eventBusService.emit(APP_TITLE_CHANGE, this.heading);
+          // update heading and title
+          this.heading = `Feature details for ${this.name}`;
+          this.eventBusService.emit(APP_TITLE_CHANGE, this.heading);
 
-        // get feature
-        this.featureService.get(this.name)
-          .subscribe(
-            feature => this.feature = feature,
-            () => this.router.navigate(['/features/list'])
-          );
+          // get feature
+          this.featureService.get(this.name)
+            .subscribe(
+              feature => this.feature = feature,
+              () => this.router.navigate(['/features/list'])
+            );
 
-      }
+        }
 
-    });
+      });
 
   }
 
   /**
    * on destroy handler
-   * unsubscribe from parameter changes
    * @returns {void} nothing
    */
   ngOnDestroy() {
-    this.sub.unsubscribe();
+
+    // unsubscribe
+    this._routerEventsSub.unsubscribe();
+
   }
 
 }

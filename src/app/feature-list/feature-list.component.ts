@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { URLSearchParams } from '@angular/http';
 
-import { Subscription, Subject, Observable } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 import { EventBusService, APP_TITLE_CHANGE } from '../event-bus.service';
 import { Feature } from '../models/feature';
@@ -14,84 +15,42 @@ import { FeatureService } from '../feature.service';
 })
 export class FeatureListComponent implements OnInit, OnDestroy {
 
-  sub: Subscription;
+  private _queryParamsSub: Subscription;
+  private _totalSub: Subscription;
 
   heading: string;
-  featureHeadlineMapping: any = {
+
+  limitOptions = [10, 20, 50];
+
+  features: Observable<Array<Feature>>;
+  params: URLSearchParams;
+
+  total = 0;
+  totalMapping: any = {
     '=0': 'No feature',
     '=1': 'One feature',
     'other': '# features'
   };
 
-  page: number = 1;
-  pages: number[];
-
-  limit: number = 10;
-
-  features$: Observable<Array<Feature>>;
-
-  featureCount: number;
-  pageCount: number;
+  page = 1;
+  pages = 1;
 
   /**
-   * retrieve features for one page (value of `this.page`)
+   * update pagination
    * @returns {void} nothing
    */
-  getData() {
+  private _updatePagination() {
 
-    this.features$ =
-      this.featureService.getAll(this.page, this.limit)
-        .map((features) => {
+    // current page
+    this.page = Math.ceil((+this.params.get('offset') + 1) / +this.params.get('limit'));
 
-          // update feature and page count
-          this.featureCount = this.featureService.getFeatureCount();
-          this.pageCount = this.featureService.getPageCount();
+    // number of pages
+    this.pages = Math.ceil(this.total / +this.params.get('limit'));
 
-          // limit page to valid values
-          if (this.page < 1 || this.page > this.pageCount) {
-            this.page = Math.max(this.page, 1);
-            this.page = Math.min(this.page, this.pageCount);
-            this.goTo(this.page);
-          }
-
-          // TODO: cut out pages in between first, current page and last page if there are more than 5
-          this.pages =
-            Array.apply(null, new Array(this.pageCount)).map((_, i) => i + 1);
-
-          return features;
-        });
-
-  }
-
-  /**
-   * update query parameter to given value and reload data
-   * @param {number} page
-   * @returns {void} nothing
-   */
-  goTo(page: number) {
-
-    // update query parameter
-    this.router.navigate(['/features/list'], {queryParams: {page: page, limit: this.limit}}).then(() => {
-
-      // get features and pagination info
-      this.getData();
-
-    });
-
-  }
-
-  /**
-   * set limit to given value
-   * @param {number} limit
-   * @returns {void} nothing
-   */
-  limitTo(limit: number) {
-
-    // set new limit
-    this.limit = limit;
-
-    // update data
-    this.goTo(this.page);
+    // if we got invalid values reset to initial values
+    if (this.page > this.pages && this.pages !== 0) {
+      this.router.navigate(['features/list']);
+    }
 
   }
 
@@ -110,42 +69,87 @@ export class FeatureListComponent implements OnInit, OnDestroy {
     private featureService: FeatureService
   ) {
 
-    // update query parameters if they already exist
-    if (typeof this.route.snapshot.queryParams['page'] !== 'undefined') {
-      this.page = +this.route.snapshot.queryParams['page'];
-    }
-
-    if (typeof this.route.snapshot.queryParams['limit'] !== 'undefined') {
-      this.limit = +this.route.snapshot.queryParams['limit'];
-    }
-
-    // get features and pagination info
-    this.getData();
-
     // update heading and title
     this.heading = 'Feature list';
     this.eventBusService.emit(APP_TITLE_CHANGE, this.heading);
+
+    // initialize params
+    this.params = new URLSearchParams();
+
+  }
+
+  /**
+   * update given parameter
+   * @param {string} key
+   * @param {any} value
+   * @returns {void} nothing
+   */
+  updateParam(key: string, value: any) {
+
+    // save parameter
+    this.params.set(key, value.toString());
+
+    // update route
+    // TODO: maybe there is a more sophisticated way of giving URLSearchParams to router.navigate
+    this.router.navigate(
+      ['features/list'],
+      {
+        queryParams: {
+          offset: this.params.get('offset'),
+          limit: this.params.get('limit'),
+          names: this.params.get('names') !== '' ? this.params.get('names') : null
+        }
+      }
+    );
+
+  }
+
+  /**
+   * go to given page
+   * @param {number} page
+   * @returns {void} nothing
+   */
+  goTo(page: number) {
+
+    // TODO: fix this
+    this.updateParam(
+      'offset',
+      Math.max(0, +this.params.get('offset') - +this.params.get('limit')).toString()
+    );
 
   }
 
   /**
    * on init handler
-   * subscribe to query parameter changes to sanitize it and occasionally call 'goTo()`
    * @returns {void} nothing
    */
   ngOnInit() {
 
     // subscribe to query param changes
-    this.sub = this.route.queryParams
-      .subscribe(params => {
+    this._queryParamsSub = this.route.queryParams
+      .subscribe(queryParams => {
 
-        // convert page param to number
-        this.page = +params['page'] || 1;
+        // set query params
+        this.params.set('offset', queryParams['offset'] || '0');
+        this.params.set('limit', queryParams['limit'] || '10');
+        this.params.set('names', queryParams['names'] || null);
 
-        // in case we sanitized page value update query parameter
-        if (this.page !== +params['page'] && typeof params['page'] !== 'undefined') {
-          this.goTo(this.page);
-        }
+        // update pagination
+        this._updatePagination();
+
+        // get features
+        this.features = this.featureService.list(this.params);
+
+      });
+
+    // subscribe to total number of features
+    this._totalSub = this.featureService.total()
+      .subscribe(total => {
+
+        this.total = total;
+
+        // update pagination
+        this._updatePagination();
 
       });
 
@@ -153,13 +157,13 @@ export class FeatureListComponent implements OnInit, OnDestroy {
 
   /**
    * on destroy handler
-   * unsubscribe from query parameter changes
    * @returns {void} nothing
    */
   ngOnDestroy() {
 
-    // unsubscribe from query param changes
-    this.sub.unsubscribe();
+    // unsubscribe
+    this._queryParamsSub.unsubscribe();
+    this._totalSub.unsubscribe();
 
   }
 
