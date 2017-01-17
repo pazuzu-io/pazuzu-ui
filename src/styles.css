@@ -22,6 +22,13 @@ main {
   margin-bottom: 5px;
 }
 
+.row h5 small {
+  color: #bdbdbd;
+  margin-left: 20px;
+  text-transform: uppercase;
+  font-size: 50%;
+}
+
 .textarea-field label {
   font-size: 0.8rem;
   -webkit-transform: translateY(-140%);

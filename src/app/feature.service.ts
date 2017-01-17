@@ -62,6 +62,32 @@ export class FeatureService {
   }
 
   /**
+   * list features with given pagination and filter
+   * @param {number} page
+   * @param {string} search
+   * @returns {Observable<Array<Feature>>}
+   */
+  list(page = 1, search: string = null) {
+
+    // set offset
+    let offset = (page - 1) * this.limit;
+
+    // set search params
+    let params: URLSearchParams = new URLSearchParams();
+
+    params.set('limit', this.limit.toString());
+    params.set('offset', offset.toString());
+
+    if (search !== null) {
+      params.set('names', search);
+    }
+
+    // trigger request
+    return this.request(params);
+
+  }
+
+  /**
    * get features count
    * @returns {number}
    */

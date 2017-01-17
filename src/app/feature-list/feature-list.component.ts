@@ -27,7 +27,8 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   page: number = 1;
   pages: number[];
 
-  features: Observable<Array<Feature>>;
+  features$: Observable<Array<Feature>>;
+
   featureCount: number;
   pageCount: number;
 
@@ -37,14 +38,15 @@ export class FeatureListComponent implements OnInit, OnDestroy {
    */
   getData() {
 
+    // TODO: merge search term into request
     /*
     this.features =
       this.featureService.search(this.term$, 400)
         .merge(this.featureService.getAll(this.page));
     */
 
-    this.features =
-      this.featureService.getAll(this.page)
+    this.features$ =
+      this.featureService.list(this.page)
         .map((features) => {
 
           // update feature and page count
