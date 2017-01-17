@@ -4,7 +4,6 @@ import { Http, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { Feature } from './models/feature';
-import { FEATURE_DATA } from './data/feature-data';
 
 @Injectable()
 export class FeatureService {
