@@ -9,7 +9,7 @@ import { FEATURE_DATA } from './data/feature-data';
 @Injectable()
 export class FeatureService {
 
-  private limit: number = 2;
+  private limit: number = 1;
   private count: number = 0;
   private pages: number = 0;
 
@@ -23,16 +23,12 @@ export class FeatureService {
   ) { }
 
   /**
-   * get all features for given page
-   * @param {number} page
+   * trigger request with given search params
+   * @param {URLSearchParams} params
    * @returns {Observable<Array<Feature>>}
    */
-  getAll(page = 1) {
-
-    // set offset
-    let offset = (page - 1) * this.limit;
-
-    return this.http.get(`/api/features?limit=${this.limit}&offset=${offset}`)
+  request(params: URLSearchParams) {
+    return this.http.get(`/api/features`, {search: params})
       .map(res => {
 
         // update count and pages
@@ -43,6 +39,26 @@ export class FeatureService {
         return res.json();
 
       });
+  }
+
+  /**
+   * get all features for given page
+   * @param {number} page
+   * @returns {Observable<Array<Feature>>}
+   */
+  getAll(page = 1) {
+
+    // set offset
+    let offset = (page - 1) * this.limit;
+
+    // set search params
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('limit', this.limit.toString());
+    params.set('offset', offset.toString());
+
+    // trigger request
+    return this.request(params);
+
   }
 
   /**
@@ -78,16 +94,14 @@ export class FeatureService {
    * @returns {Observable<Array<Feature>>}
    */
   searchRaw(term: string) {
-    let params: URLSearchParams = new URLSearchParams();
-    params.set('q', term);
 
-    /*
-    return Observable.of(
-      this.features.filter(feature => feature.meta.name.indexOf(params.get('q')) !== -1)
-    );
-    */
-    return this.http.get(`http://localhost:8080/api/features`, {search: params})
-      .map(res => res.json());
+    // set search params
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('names', term);
+
+    // trigger request
+    return this.request(params);
+
   }
 
   /**
