@@ -15,7 +15,6 @@ import { FeatureService } from '../feature.service';
 export class FeatureListComponent implements OnInit, OnDestroy {
 
   sub: Subscription;
-  term$ = new Subject<string>();
 
   heading: string;
   featureHeadlineMapping: any = {
@@ -38,15 +37,8 @@ export class FeatureListComponent implements OnInit, OnDestroy {
    */
   getData() {
 
-    // TODO: merge search term into request
-    /*
-    this.features =
-      this.featureService.search(this.term$, 400)
-        .merge(this.featureService.getAll(this.page));
-    */
-
     this.features$ =
-      this.featureService.list(this.page)
+      this.featureService.getAll(this.page)
         .map((features) => {
 
           // update feature and page count

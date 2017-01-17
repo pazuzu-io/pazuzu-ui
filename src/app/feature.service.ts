@@ -8,7 +8,7 @@ import { Feature } from './models/feature';
 @Injectable()
 export class FeatureService {
 
-  private limit: number = 1;
+  private limit: number = 10;
   private count: number = 0;
   private pages: number = 0;
 
@@ -61,32 +61,6 @@ export class FeatureService {
   }
 
   /**
-   * list features with given pagination and filter
-   * @param {number} page
-   * @param {string} search
-   * @returns {Observable<Array<Feature>>}
-   */
-  list(page = 1, search: string = null) {
-
-    // set offset
-    let offset = (page - 1) * this.limit;
-
-    // set search params
-    let params: URLSearchParams = new URLSearchParams();
-
-    params.set('limit', this.limit.toString());
-    params.set('offset', offset.toString());
-
-    if (search !== null) {
-      params.set('names', search);
-    }
-
-    // trigger request
-    return this.request(params);
-
-  }
-
-  /**
    * get features count
    * @returns {number}
    */
@@ -111,35 +85,6 @@ export class FeatureService {
     // return this.features.find(feature => feature.meta.name.toString() === name);
     return this.http.get(`/api/features/${name}`)
       .map(res => res.json());
-  }
-
-  /**
-   * search for feature by term
-   * @param {string} term
-   * @returns {Observable<Array<Feature>>}
-   */
-  searchRaw(term: string) {
-
-    // set search params
-    let params: URLSearchParams = new URLSearchParams();
-    params.set('names', term);
-
-    // trigger request
-    return this.request(params);
-
-  }
-
-  /**
-   * search for feature with debounce and distinct detection
-   * @param {string} term
-   * @param {number} debounceMs
-   * @returns {Observable<Array<Feature>>}
-   */
-  search(term: Observable<string>, debounceMs = 400) {
-    return term
-      .debounceTime(debounceMs)
-      .distinctUntilChanged()
-      .switchMap(t => this.searchRaw(t));
   }
 
 }
