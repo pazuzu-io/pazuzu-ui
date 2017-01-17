@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription } from 'rxjs';
+import { Subscription, Subject, Observable } from 'rxjs';
 
 import { EventBusService, APP_TITLE_CHANGE } from '../event-bus.service';
 import { Feature } from '../models/feature';
@@ -15,6 +15,7 @@ import { FeatureService } from '../feature.service';
 export class FeatureListComponent implements OnInit, OnDestroy {
 
   sub: Subscription;
+  term$ = new Subject<string>();
 
   heading: string;
   featureHeadlineMapping: any = {
@@ -26,7 +27,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   page: number = 1;
   pages: number[];
 
-  features: Array<Feature>;
+  features: Observable<Array<Feature>>;
   featuresCount: number;
   featuresPageCount: number;
 
@@ -36,9 +37,12 @@ export class FeatureListComponent implements OnInit, OnDestroy {
    */
   getData() {
 
-    this.features = this.featureService.getFeatures(this.page);
-    this.featuresCount = this.featureService.getFeaturesCount();
-    this.featuresPageCount = this.featureService.getFeaturesPageCount();
+    this.features =
+      this.featureService.search(this.term$, 400)
+        .merge(this.featureService.getAll(this.page));
+
+    this.featuresCount = this.featureService.getFeatureCount();
+    this.featuresPageCount = this.featureService.getPageCount();
 
     // TODO: cut out pages in between first, current page and last page if there are more than 5
     this.pages =
