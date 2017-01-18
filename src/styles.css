@@ -29,6 +29,10 @@ main a:hover {
   border-bottom: 1px dotted #ff5722;
 }
 
+main .pagination a:hover {
+  border-bottom: 1px solid transparent;
+}
+
 .row h5 {
   margin-top: 5px;
   margin-bottom: 5px;
