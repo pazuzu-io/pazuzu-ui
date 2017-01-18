@@ -4,10 +4,6 @@
   font-family: 'Roboto', sans-serif;
 }
 
-a {
-  color: #ff5722;
-}
-
 nav .brand-logo {
   padding: 0 15px;
   text-transform: uppercase;
@@ -22,6 +18,15 @@ nav .brand-logo:hover {
 main {
   padding-top: 10px;
   padding-bottom: 40px;
+}
+
+main a {
+  color: #ff5722;
+  border-bottom: 1px solid transparent;
+}
+
+main a:hover {
+  border-bottom: 1px dotted #ff5722;
 }
 
 .row h5 {
