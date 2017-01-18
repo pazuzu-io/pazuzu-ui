@@ -50,6 +50,10 @@ main {
   font-weight: bold;
 }
 
+#search:focus {
+  border-bottom: 1px solid #ff5722;
+}
+
 .textarea-field label {
   font-size: 0.8rem;
   -webkit-transform: translateY(-140%);

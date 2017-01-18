@@ -36,6 +36,8 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   pages = 1;
   pagerItems = [1];
 
+  terms = '';
+
   /**
    * update pagination
    * @returns {void} nothing
@@ -106,10 +108,28 @@ export class FeatureListComponent implements OnInit, OnDestroy {
         queryParams: {
           offset: this.params.get('offset'),
           limit: this.params.get('limit'),
-          names: this.params.get('names') !== '' ? this.params.get('names') : null
+          names: this.params.get('names') !== '' ? this.params.get('names') : null,
+          author: this.params.get('author') !== '' ? this.params.get('author') : null
         }
       }
     );
+
+  }
+
+  /**
+   * search for feature by given target value (target.value)
+   * @param {*} event
+   * @returns {void} nothing
+   */
+  search(event: any) {
+
+    // blur input field
+    event.target.blur();
+
+    // TODO: change to "q" after API is changed
+
+    // set names parameter accordingly
+    this.updateParam('names', event.target.value);
 
   }
 
@@ -146,6 +166,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
         this.params.set('offset', queryParams['offset'] || '0');
         this.params.set('limit', queryParams['limit'] || '10');
         this.params.set('names', queryParams['names'] || null);
+        this.params.set('author', queryParams['author'] || null);
 
         // update pagination
         this._updatePagination();
