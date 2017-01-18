@@ -89,6 +89,11 @@ export class FeatureListComponent implements OnInit, OnDestroy {
     // save parameter
     this.params.set(key, value.toString());
 
+    // safety check for offset
+    if (+this.params.get('limit') >= this.total) {
+      this.params.set('offset', '0');
+    }
+
     // update route
     // TODO: maybe there is a more sophisticated way of giving URLSearchParams to router.navigate
     this.router.navigate(
@@ -111,11 +116,15 @@ export class FeatureListComponent implements OnInit, OnDestroy {
    */
   goTo(page: number) {
 
-    // TODO: fix this
-    this.updateParam(
-      'offset',
-      Math.max(0, +this.params.get('offset') - +this.params.get('limit')).toString()
-    );
+    // idle if we are already on the same page
+    if (page >= 1 && page <= this.pages && page !== this.page) {
+
+      this.updateParam(
+        'offset',
+        (+this.params.get('limit') * (page - 1)).toString()
+      );
+
+    }
 
   }
 
