@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col s8 m10">
     <h5>
-      {{ total | i18nPlural: totalMapping }}
+      {{ total | i18nPlural:totalMapping }}
       <small>showing page {{ page }} of {{ pages }} –
         <span *ngFor="let option of limitOptions; let lastOption = last">
           <a href="javascript:void(0)" (click)="updateParam('limit', option)"
@@ -16,7 +16,7 @@
   </div>
   <div class="col s4 m2 right-align">
     <a class="btn grey lighten-3 black-text disabled" title="Create new feature"
-       routerLink="/feature/create"><i class="material-icons">add</i></a>
+       [routerLink]="['/feature/create']"><i class="material-icons">add</i></a>
   </div>
 </div>
 
@@ -31,7 +31,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let feature of features | async">
-        <td><a routerLink="/features/detail/{{ feature.meta.name }}">{{ feature.meta.name }}</a></td>
+        <td><a [routerLink]="['/features/detail/' + feature.meta.name]">{{ feature.meta.name }}</a></td>
         <td>{{ feature.meta.author }}</td>
         <td><span class="truncate">{{ feature.meta.description }}</span></td>
       </tr>
@@ -45,11 +45,9 @@
       <i class="material-icons">chevron_left</i>
     </a>
   </li>
-<!--
-  <li *ngFor="let p of pages" [ngClass]="{'active grey': p === page }">
+  <li *ngFor="let p of pagerItems" [ngClass]="{'active grey': p === page}">
     <a href="javascript:void(0)" (click)="goTo(p)" title="Go to Page {{ p }}">{{ p }}</a>
   </li>
- -->
   <li [class.disabled]="page >= pages">
     <a href="javascript:void(0)" (click)="goTo(page + 1)" title="Next page">
       <i class="material-icons">chevron_right</i>

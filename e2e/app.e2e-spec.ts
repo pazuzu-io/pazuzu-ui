@@ -9,6 +9,6 @@ describe('Pazuzu UI App', function() {
 
   it(`should display app title 'Pazuzu UI'`, () => {
     page.navigateTo();
-    expect(page.getToolbarTitle()).toEqual('Pazuzu UI');
+    expect(page.getToolbarTitle()).toEqual('Pazuzu UI'.toUpperCase());
   });
 });

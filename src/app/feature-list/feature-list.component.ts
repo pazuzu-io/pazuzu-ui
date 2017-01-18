@@ -34,6 +34,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
 
   page = 1;
   pages = 1;
+  pagerItems = [1];
 
   /**
    * update pagination
@@ -51,6 +52,9 @@ export class FeatureListComponent implements OnInit, OnDestroy {
     if (this.page > this.pages && this.pages !== 0) {
       this.router.navigate(['features/list']);
     }
+
+    // pager items
+    this.pagerItems = Array.apply(null, new Array(this.pages)).map((_, i) => i + 1);
 
   }
 
