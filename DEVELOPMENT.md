@@ -66,74 +66,12 @@ Continuously run end-to-end tests (start application using `ng serve` before):
 $ ng e2e
 ```
 
-TypeScript compiler complains about not knowing the Jasmine methods. You can solve this by adding the types:
-
-```bash
-$ npm install --save-dev @types/jasmine
-```
-
-And import the types in `app/test.ts`:
-
-```typescript
-import {} from 'jasmine';
-```
-
 ## Build application
 
 Create distribution for development or production environment:
 
 ```bash
 $ ng build [--prod]
-```
-
-## Adding Angular Material components
-
-Install Angular Material and add it to `package.json`:
-
-```bash
-$ npm install --save @angular/material
-```
-
-Don’t bother with the warnings.
-
-Import Angular Material module into app module:
-
-```typescript
-import { MaterialModule } from '@angular/material';
-// other imports
-
-@NgModule({
-  imports: [MaterialModule.forRoot()],
-  ...
-})
-export class AppModule { }
-```
-
-## Adding HammerJS for touch gestures
-
-Install HammerJS and add it to `package.json`:
-
-```bash
-$ npm install --save hammerjs
-$ npm install --save-dev @types/hammerjs
-```
-
-Import HammerJS into app module:
-
-```typescript
-import 'hammerjs';
-```
-
-Add `hammerjs` to `types` section of `src/tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "types": [
-      "hammerjs"
-    ]
-  }
-}
 ```
 
 Developing locally
