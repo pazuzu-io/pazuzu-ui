@@ -39,8 +39,14 @@
     </thead>
     <tbody>
       <tr *ngFor="let feature of features | async">
-        <td><a [routerLink]="['/features/detail/' + feature.meta.name]">{{ feature.meta.name }}</a></td>
-        <td><a href="javascript:void(0)" (click)="updateParam('author', feature.meta.author)">{{ feature.meta.author }}</a></td>
+        <td>
+          <a [routerLink]="['/features/detail/' + feature.meta.name]"
+            title="View details">{{ feature.meta.name }}</a>
+        </td>
+        <td>
+          <a href="javascript:void(0)" (click)="updateParam('author', feature.meta.author)"
+            title="Show only features of this author">{{ feature.meta.author }}</a>
+        </td>
         <td><span class="truncate">{{ feature.meta.description }}</span></td>
       </tr>
     </tbody>
