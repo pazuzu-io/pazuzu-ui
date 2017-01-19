@@ -41,6 +41,21 @@ main section {
   margin-bottom: 15px;
 }
 
+main .editor {
+  margin: 5px 0 15px 0;
+  min-height: 305px;
+  width: 100%;
+  overflow: auto;
+}
+
+main .editor-small {
+  min-height: 105px;
+}
+
+main .editor * {
+  font-family: 'Roboto Mono', sans-serif;
+}
+
 .row h5 {
   margin-top: 5px;
   margin-bottom: 5px;
