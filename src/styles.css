@@ -33,6 +33,14 @@ main .pagination a:hover {
   border-bottom: 1px solid transparent;
 }
 
+main .row {
+  margin-bottom: 0;
+}
+
+main section {
+  margin-bottom: 15px;
+}
+
 .row h5 {
   margin-top: 5px;
   margin-bottom: 5px;

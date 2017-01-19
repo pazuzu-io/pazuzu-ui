@@ -12,40 +12,62 @@
   </div>
 </div>
 
-<form *ngIf="feature">
-  <div class="card">
-    <div class="card-content grey-text text-darken-4">
-      <div class="input-field">
-        <input id="name" name="name" type="text" class="validate" [(ngModel)]="feature.meta.name">
-        <label class="active" for="name">Name</label>
+<div class="card">
+  <div class="card-content grey-text text-darken-4">
+    <div class="row">
+
+      <div class="col s12 m6">
+        <section>
+          <label>Name</label>
+          <p>
+            {{ feature?.meta.name }}
+          </p>
+        </section>
       </div>
-      <div class="input-field">
-        <input id="author" name="author" type="text" class="validate" [(ngModel)]="feature.meta.author">
-        <label class="active" for="author">Author</label>
+      <div class="col s12 m6">
+        <section>
+          <label>Author</label>
+          <p>
+            <a href="javascript:void(0)" title="Show all features of this author">{{ feature?.meta.author }}</a>
+          </p>
+        </section>
       </div>
-      <div class="input-field textarea-field">
-        <textarea id="description" class="materialize-textarea">{{ feature?.meta.description }}</textarea>
-        <label for="description">Description</label>
+
+      <div class="col s12">
+        <section>
+          <label>Description</label>
+          <div>{{ feature?.meta.description }}</div>
+        </section>
       </div>
-      <div class="input-field">
-        <input id="snippet" name="snippet" type="text" class="validate" [(ngModel)]="feature.snippet">
-        <label class="active" for="snippet">Snippet</label>
+
+      <div class="col s12">
+        <section>
+          <label>Snippet</label>
+          <pre><code>{{ feature?.snippet }}</code></pre>
+        </section>
       </div>
-      <div class="input-field">
-        <input id="test-snippet" name="test-snippet" type="text" class="validate" [(ngModel)]="feature.test_snippet">
-        <label class="active" for="test-snippet">Test snippet</label>
+
+      <div class="col s12">
+        <section>
+          <label>Test snippet</label>
+          <pre><code>{{ feature?.test_snippet }}</code></pre>
+        </section>
       </div>
-      <p>
-        <label class="active">Dependencies</label>
-      </p>
-      <p *ngIf="feature?.meta.dependencies.length > 0">
-        <span class="chip" *ngFor="let dependency of feature.meta.dependencies">
-          <a [routerLink]="['/features/detail', dependency]">{{ dependency }}</a>
-        </span>
-      </p>
-      <p *ngIf="feature?.meta.dependencies.length === 0">
-        No dependencies defined
-      </p>
+
+      <div class="col s12">
+        <section>
+          <label>Dependencies</label>
+          <p *ngIf="feature?.meta.dependencies.length > 0">
+            <span class="chip" *ngFor="let dependency of feature.meta.dependencies">
+              <a [routerLink]="['/features/detail', dependency]">{{ dependency }}</a>
+            </span>
+          </p>
+          <p *ngIf="feature?.meta.dependencies.length === 0">
+            No dependencies defined
+          </p>
+        </section>
+      </div>
+
     </div>
   </div>
-</form>
+</div>
