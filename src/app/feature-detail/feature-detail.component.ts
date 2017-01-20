@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -13,28 +13,13 @@ import { FeatureService } from '../feature.service';
   templateUrl: './feature-detail.component.html',
   styleUrls: ['./feature-detail.component.css']
 })
-export class FeatureDetailComponent implements OnInit, OnDestroy, AfterViewInit {
+export class FeatureDetailComponent implements OnInit, OnDestroy {
 
   private _routerEventsSub: Subscription;
 
   name: string;
   heading: string;
   feature: Observable<Feature>;
-
-  @ViewChild('snippetEditor') snippetEditor;
-  @ViewChild('testSnippetEditor') testSnippetEditor;
-
-  snippetEditorOptions: any = {
-    highlightActiveLine: false,
-    highlightGutterLine: false,
-    showPrintMargin: false
-  };
-
-  testSnippetEditorOptions: any = {
-    highlightActiveLine: false,
-    highlightGutterLine: false,
-    showPrintMargin: false
-  };
 
   /**
    * go back using Location API
@@ -95,18 +80,6 @@ export class FeatureDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
       });
-
-  }
-
-  /**
-   * after view init handler
-   * @returns {void} nothing
-   */
-  ngAfterViewInit() {
-
-    // disable automatic scrolling
-    this.snippetEditor.$blockScrolling = Infinity;
-    this.testSnippetEditor.$blockScrolling = Infinity;
 
   }
 

@@ -28,7 +28,8 @@
         <section>
           <label>Author</label>
           <p>
-            <a href="javascript:void(0)" title="Show all features of this author">{{ feature?.meta.author }}</a>
+            <a [routerLink]="['/features/list']" [queryParams]="{author: feature?.meta.author}"
+               title="Show all features of this author">{{ feature?.meta.author }}</a>
           </p>
         </section>
       </div>
@@ -43,24 +44,28 @@
       <div class="col s12">
         <section>
           <label>Snippet</label>
+          <!--
           <ace-editor class="editor" #snippetEditor
             [text]="feature?.snippet"
             [mode]="'dockerfile'"
             [theme]="'github'"
             [options]="snippetEditorOptions"
             [readOnly]="true"></ace-editor>
+           -->
         </section>
       </div>
 
       <div class="col s12">
         <section>
           <label>Test snippet</label>
+          <!--
           <ace-editor class="editor editor-small" #testSnippetEditor
             [text]="feature?.test_snippet"
             [mode]="'sh'"
             [theme]="'github'"
             [options]="testSnippetEditorOptions"
             [readOnly]="true"></ace-editor>
+           -->
         </section>
       </div>
 

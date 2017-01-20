@@ -15,9 +15,6 @@ import { FeatureDetailComponent } from './feature-detail.component';
 import { EventBusService } from '../event-bus.service';
 import { FeatureService } from '../feature.service';
 
-import { AceEditorComponent } from 'ng2-ace-editor';
-import { AceEditorDirective } from 'ng2-ace-editor';
-
 describe('FeatureDetailComponent', () => {
   let component: FeatureDetailComponent;
   let fixture: ComponentFixture<FeatureDetailComponent>;
@@ -25,9 +22,7 @@ describe('FeatureDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        FeatureDetailComponent,
-        AceEditorComponent,
-        AceEditorDirective
+        FeatureDetailComponent
       ],
       imports: [
         RouterTestingModule.withRoutes([

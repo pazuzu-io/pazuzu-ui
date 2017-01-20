@@ -21,12 +21,7 @@
         "../node_modules/materialize-css/dist/css/materialize.css",
         "styles.css"
       ],
-      "scripts": [
-        "../node_modules/ace-builds/src-min/ace.js",
-        "../node_modules/ace-builds/src-min/mode-dockerfile.js",
-        "../node_modules/ace-builds/src-min/mode-sh.js",
-        "../node_modules/ace-builds/src-min/theme-github.js"
-      ],
+      "scripts": [],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
