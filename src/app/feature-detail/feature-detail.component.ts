@@ -36,6 +36,14 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
 
   }
 
+  // TODO: remove this after demo
+  delete() {
+
+    this.featureService.delete(this.name)
+      .subscribe(res => this.router.navigate(['/features/list']));
+
+  }
+
   /**
    * constructor
    * @param {Router} router
