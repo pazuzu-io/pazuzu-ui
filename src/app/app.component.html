@@ -1,0 +1,17 @@
+<header class="navbar-fixed">
+  <nav class="deep-orange white-text">
+    <div class="nav-wrapper">
+      <a routerLink="/" class="brand-logo" title="{{ title }}">{{ title }}</a>
+      <ul class="right">
+        <li><a routerLink="/login" title="Login"><i class="material-icons left">person_outline</i>Login</a></li>
+        <!--
+        <li><a routerLink="/logout" title="Logout"><i class="material-icons left">person</i>Logout</a></li>
+         -->
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<main class="container">
+  <router-outlet></router-outlet>
+</main>

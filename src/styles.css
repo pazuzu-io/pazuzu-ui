@@ -1,0 +1,111 @@
+/* You can add global styles to this file, and also import other style files */
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+nav .brand-logo {
+  padding: 0 15px;
+  text-transform: uppercase;
+  font-size: 100%;
+  transition: background-color .3s;
+}
+
+nav .brand-logo:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+main {
+  padding-top: 10px;
+  padding-bottom: 40px;
+}
+
+main a:not(.btn):not(.dependency) {
+  color: #ff5722;
+  border-bottom: 1px solid transparent;
+}
+
+main a:not(.btn):not(.dependency):hover {
+  border-bottom: 1px dotted #ff5722;
+}
+
+main .pagination a:hover {
+  border-bottom: 1px solid transparent;
+}
+
+main a.chip.dependency {
+  color: #ff5722;
+}
+
+main a.chip.dependency:hover {
+  color: #ffffff;
+  background: #ff5722;
+}
+
+main .row {
+  margin-bottom: 0;
+}
+
+main section {
+  margin-bottom: 15px;
+}
+
+main .editor {
+  margin: 5px 0 15px 0;
+  width: 100%;
+  overflow: auto;
+  display: block;
+}
+
+main .editor * {
+  font-family: 'Roboto Mono', sans-serif;
+}
+
+.row h5 {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.row h5 small {
+  color: #bdbdbd;
+  margin-left: 20px;
+  text-transform: uppercase;
+  font-size: 50%;
+}
+
+@media only screen and (max-width: 600px) {
+
+  .row h5 small {
+    display: block;
+    margin-left: 0;
+  }
+
+}
+
+.row h5 small a.active {
+  color: #000;
+  font-weight: bold;
+}
+
+#search:focus {
+  border-bottom: 1px solid #ff5722;
+}
+
+.textarea-field label {
+  font-size: 0.8rem;
+  -webkit-transform: translateY(-140%);
+  transform: translateY(-140%);
+}
+
+/* label focus color */
+.input-field input[type=text]:focus + label,
+.input-field textarea.materialize-textarea:focus + label {
+  color: #ff5722;
+}
+
+/* label underline focus color */
+.input-field input[type=text]:focus,
+.input-field textarea.materialize-textarea:focus {
+  border-bottom: 1px solid #ff5722;
+  box-shadow: 0 1px 0 0 #ff5722;
+}
