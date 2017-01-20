@@ -27,7 +27,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
 
   total = 0;
   totalMapping: any = {
-    '=0': 'No feature',
+    '=0': 'No features',
     '=1': 'One feature',
     'other': '# features'
   };
