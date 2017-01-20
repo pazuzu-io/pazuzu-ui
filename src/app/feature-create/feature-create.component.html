@@ -8,73 +8,98 @@
   </div>
 </div>
 
-<div class="card">
-  <div class="card-content grey-text text-darken-4">
-    <div class="row">
+<form>
+  <div class="card">
 
-      <div class="col s12 m6">
-        <section>
-          <label>Name</label>
-          <p>
-            {{ feature?.meta.name }}
-          </p>
-        </section>
-      </div>
-      <div class="col s12 m6">
-        <section>
-          <label>Author</label>
-          <p>
-            <a [routerLink]="['/features/list']" [queryParams]="{author: feature?.meta.author}"
-               title="Show all features of this author">{{ feature?.meta.author }}</a>
-          </p>
-        </section>
-      </div>
+    <div class="card-content grey-text text-darken-4">
+      <div class="row">
 
-      <div class="col s12">
-        <section>
-          <label>Description</label>
-          <div>{{ feature?.meta.description }}</div>
-        </section>
-      </div>
+        <div class="col s12 m6">
+          <section>
+            <div class="input-field">
+              <input id="name" name="name" type="text" class="validate" [(ngModel)]="feature.meta.name">
+              <label for="name" class="active">Name</label>
+            </div>
+          </section>
+        </div>
+        <div class="col s12 m6">
+          <section>
+            <div class="input-field">
+              <input id="author" name="author" type="text" class="validate" [(ngModel)]="feature.meta.author">
+              <label for="author" class="active">Author</label>
+            </div>
+          </section>
+        </div>
 
-      <div class="col s12">
-        <section>
-          <label>Snippet</label>
-          <div ace-editor style="height: 30vh;"
-               [text]="snippet"
-               [mode]="'dockerfile'"
-               [theme]="'github'"
-               [options]="options"
-               [readOnly]="true"></div>
-        </section>
-      </div>
+        <div class="col s12">
+          <section>
+            <div class="input-field">
+              <input id="description" name="description" type="text" class="validate" [(ngModel)]="feature.meta.description">
+              <label for="description" class="active">Description</label>
+            </div>
+          </section>
+        </div>
 
-      <div class="col s12">
-        <section>
-          <label>Test snippet</label>
-          <div ace-editor style="height: 10vh;"
-               [text]="testSnippet"
-               [mode]="'sh'"
-               [theme]="'github'"
-               [options]="options"
-               [readOnly]="true"></div>
-        </section>
-      </div>
+        <div class="col s12">
+          <section>
+            <label>Snippet</label>
+            <div ace-editor style="height: 30vh;"
+              [text]="feature.snippet"
+              [mode]="'dockerfile'"
+              [theme]="'github'"
+              [options]="options"
+              (textChanged)="onTextChanged($event, 'snippet')"
+              [readOnly]="false"></div>
+          </section>
+        </div>
 
-      <div class="col s12">
-        <section>
-          <label>Dependencies</label>
-          <p *ngIf="feature?.meta.dependencies.length > 0">
-            <span class="chip" *ngFor="let dependency of feature.meta.dependencies">
-              <a [routerLink]="['/features/detail', dependency]">{{ dependency }}</a>
-            </span>
-          </p>
-          <p *ngIf="feature?.meta.dependencies.length === 0">
-            No dependencies defined
-          </p>
-        </section>
-      </div>
+        <div class="col s12">
+          <section>
+            <label>Test snippet</label>
+            <div ace-editor style="height: 10vh;"
+              [text]="feature.test_snippet"
+              [mode]="'sh'"
+              [theme]="'github'"
+              [options]="options"
+              (textChanged)="onTextChanged($event, 'test_snippet')"
+              [readOnly]="false"></div>
+          </section>
+        </div>
 
+        <div class="col s12 m6">
+          <section>
+            <div class="input-field">
+              <input id="dependency" name="dependency" type="text" class="validate" (change)="addDependency($event)">
+              <label for="dependency" class="active">Add dependency</label>
+            </div>
+          </section>
+        </div>
+        <div class="col s12 m6">
+          <section>
+            <label>Dependencies</label>
+            <p *ngIf="feature?.meta.dependencies.length > 0">
+              <span class="chip" *ngFor="let dependency of feature.meta.dependencies">{{ dependency }}
+                <i class="close material-icons" (click)="removeDependency(dependency)" title="Remove dependency">close</i></span>
+            </p>
+            <p *ngIf="feature?.meta.dependencies.length === 0">
+              No dependencies defined
+            </p>
+          </section>
+        </div>
+
+      </div>
     </div>
+
+    <div class="card-action">
+      <div class="card-panel red" *ngIf="error">
+          <span class="white-text">{{ error }}</span>
+      </div>
+      <!--<p *ngIf="error">{{ error }}</p>-->
+      <button type="button" class="btn deep-orange"
+        title="Save feature" (click)="save(feature)">Save</button>
+      <button type="button" class="btn btn-flat grey lighten-3 black-text"
+        title="Cancel and return to list" (click)="cancel()">Cancel</button>
+    </div>
+
   </div>
-</div>
+</form>

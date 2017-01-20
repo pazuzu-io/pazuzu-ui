@@ -29,42 +29,6 @@ export class FeatureService {
   ) { }
 
   /**
-   * get all features for given page and limit
-   * @param {number} page
-   * @param {number} limit
-   * @returns {Observable<Array<Feature>>}
-   */
-  /*
-  getAll(page = 1, limit = 10) {
-
-    // set limit
-    this.limit = limit;
-
-    // set offset
-    let offset = (page - 1) * limit;
-
-    // set search params
-    let params: URLSearchParams = new URLSearchParams();
-    params.set('limit', limit.toString());
-    params.set('offset', offset.toString());
-
-    // trigger request
-    return this.http.get(`/api/features`, {search: params})
-      .map(res => {
-
-        // update count and pages
-        this.count = +res.headers.get('x-total-count') || 0;
-        this.pages = Math.max(Math.ceil(this.count / this.limit), 1);
-
-        // return features as json
-        return res.json();
-
-      });
-
-  }
-  */
-
-  /**
    * get features by parameters
    * @param {URLSearchParams} params
    * @returns {Observable<Array<Feature>>}
@@ -90,6 +54,19 @@ export class FeatureService {
 
     // trigger request
     return this.http.get(`/api/features/${name}`)
+      .map(res => res.json());
+
+  }
+
+  /**
+   * create new feature
+   * @param {Feature} feature
+   * @return {Observable<R>}
+   */
+  create(feature: Feature) {
+
+    // trigger request
+    return this.http.post(`/api/features`, feature)
       .map(res => res.json());
 
   }

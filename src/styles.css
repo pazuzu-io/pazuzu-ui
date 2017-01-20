@@ -20,26 +20,10 @@ main {
   padding-bottom: 40px;
 }
 
-main a:not(.btn):not(.dependency) {
-  color: #ff5722;
-  border-bottom: 1px solid transparent;
-}
-
-main a:not(.btn):not(.dependency):hover {
-  border-bottom: 1px dotted #ff5722;
-}
-
-main .pagination a:hover {
-  border-bottom: 1px solid transparent;
-}
-
-main a.chip.dependency {
-  color: #ff5722;
-}
-
-main a.chip.dependency:hover {
-  color: #ffffff;
-  background: #ff5722;
+main a.paginate-prev:hover,
+main a.paginate-page:hover,
+main a.paginate-next:hover {
+  cursor: pointer;
 }
 
 main .row {

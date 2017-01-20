@@ -1,6 +1,4 @@
-<p>
-  &nbsp;
-</p>
+<p>&nbsp;</p>
 
 <div class="row">
   <div class="col s8 m10">
@@ -55,15 +53,15 @@
 
 <ul class="pagination">
   <li [class.disabled]="page <= 1">
-    <a href="javascript:void(0)" (click)="goTo(page - 1)" title="Previous page">
+    <a href="javascript:void(0)" (click)="goTo(page - 1)" title="Previous page" class="paginate-prev">
       <i class="material-icons">chevron_left</i>
     </a>
   </li>
   <li *ngFor="let p of pagerItems" [ngClass]="{'active grey': p === page}">
-    <a href="javascript:void(0)" (click)="goTo(p)" title="Go to Page {{ p }}">{{ p }}</a>
+    <a href="javascript:void(0)" (click)="goTo(p)" title="Go to Page {{ p }}" class="paginate-page">{{ p }}</a>
   </li>
   <li [class.disabled]="page >= pages">
-    <a href="javascript:void(0)" (click)="goTo(page + 1)" title="Next page">
+    <a href="javascript:void(0)" (click)="goTo(page + 1)" title="Next page" class="paginate-next">
       <i class="material-icons">chevron_right</i>
     </a>
   </li>
