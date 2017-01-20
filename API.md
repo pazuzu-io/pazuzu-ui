@@ -24,13 +24,11 @@ This is a single-page application implemented in TypeScript using
 Registry
 --------
 
+> The following describes API version 0.0.4! More up-to-date examples will follow.
+
 ### Persistance
 
-It’s using Spring Boot, Hibernate (ORM) and an in-memory database called HSQL.
-
-```
-Database: jdbc:hsqldb:mem:pazuzudb;sql.syntax_pgs=true (HSQL Database Engine 2.3)
-```
+It’s using Spring Boot and JPA as ORM API.
 
 ### API
 

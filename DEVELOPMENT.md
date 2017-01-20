@@ -77,6 +77,8 @@ $ ng build [--prod]
 Developing locally
 ------------------
 
+> Will be removed soon! Just kept to keep the OAuth2 stuff.
+
 This is a small guide that hopefully demonstrates how to get the
 [pazuzu-registry](https://github.com/zalando/pazuzu-registry) and the
 [pazuzu-ui](https://github.com/zalando/pazuzu-ui) running locally with OAuth
