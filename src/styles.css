@@ -20,17 +20,21 @@ main {
   padding-bottom: 40px;
 }
 
-main a:not(.btn):not(.dependency) {
+main a:not(.btn):not(.dependency):not(.paginate-prev):not(.paginate-page):not(.paginate-next) {
   color: #ff5722;
   border-bottom: 1px solid transparent;
 }
 
-main a:not(.btn):not(.dependency):hover {
+main a:not(.btn):not(.dependency):not(.paginate-prev):not(.paginate-page):not(.paginate-next):hover {
   border-bottom: 1px dotted #ff5722;
 }
 
-main .pagination a:hover {
-  border-bottom: 1px solid transparent;
+/* TODO: recheck as soon as total count is available to not highlight disabled anchors */
+main a.paginate-prev:hover,
+main a.paginate-page:hover,
+main a.paginate-next:hover {
+  cursor: pointer;
+  color: #ff5722;
 }
 
 main a.chip.dependency {

@@ -27,41 +27,45 @@
       <div class="col s12 m6">
         <section>
           <label>Author</label>
-          <p>
+          <p *ngIf="feature?.meta.author">
             <a [routerLink]="['/features/list']" [queryParams]="{author: feature?.meta.author}"
-               title="Show all features of this author">{{ feature?.meta.author }}</a>
+              title="Show all features of this author">{{ feature?.meta.author }}</a>
           </p>
+          <p *ngIf="!feature?.meta.author">No author defined</p>
         </section>
       </div>
 
       <div class="col s12">
         <section>
           <label>Description</label>
-          <div>{{ feature?.meta.description }}</div>
+          <div *ngIf="feature?.meta.description">{{ feature?.meta.description }}</div>
+          <div *ngIf="!feature?.meta.description">No description defined</div>
         </section>
       </div>
 
       <div class="col s12">
         <section>
           <label>Snippet</label>
-          <div ace-editor style="height: 30vh;"
-            [text]="snippet"
+          <div *ngIf="feature?.snippet" ace-editor style="height: 30vh;"
+            [text]="feature?.snippet"
             [mode]="'dockerfile'"
             [theme]="'github'"
             [options]="options"
             [readOnly]="true"></div>
+          <div *ngIf="!feature?.snippet">No snippet defined</div>
         </section>
       </div>
 
       <div class="col s12">
         <section>
           <label>Test snippet</label>
-          <div ace-editor style="height: 10vh;"
-               [text]="testSnippet"
-               [mode]="'sh'"
-               [theme]="'github'"
-               [options]="options"
-               [readOnly]="true"></div>
+          <div *ngIf="feature?.test_snippet" ace-editor style="height: 10vh;"
+            [text]="feature?.test_snippet"
+            [mode]="'sh'"
+            [theme]="'github'"
+            [options]="options"
+            [readOnly]="true"></div>
+          <div *ngIf="!feature?.test_snippet">No test snippet defined</div>
         </section>
       </div>
 

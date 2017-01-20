@@ -18,6 +18,13 @@ export class FeatureCreateComponent implements OnInit, OnDestroy {
   private _routerEventsSub: Subscription;
 
   heading: string;
+  feature: Feature;
+
+  options = {
+    printMargin: false
+  };
+
+  error: string;
 
   /**
    * go back using Location API
@@ -28,6 +35,87 @@ export class FeatureCreateComponent implements OnInit, OnDestroy {
     // go back
     this.location.back();
 
+  }
+
+  /**
+   * on text change handler for ACE editors
+   * @param {string} text
+   * @param {string} ref
+   * @returns {void} nothing
+   */
+  onTextChanged(text, ref) {
+    this.feature[ref] = text !== '' ? text : null;
+  }
+
+  /**
+   * add dependency if not already defined
+   * @param {*} event
+   * @returns {void} nothing
+   */
+  addDependency(event: any) {
+
+    let dependency = event.target.value;
+
+    if (this.feature.meta.dependencies.indexOf(dependency) === -1) {
+      this.feature.meta.dependencies.push(dependency);
+      event.target.value = '';
+    }
+
+  }
+
+  /**
+   * remove dependency if found
+   * @param {string} dependency
+   * @returns {void} nothing
+   */
+  removeDependency(dependency: string) {
+
+    if (this.feature.meta.dependencies.indexOf(dependency) !== -1) {
+      this.feature.meta.dependencies.splice(
+        this.feature.meta.dependencies.indexOf(dependency),
+        1
+      );
+    }
+
+  }
+
+  /**
+   * go to list
+   * @returns {void} nothing
+   */
+  goToList() {
+    this.router.navigate(['/features/list']);
+  }
+
+  /**
+   * save feature and go to detail view for success otherwise go back to list
+   * @param {Feature} feature
+   * @returns {void} nothing
+   */
+  save(feature: Feature) {
+
+    this.featureService.create(feature)
+      .subscribe(
+        res => this.router.navigate(['/features/detail', res.meta.name]),
+        err => {
+          let body = JSON.parse(err._body);
+          this.error = typeof body.title !== 'undefined' ? body.title : null;
+          if (this.error !== null) {
+            setTimeout(() => {
+              this.error = null;
+            }, 3000);
+          }
+        }
+      );
+
+  }
+
+  /**
+   * cancel creation and go back to list
+   * @returns {void} nothing
+   */
+  cancel() {
+    this.goToList();
   }
 
   /**
@@ -45,7 +133,21 @@ export class FeatureCreateComponent implements OnInit, OnDestroy {
     private location: Location,
     private eventBusService: EventBusService,
     private featureService: FeatureService
-  ) { }
+  ) {
+
+    this.feature = {
+      meta: {
+        name: null,
+        author: null,
+        description: null,
+        dependencies: [],
+        updated_at: null
+      },
+      snippet: null,
+      test_snippet: null
+    };
+
+  }
 
   /**
    * on init handler

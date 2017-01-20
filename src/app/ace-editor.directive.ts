@@ -50,6 +50,11 @@ export class AceEditorDirective {
   @Output() textChanged = new EventEmitter();
   @Output() editorRef = new EventEmitter();
 
+  /**
+   * constructor
+   * @param {ElementRef} _elementRef
+   * @returns {void} nothing
+   */
   constructor(
     private _elementRef: ElementRef
   ) {
@@ -58,7 +63,7 @@ export class AceEditorDirective {
       return;
     }
 
-    const el = _elementRef.nativeElement;
+    let el = _elementRef.nativeElement;
     el.classList.add('editor');
 
     this.editor = ace.edit(el);
@@ -68,18 +73,21 @@ export class AceEditorDirective {
       this.editorRef.next(this.editor);
     });
 
+    /**
+     * add change handler
+     * @returns {void} nothing
+     */
     this.editor.on('change', () => {
-      const newVal = this.editor.getValue();
+
+      let newVal = this.editor.getValue();
 
       if (newVal === this.oldVal) {
         return;
       }
 
-      if (typeof this.oldVal !== 'undefined') {
-        this.textChanged.next(newVal);
-      }
-
+      this.textChanged.next(newVal);
       this.oldVal = newVal;
+
     });
 
   }
