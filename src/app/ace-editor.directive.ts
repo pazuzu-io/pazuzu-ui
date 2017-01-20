@@ -38,7 +38,7 @@ export class AceEditorDirective {
   }
 
   @Input() set text(value) {
-    if (value === this.oldVal) {
+    if (value === this.oldVal || value === null) {
       return;
     }
 
