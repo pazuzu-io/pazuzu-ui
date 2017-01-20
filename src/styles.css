@@ -20,12 +20,12 @@ main {
   padding-bottom: 40px;
 }
 
-main a {
+main a:not(.btn) {
   color: #ff5722;
   border-bottom: 1px solid transparent;
 }
 
-main a:hover {
+main a:not(.btn):hover {
   border-bottom: 1px dotted #ff5722;
 }
 

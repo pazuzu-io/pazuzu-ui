@@ -16,13 +16,15 @@ import { AppComponent } from './app.component';
 import { FeatureListComponent } from './feature-list/feature-list.component';
 import { FeatureDetailComponent } from './feature-detail/feature-detail.component';
 import { AceEditorDirective } from './ace-editor.directive';
+import { FeatureCreateComponent } from './feature-create/feature-create.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FeatureListComponent,
     FeatureDetailComponent,
-    AceEditorDirective
+    AceEditorDirective,
+    FeatureCreateComponent
   ],
   imports: [
     BrowserModule,
