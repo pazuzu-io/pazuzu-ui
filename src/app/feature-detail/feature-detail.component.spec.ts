@@ -11,6 +11,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { FeatureDetailComponent } from './feature-detail.component';
+import { AceEditorDirective } from '../ace-editor.directive';
 
 import { EventBusService } from '../event-bus.service';
 import { FeatureService } from '../feature.service';
@@ -22,7 +23,8 @@ describe('FeatureDetailComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        FeatureDetailComponent
+        FeatureDetailComponent,
+        AceEditorDirective
       ],
       imports: [
         RouterTestingModule.withRoutes([

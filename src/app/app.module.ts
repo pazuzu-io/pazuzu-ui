@@ -15,12 +15,14 @@ import { APP_ROUTES } from './app.routes';
 import { AppComponent } from './app.component';
 import { FeatureListComponent } from './feature-list/feature-list.component';
 import { FeatureDetailComponent } from './feature-detail/feature-detail.component';
+import { AceEditorDirective } from './ace-editor.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     FeatureListComponent,
-    FeatureDetailComponent
+    FeatureDetailComponent,
+    AceEditorDirective
   ],
   imports: [
     BrowserModule,

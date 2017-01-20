@@ -43,13 +43,9 @@ main section {
 
 main .editor {
   margin: 5px 0 15px 0;
-  min-height: 305px;
   width: 100%;
   overflow: auto;
-}
-
-main .editor-small {
-  min-height: 105px;
+  display: block;
 }
 
 main .editor * {

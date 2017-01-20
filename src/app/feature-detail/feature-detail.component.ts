@@ -21,6 +21,13 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
   heading: string;
   feature: Observable<Feature>;
 
+  snippet = '';
+  testSnippet = '';
+
+  options = {
+    printMargin: false
+  };
+
   /**
    * go back using Location API
    * @returns {void} nothing
@@ -73,7 +80,11 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
           // get feature
           this.featureService.get(this.name)
             .subscribe(
-              feature => this.feature = feature,
+              feature => {
+                this.feature = feature;
+                this.snippet = feature.snippet;
+                this.testSnippet = feature.test_snippet;
+              },
               () => this.router.navigate(['/features/list'])
             );
 

@@ -44,28 +44,24 @@
       <div class="col s12">
         <section>
           <label>Snippet</label>
-          <!--
-          <ace-editor class="editor" #snippetEditor
-            [text]="feature?.snippet"
+          <div ace-editor style="height: 30vh;"
+            [text]="snippet"
             [mode]="'dockerfile'"
             [theme]="'github'"
-            [options]="snippetEditorOptions"
-            [readOnly]="true"></ace-editor>
-           -->
+            [options]="options"
+            [readOnly]="true"></div>
         </section>
       </div>
 
       <div class="col s12">
         <section>
           <label>Test snippet</label>
-          <!--
-          <ace-editor class="editor editor-small" #testSnippetEditor
-            [text]="feature?.test_snippet"
-            [mode]="'sh'"
-            [theme]="'github'"
-            [options]="testSnippetEditorOptions"
-            [readOnly]="true"></ace-editor>
-           -->
+          <div ace-editor style="height: 10vh;"
+               [text]="testSnippet"
+               [mode]="'sh'"
+               [theme]="'github'"
+               [options]="options"
+               [readOnly]="true"></div>
         </section>
       </div>
 
