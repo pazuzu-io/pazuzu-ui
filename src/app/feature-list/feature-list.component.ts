@@ -108,7 +108,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
         queryParams: {
           offset: this.params.get('offset'),
           limit: this.params.get('limit'),
-          names: this.params.get('names') !== '' ? this.params.get('names') : null,
+          q: this.params.get('q') !== '' ? this.params.get('q') : null,
           author: this.params.get('author') !== '' ? this.params.get('author') : null
         }
       }
@@ -121,7 +121,11 @@ export class FeatureListComponent implements OnInit, OnDestroy {
    * @returns {void} nothing
    */
   resetSearch() {
-    this.updateParam('names', '');
+
+    // delete q and author param
+    this.updateParam('q', '');
+    this.updateParam('author', '');
+
   }
 
   /**
@@ -134,10 +138,8 @@ export class FeatureListComponent implements OnInit, OnDestroy {
     // blur input field
     event.target.blur();
 
-    // TODO: change to "q" after API is changed
-
-    // set names parameter accordingly
-    this.updateParam('names', event.target.value);
+    // set query parameter accordingly
+    this.updateParam('q', event.target.value);
 
   }
 
@@ -173,7 +175,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
         // set query params
         this.params.set('offset', queryParams['offset'] || '0');
         this.params.set('limit', queryParams['limit'] || '10');
-        this.params.set('names', queryParams['names'] || null);
+        this.params.set('q', queryParams['q'] || null);
         this.params.set('author', queryParams['author'] || null);
 
         // update pagination

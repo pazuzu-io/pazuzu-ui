@@ -14,14 +14,15 @@
     </h5>
   </div>
   <div class="col s4 m2 right-align">
-    <a class="btn grey lighten-3 black-text waves-effect waves-light" title="Create new feature"
+    <a class="btn grey lighten-3 black-text waves-effect waves-light"
+       materialize="tooltip" data-tooltip="Add a feature to the registry"
        [routerLink]="['/features/create']"><i class="material-icons">add</i></a>
   </div>
 </div>
 
-<div class="input-field col s6" *ngIf="(features | async)?.length > 0 || params.get('names') !== null">
+<div class="input-field col s6" *ngIf="(features | async)?.length > 0 || params.get('q') !== null">
   <i class="material-icons prefix">search</i>
-  <input id="search" type="text" placeholder="Search by name" [value]="params.get('names')" (change)="search($event)">
+  <input id="search" type="text" placeholder="Search by name" [value]="params.get('q')" (change)="search($event)">
 </div>
 
 <div class="truncate" *ngIf="(features | async)?.length > 0">
@@ -67,10 +68,10 @@
 
 <div class="card" *ngIf="(features | async)?.length === 0">
   <div class="card-content">
-    <p *ngIf="params.get('names') === null">
+    <p *ngIf="params.get('q') === null && params.get('author') === null">
       You don’t have any features in your registry. Start by <a [routerLink]="['/features/create']">creating</a> some.
     </p>
-    <p *ngIf="params.get('names') !== null">
+    <p *ngIf="params.get('q') !== null || params.get('author') !== null">
       Your search didn’t match any feature. <a (click)="resetSearch()" href="javascript:void(0)">Reset</a> search to view all.
     </p>
   </div>

@@ -38,9 +38,9 @@ export class FeatureService {
     // trigger request
     return this.http.get(`/api/features`, {search: params})
       .map(res => {
-        // TODO: rework this as soon as API is changed
-        this._total.next(+res.headers.get('x-total-count') || 0);
-        return res.json();
+        let jsonResponse = res.json();
+        this._total.next(+jsonResponse.total_count || 0);
+        return jsonResponse.features || [];
       });
 
   }
