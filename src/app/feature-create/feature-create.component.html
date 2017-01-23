@@ -17,8 +17,8 @@
         <div class="col s12 m6">
           <section>
             <div class="input-field">
-              <input id="name" name="name" type="text" class="validate" [(ngModel)]="feature.meta.name">
-              <label for="name" class="active">Name</label>
+              <input id="name" name="name" type="text" class="validate" [(ngModel)]="feature.meta.name" required>
+              <label for="name">Name <sup>*</sup></label>
             </div>
           </section>
         </div>
@@ -26,7 +26,7 @@
           <section>
             <div class="input-field">
               <input id="author" name="author" type="text" class="validate" [(ngModel)]="feature.meta.author">
-              <label for="author" class="active">Author</label>
+              <label for="author">Author</label>
             </div>
           </section>
         </div>
@@ -35,7 +35,7 @@
           <section>
             <div class="input-field">
               <input id="description" name="description" type="text" class="validate" [(ngModel)]="feature.meta.description">
-              <label for="description" class="active">Description</label>
+              <label for="description">Description</label>
             </div>
           </section>
         </div>
@@ -70,7 +70,7 @@
           <section>
             <div class="input-field">
               <input id="dependency" name="dependency" type="text" class="validate" (change)="addDependency($event)">
-              <label for="dependency" class="active">Add dependency</label>
+              <label for="dependency">Add dependency</label>
             </div>
           </section>
         </div>
@@ -85,6 +85,10 @@
               No dependencies defined
             </p>
           </section>
+        </div>
+
+        <div class="col s12">
+          <sup>*</sup> Required field
         </div>
 
       </div>
