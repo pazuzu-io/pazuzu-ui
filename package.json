@@ -21,6 +21,7 @@
     "@angular/platform-browser": "^2.3.1",
     "@angular/platform-browser-dynamic": "^2.3.1",
     "@angular/router": "^3.3.1",
+    "angular2-materialize": "^6.6.0",
     "base64-js": "^1.2.0",
     "brace": "^0.9.1",
     "buffer": "^5.0.2",

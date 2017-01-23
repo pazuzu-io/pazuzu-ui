@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { MaterializeModule } from 'angular2-materialize';
 
 import 'hammerjs';
 
@@ -30,7 +31,8 @@ import { FeatureCreateComponent } from './feature-create/feature-create.componen
     BrowserModule,
     RouterModule.forRoot(APP_ROUTES),
     FormsModule,
-    HttpModule
+    HttpModule,
+    MaterializeModule
   ],
   providers: APP_PROVIDERS,
   bootstrap: [AppComponent]

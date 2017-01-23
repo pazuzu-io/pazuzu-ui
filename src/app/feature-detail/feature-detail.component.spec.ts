@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { BaseRequestOptions, Http, HttpModule } from '@angular/http';
 import { MockBackend } from '@angular/http/testing';
 import { FormsModule } from '@angular/forms';
+import { MaterializeModule } from 'angular2-materialize';
 
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -31,7 +32,8 @@ describe('FeatureDetailComponent', () => {
           {path: 'features/detail/java', component: FeatureDetailComponent}
         ]),
         HttpModule,
-        FormsModule
+        FormsModule,
+        MaterializeModule
       ],
       providers: [
         EventBusService,

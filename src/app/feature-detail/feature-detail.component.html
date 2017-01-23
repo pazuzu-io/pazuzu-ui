@@ -7,8 +7,26 @@
     <h5>{{ heading }}</h5>
   </div>
   <div class="col s4 m2 right-align">
-    <a class="btn grey lighten-3 black-text" title="Delete feature"
-       [routerLink]="['/features/delete/', name]"><i class="material-icons">clear</i></a>
+    <a class="btn grey lighten-3 black-text waves-effect waves-light" (click)="openDeleteModal()"
+       materialize="tooltip" data-tooltip="Delete this feature"><i class="material-icons">clear</i></a>
+  </div>
+</div>
+
+<div id="deleteModal" class="modal" materialize="modal"
+  [materializeParams]="[{dismissible: true}]" [materializeActions]="modalDeleteActions">
+  <div class="modal-content">
+    <h4>Delete feature</h4>
+    <p>
+      Do you really want to delete feature <strong>{{ name }}</strong>?
+      Please note that this action can not be undone.
+    </p>
+    <div class="card-panel red" *ngIf="modalDeleteError">
+      <span class="white-text">{{ modalDeleteError }}</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a class="btn deep-orange waves-effect" (click)="confirmDeleteModal()">Confirm</a>
+    <a class="btn btn-flat grey lighten-3 black-text waves-effect modal-action modal-close">Abort</a>
   </div>
 </div>
 

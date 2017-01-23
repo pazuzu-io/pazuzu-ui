@@ -1,12 +1,7 @@
+# Approval rules
 approvals:
-  # PR needs at least 1 approval
+  pattern: "(:\\+1:|👍|:ship:|:shipit:|:rocket:|LGTM)"
   minimum: 1
-  # approval = comment that matches this regex
-  pattern: "^(:\\+1:|👍)$"
+  ignore: pr_opener
   from:
-    # commenter must be either one of:
-    # a public zalando org member
-    orgs:
-      - zalando
-    # a collaborator of the repo
     collaborators: true

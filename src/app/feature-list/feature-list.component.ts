@@ -48,7 +48,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
     this.page = Math.ceil((+this.params.get('offset') + 1) / +this.params.get('limit'));
 
     // number of pages
-    this.pages = Math.ceil(this.total / +this.params.get('limit'));
+    this.pages = Math.max(1, Math.ceil(this.total / +this.params.get('limit')));
 
     // if we got invalid values reset to initial values
     if (this.page > this.pages && this.pages !== 0) {

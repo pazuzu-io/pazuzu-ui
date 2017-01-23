@@ -94,17 +94,28 @@ export class FeatureCreateComponent implements OnInit, OnDestroy {
    */
   save(feature: Feature) {
 
+    // create feature
     this.featureService.create(feature)
       .subscribe(
-        res => this.router.navigate(['/features/detail', res.meta.name]),
+        res => {
+
+          // redirect to list
+          this.router.navigate(['/features/detail', res.meta.name]);
+
+        },
         err => {
+
+          // set error message
           let body = JSON.parse(err._body);
           this.error = typeof body.title !== 'undefined' ? body.title : null;
+
+          // dismiss error message after timeout
           if (this.error !== null) {
             setTimeout(() => {
               this.error = null;
-            }, 3000);
+            }, 5000);
           }
+
         }
       );
 

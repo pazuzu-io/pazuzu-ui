@@ -13,20 +13,25 @@
     </h5>
   </div>
   <div class="col s4 m2 right-align">
-    <a class="btn grey lighten-3 black-text" title="Create new feature"
+    <a class="btn grey lighten-3 black-text waves-effect waves-light" title="Create new feature"
        [routerLink]="['/features/create']"><i class="material-icons">add</i></a>
   </div>
 </div>
 
-<form>
-  <div class="input-field">
-    <input id="search" type="search" placeholder="Search by name" (change)="search($event)">
-    <label for="search"><i class="material-icons">search</i></label>
-    <i class="material-icons">close</i>
+<div class="card" *ngIf="!features">
+  <div class="card-content">
+    <p>
+      You don’t have any features in your registry. Start by <a [routerLink]="['/features/create']">creating</a> some.
+    </p>
   </div>
-</form>
+</div>
 
-<div class="truncate">
+<div class="input-field col s6" *ngIf="features">
+  <i class="material-icons prefix">search</i>
+  <input id="search" type="text" placeholder="Search by name" (change)="search($event)">
+</div>
+
+<div class="truncate" *ngIf="features">
   <table class="bordered striped">
     <thead>
       <tr>
@@ -51,7 +56,7 @@
   </table>
 </div>
 
-<ul class="pagination">
+<ul class="pagination" *ngIf="features">
   <li [class.disabled]="page <= 1">
     <a href="javascript:void(0)" (click)="goTo(page - 1)" title="Previous page" class="paginate-prev">
       <i class="material-icons">chevron_left</i>

@@ -2,6 +2,7 @@ import './polyfills.ts';
 
 import {} from 'jasmine';
 import 'hammerjs';
+import 'materialize-css';
 
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';

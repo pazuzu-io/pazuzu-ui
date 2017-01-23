@@ -71,4 +71,17 @@ export class FeatureService {
 
   }
 
+  /**
+   * delete feature by name
+   * @param {string} name
+   * @return {Observable<R>}
+   */
+  delete(name: string) {
+
+    // trigger request
+    return this.http.delete(`/api/features/${name}`)
+      .map(res => res.json());
+
+  }
+
 }

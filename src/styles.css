@@ -71,14 +71,14 @@ main .editor * {
   font-weight: bold;
 }
 
-#search:focus {
-  border-bottom: 1px solid #ff5722;
+.input-field i.prefix {
+  top: 10px;
+  left: 10px;
+  font-size: 1.5rem;
 }
 
-.textarea-field label {
-  font-size: 0.8rem;
-  -webkit-transform: translateY(-140%);
-  transform: translateY(-140%);
+.input-field i.prefix.active {
+  color: #ff5722;
 }
 
 /* label focus color */
