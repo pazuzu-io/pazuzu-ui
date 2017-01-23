@@ -36,7 +36,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   pages = 1;
   pagerItems = [1];
 
-  terms = '';
+  error = null;
 
   /**
    * update pagination
@@ -180,7 +180,18 @@ export class FeatureListComponent implements OnInit, OnDestroy {
         this._updatePagination();
 
         // get features
-        this.features = this.featureService.list(this.params);
+        this.featureService.list(this.params)
+          .subscribe(
+            features => {
+              this.features = Observable.of(features);
+            },
+            err => {
+              this.error = {
+                status: err.status,
+                message: err.statusText
+              };
+            }
+          );
 
       });
 
