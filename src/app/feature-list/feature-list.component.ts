@@ -117,6 +117,14 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * reset search
+   * @returns {void} nothing
+   */
+  resetSearch() {
+    this.updateParam('names', '');
+  }
+
+  /**
    * search for feature by given target value (target.value)
    * @param {*} event
    * @returns {void} nothing

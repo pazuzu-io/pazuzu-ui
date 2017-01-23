@@ -18,20 +18,12 @@
   </div>
 </div>
 
-<div class="card" *ngIf="!features">
-  <div class="card-content">
-    <p>
-      You don’t have any features in your registry. Start by <a [routerLink]="['/features/create']">creating</a> some.
-    </p>
-  </div>
-</div>
-
-<div class="input-field col s6" *ngIf="features">
+<div class="input-field col s6" *ngIf="(features | async)?.length > 0 || params.get('names') !== null">
   <i class="material-icons prefix">search</i>
-  <input id="search" type="text" placeholder="Search by name" (change)="search($event)">
+  <input id="search" type="text" placeholder="Search by name" [value]="params.get('names')" (change)="search($event)">
 </div>
 
-<div class="truncate" *ngIf="features">
+<div class="truncate" *ngIf="(features | async)?.length > 0">
   <table class="bordered striped">
     <thead>
       <tr>
@@ -56,7 +48,7 @@
   </table>
 </div>
 
-<ul class="pagination" *ngIf="features">
+<ul class="pagination" *ngIf="(features | async)?.length > 0">
   <li [class.disabled]="page <= 1">
     <a href="javascript:void(0)" (click)="goTo(page - 1)" title="Previous page" class="paginate-prev">
       <i class="material-icons">chevron_left</i>
@@ -71,3 +63,14 @@
     </a>
   </li>
 </ul>
+
+<div class="card" *ngIf="(features | async)?.length === 0">
+  <div class="card-content">
+    <p *ngIf="params.get('names') === null">
+      You don’t have any features in your registry. Start by <a [routerLink]="['/features/create']">creating</a> some.
+    </p>
+    <p *ngIf="params.get('names') !== null">
+      Your search didn’t match any feature. <a (click)="resetSearch()" href="javascript:void(0)">Reset</a> search to view all.
+    </p>
+  </div>
+</div>
