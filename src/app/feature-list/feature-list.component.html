@@ -67,10 +67,10 @@
 
 <div class="card" *ngIf="(features | async)?.length === 0">
   <div class="card-content">
-    <p *ngIf="params.get('q') === null">
+    <p *ngIf="params.get('q') === null && params.get('author') === null">
       You don’t have any features in your registry. Start by <a [routerLink]="['/features/create']">creating</a> some.
     </p>
-    <p *ngIf="params.get('q') !== null">
+    <p *ngIf="params.get('q') !== null || params.get('author') !== null">
       Your search didn’t match any feature. <a (click)="resetSearch()" href="javascript:void(0)">Reset</a> search to view all.
     </p>
   </div>

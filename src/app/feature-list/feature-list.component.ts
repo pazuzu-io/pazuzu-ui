@@ -121,7 +121,11 @@ export class FeatureListComponent implements OnInit, OnDestroy {
    * @returns {void} nothing
    */
   resetSearch() {
+
+    // delete q and author param
     this.updateParam('q', '');
+    this.updateParam('author', '');
+
   }
 
   /**
