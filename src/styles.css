@@ -81,14 +81,6 @@ main .editor * {
   color: #ff5722;
 }
 
-/*
-.textarea-field label {
-  font-size: 0.8rem;
-  -webkit-transform: translateY(-140%);
-  transform: translateY(-140%);
-}
-*/
-
 /* label focus color */
 .input-field input[type=text]:focus + label,
 .input-field textarea.materialize-textarea:focus + label {
