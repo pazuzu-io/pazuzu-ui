@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { Subscription, Observable } from 'rxjs';
+import { MaterializeAction } from 'angular2-materialize';
 
 import { EventBusService, APP_TITLE_CHANGE } from '../event-bus.service';
 import { Feature } from '../models/feature';
@@ -25,6 +26,9 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
     printMargin: false
   };
 
+  modalDeleteActions = new EventEmitter<string|MaterializeAction>();
+  modalDeleteError = null;
+
   /**
    * go back using Location API
    * @returns {void} nothing
@@ -36,13 +40,49 @@ export class FeatureDetailComponent implements OnInit, OnDestroy {
 
   }
 
-  // TODO: remove this after demo
-  delete() {
+  /**
+   * open delete modal
+   * @returns {void} nothing
+   */
+  openDeleteModal() {
 
-    /*
+    // open delete modal to get confirmation first
+    this.modalDeleteActions.emit({action: 'modal', params: ['open']});
+
+  }
+
+  /**
+   * confirm delete modal
+   * @returns {void} nothing
+   */
+  confirmDeleteModal() {
+
+    // delete feature
     this.featureService.delete(this.name)
-      .subscribe(res => this.router.navigate(['/features/list']));
-    */
+      .subscribe(
+        res => {
+
+          // close delete modal
+          this.modalDeleteActions.emit({action: 'modal', params: ['close']});
+
+          // redirect to list
+          this.router.navigate(['/features/list']);
+
+        },
+        err => {
+
+          // set error message
+          this.modalDeleteError = typeof err.statusText !== 'undefined' ? err.statusText : null;
+
+          // dismiss error message after timeout
+          if (this.modalDeleteError !== null) {
+            setTimeout(() => {
+              this.modalDeleteError = null;
+            }, 5000);
+          }
+
+        }
+      );
 
   }
 
