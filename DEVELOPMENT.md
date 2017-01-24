@@ -74,6 +74,12 @@ Create distribution for development or production environment:
 $ ng build [--prod]
 ```
 
+## Deploying application
+
+First build application with production environment enabled using `ng build --prod`.
+Afterwards build the docker image with `docker build -t pazuzu-ui .` and run it with `docker run -p 3000:3000 -d pazuzu-ui`.
+To get container id just execute `docker ps`. To go inside the container execute `docker exec -it <container-id> /bin/sh`.
+
 Developing locally
 ------------------
 
