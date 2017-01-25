@@ -1,0 +1,42 @@
+
+# basic information for generating and executing this definition
+SenzaInfo:
+  StackName: pazuzu-ui
+  Parameters:
+    - ImageVersion:
+        Description: "Docker image version of pazuzu-ui."
+
+# a list of senza components to apply to the definition
+SenzaComponents:
+
+  # this basic configuration is required for the other components
+  - Configuration:
+      Type: Senza::StupsAutoConfiguration # auto-detect network setup
+
+  # will create a launch configuration and auto scaling group with scaling triggers
+  - AppServer:
+      Type: Senza::TaupageAutoScalingGroup
+      InstanceType: t2.micro
+      SecurityGroups:
+        - app-pazuzu-ui
+      IamRoles:
+        - app-pazuzu-ui
+      ElasticLoadBalancer: AppLoadBalancer
+      AssociatePublicIpAddress: false # change for standalone deployment in default VPC
+      TaupageConfig:
+        application_version: "{{Arguments.ImageVersion}}"
+        runtime: Docker
+        source: "pierone.stups.zalan.do/mentoring/pazuzu-ui:{{Arguments.ImageVersion}}"
+        health_check_path: /
+        ports:
+          8080: 3000
+        mint_bucket: "zalando-stups-mint-187355903146-eu-central-1"
+
+  # creates an ELB entry and Route53 domains to this ELB
+  - AppLoadBalancer:
+      Type: Senza::WeightedDnsElasticLoadBalancer
+      HTTPPort: 8080
+      HealthCheckPath: /
+      SecurityGroups:
+        - app-pazuzu-ui-lb
+      Scheme: internet-facing

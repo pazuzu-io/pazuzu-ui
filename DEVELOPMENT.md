@@ -76,9 +76,57 @@ $ ng build [--prod]
 
 ## Deploying application
 
+### Build Docker image
+
 First build application with production environment enabled using `ng build --prod`.
-Afterwards build the docker image with `docker build -t pazuzu-ui .` and run it with `docker run -p 3000:3000 -d pazuzu-ui`.
+Afterwards build the docker image with `docker build -t pierone.stups.zalan.do/mentoring/pazuzu-ui:0.2.0 .`.
+Run it locally with `docker run -p 3000:3000 -d pierone.stups.zalan.do/mentoring/pazuzu-ui:0.2.0`.
 To get container id just execute `docker ps`. To go inside the container execute `docker exec -it <container-id> /bin/sh`.
+
+### Deploy to pierone
+
+```bash
+$ pierone login --url pierone.stups.zalan.do
+$ docker push pierone.stups.zalan.do/mentoring/pazuzu-ui:0.2.0
+$ pierone tags --url pierone.stups.zalan.do mentoring pazuzu-ui
+```
+
+### Register new version using kio
+ 
+```bash
+$ kio versions create pazuzu-ui 0.2.0 pierone.stups.zalan.do/mentoring/pazuzu-ui
+```
+
+Alternatively you can use Your Turn (UI for kio and mint) to create and register a new application version.
+
+### Start EC2 instance with senza
+
+If `pazuzu-ui.yaml` doesn’t exist create AWS configuration file using the following command:
+
+```bash
+$ senza init pazuzu-ui.yaml
+```
+
+Create a new stack (e.g. 1) using:
+
+```bash
+$ senza create pazuzu-ui.yaml 1 0.2.0
+```
+
+Wait for completation or watch events:
+
+```bash
+$ senza wait pazuzu-ui 1
+$ senza events pazuzu-ui 1 -W
+```
+
+Switch traffic to new stack:
+
+```bash
+$ senza traffic pazuzu-ui 1 100
+```
+
+Be aware to correctly configure app server port mapping to `8080: 3000` and load balancer default port to `HTTPPort: 8080`.
 
 Developing locally
 ------------------

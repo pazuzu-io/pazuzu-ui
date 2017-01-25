@@ -11,6 +11,9 @@ RUN npm install express body-parser http-proxy-middleware
 COPY dist /usr/src/app/dist
 COPY server.js /usr/src/app/server.js
 
+# copy scm-source.json
+COPY scm-source.json /
+
 # expose port
 EXPOSE 3000
 
