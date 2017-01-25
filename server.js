@@ -4,6 +4,26 @@ const path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser');
 const proxy = require('http-proxy-middleware');
+const passport = require('passport');
+const OAuth2Strategy = require('passport-oauth2');
+
+// get client credentials the ugly way
+const client = require('./client.json');
+
+// configure passport
+passport.use(
+  new OAuth2Strategy({
+    authorizationURL: 'https://auth.zalando.com/z/oauth2/authorize?realm=employees',
+    tokenURL: 'https://auth.zalando.com/z/oauth2/access_token?realm=employees',
+    clientID: client.client_id || '',
+    clientSecret: client.client_secret || '',
+    callbackURL: 'https://pazuzu-ui.mentoring.zalan.do/auth/callback'
+  }, function(accessToken, refreshToken, profile, cb) {
+    console.log(`Access Token ${accessToken}, Refresh Token ${refreshToken}`);
+    window.localStorage.setItem('access_token', accessToken);
+    window.localStorage.setItem('refresh_token', refreshToken);
+  })
+);
 
 // create server
 const app = express();
@@ -21,6 +41,19 @@ app.use('/api', proxy({
   changeOrigin: true,
   logLevel: 'debug'
 }));
+
+// define routes (deep links) to protect
+// TODO: add canActivate guards inside of angular app as well
+app.get('/features/create', passport.authenticate('oauth2'));
+
+// define oauth2 callback route
+app.get('/auth/callback',
+  passport.authenticate('oauth2', {failureRedirect: '/'}),
+  function(req, res) {
+    // successful authentication, redirect home
+    res.redirect('/');
+  }
+);
 
 // catch all other routes and return the index file
 app.get('*', (req, res) => {

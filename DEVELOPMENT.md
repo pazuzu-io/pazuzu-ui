@@ -128,6 +128,14 @@ $ senza traffic pazuzu-ui 1 100
 
 Be aware to correctly configure app server port mapping to `8080: 3000` and load balancer default port to `HTTPPort: 8080`.
 
+## Authentication
+
+Get `client_id` and `client_secret` from S3 bucket:
+
+```bash
+$ aws s3 cp  s3://zalando-stups-mint-187355903146-eu-central-1/pazuzu-ui/client.json .
+```
+
 Developing locally
 ------------------
 
