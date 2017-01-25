@@ -1,4 +1,4 @@
-FROM node:7.4.0-alpine
+FROM registry.opensource.zalan.do/stups/node:7.4-cd34
 
 # create app directory
 RUN mkdir -p /usr/src/app

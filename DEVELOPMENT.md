@@ -79,22 +79,22 @@ $ ng build [--prod]
 ### Build Docker image
 
 First build application with production environment enabled using `ng build --prod`.
-Afterwards build the docker image with `docker build -t pierone.stups.zalan.do/mentoring/pazuzu-ui:0.2.0 .`.
-Run it locally with `docker run -p 3000:3000 -d pierone.stups.zalan.do/mentoring/pazuzu-ui:0.2.0`.
+Afterwards build the docker image with `docker build -t pierone.stups.zalan.do/mentoring/pazuzu-ui:0.2.1 .`.
+Run it locally with `docker run -p 3000:3000 -d pierone.stups.zalan.do/mentoring/pazuzu-ui:0.2.1`.
 To get container id just execute `docker ps`. To go inside the container execute `docker exec -it <container-id> /bin/sh`.
 
 ### Deploy to pierone
 
 ```bash
 $ pierone login --url pierone.stups.zalan.do
-$ docker push pierone.stups.zalan.do/mentoring/pazuzu-ui:0.2.0
+$ docker push pierone.stups.zalan.do/mentoring/pazuzu-ui:0.2.1
 $ pierone tags --url pierone.stups.zalan.do mentoring pazuzu-ui
 ```
 
 ### Register new version using kio
  
 ```bash
-$ kio versions create pazuzu-ui 0.2.0 pierone.stups.zalan.do/mentoring/pazuzu-ui
+$ kio versions create pazuzu-ui 0.2.1 pierone.stups.zalan.do/mentoring/pazuzu-ui
 ```
 
 Alternatively you can use Your Turn (UI for kio and mint) to create and register a new application version.
@@ -110,7 +110,7 @@ $ senza init pazuzu-ui.yaml
 Create a new stack (e.g. 1) using:
 
 ```bash
-$ senza create pazuzu-ui.yaml 1 0.2.0
+$ senza create pazuzu-ui.yaml 1 0.2.1
 ```
 
 Wait for completation or watch events:
