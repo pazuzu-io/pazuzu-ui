@@ -12,17 +12,22 @@ const client = require('./client.json');
 
 // configure passport
 passport.use(
+
+  // The strategy requires a verify callback, which receives an access token and profile,
+  // and calls "cb" providing a user.
+
   new OAuth2Strategy({
     authorizationURL: 'https://auth.zalando.com/z/oauth2/authorize?realm=employees',
     tokenURL: 'https://auth.zalando.com/z/oauth2/access_token?realm=employees',
     clientID: client.client_id || '',
     clientSecret: client.client_secret || '',
-    callbackURL: 'https://pazuzu-ui.mentoring.zalan.do/auth/callback'
+    callbackURL: 'https://pazuzu-ui.mentoring.zalan.do'
   }, function(accessToken, refreshToken, profile, cb) {
     console.log(`Access Token ${accessToken}, Refresh Token ${refreshToken}`);
     window.localStorage.setItem('access_token', accessToken);
     window.localStorage.setItem('refresh_token', refreshToken);
   })
+
 );
 
 // create server
@@ -45,15 +50,6 @@ app.use('/api', proxy({
 // define routes (deep links) to protect
 // TODO: add canActivate guards inside of angular app as well
 app.get('/features/create', passport.authenticate('oauth2'));
-
-// define oauth2 callback route
-app.get('/auth/callback',
-  passport.authenticate('oauth2', {failureRedirect: '/'}),
-  function(req, res) {
-    // successful authentication, redirect home
-    res.redirect('/');
-  }
-);
 
 // catch all other routes and return the index file
 app.get('*', (req, res) => {
