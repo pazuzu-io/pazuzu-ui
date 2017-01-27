@@ -69,7 +69,10 @@ Features
 ToDos
 -----
 
-*to be written*
+* Getting authentication working to consume the protected API resources (e.g. `POST /api/features`)
+* Implement `ADMIN` features, e.g. approval workflow as designed by API (see `pazuzu-registry`)
+* Enhance user role based features
+* Add unit and E2E tests for the application as well as a test coverage report
 
 Development
 -----------
