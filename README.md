@@ -33,13 +33,14 @@ Features
 **As `ANONYMOUS` user**
 
  * I can view list of approved features
-    * [ ] Table showing `name`, `author`, truncated `description`
-    * [ ] Sorted by name in ascending order
-    * [ ] Paginated in batches of 20 (configurable)
-    * [ ] Link to view feature details
-    * [ ] Search (filter) by `name` or `author`
+    * [X] Table showing `name`, `author`, truncated `description`
+    * [X] Sorted by name in ascending order (done by backend automatically)
+    * [X] Paginated in batches of 10 (configurable)
+    * [X] Link to view feature details
+    * [X] Search by `name`
+    * [X] Filter by `author`
  * I can view details of one approved feature
-    * [ ] View showing `name`, `description`, `date of creation`, `date of last update`, `author`, `snippet`, `test_snippet` and list of dependencies (with links)
+    * [X] View showing `name`, `description`, `date of creation`, `date of last update`, `author`, `snippet`, `test_snippet` and list of dependencies (with links)
  * I can login
     * [ ] Form getting `username` and `password` to login
     * [ ] On success redirect to list view
@@ -68,7 +69,10 @@ Features
 ToDos
 -----
 
-*to be written*
+* Getting authentication working to consume the protected API resources (e.g. `POST /api/features`)
+* Implement `ADMIN` features, e.g. approval workflow as designed by API (see `pazuzu-registry`)
+* Enhance user role based features
+* Add unit and E2E tests for the application as well as a test coverage report
 
 Development
 -----------

@@ -131,7 +131,7 @@ Be aware to correctly configure app server port mapping to `8080: 3000` and load
 Developing locally
 ------------------
 
-> Will be removed soon! Just kept to keep the OAuth2 stuff.
+> Documentation was made by a previous team. So it maybe outdated.
 
 This is a small guide that hopefully demonstrates how to get the
 [pazuzu-registry](https://github.com/zalando/pazuzu-registry) and the
