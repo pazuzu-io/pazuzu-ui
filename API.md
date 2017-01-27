@@ -30,7 +30,9 @@ Registry
 
 It’s using Spring Boot and JPA as ORM API.
 
-### API
+### API (Outdated)
+
+> Please have a look at the Swagger file in project `pazuzu-registry`.
 
 #### Features
 
