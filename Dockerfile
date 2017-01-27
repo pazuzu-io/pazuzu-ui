@@ -5,15 +5,16 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # install app dependencies
-RUN npm install express body-parser http-proxy-middleware passport passport-oauth2
+RUN npm install express body-parser http-proxy-middleware
 
 # bundle app source
 COPY dist /usr/src/app/dist
-COPY server.js /usr/src/app/server.js
-COPY client.json /usr/src/app/client.json
 
-# copy scm-source.json
+# copy meta
 COPY scm-source.json /
+
+# copy server source
+# ...
 
 # expose port
 EXPOSE 3000

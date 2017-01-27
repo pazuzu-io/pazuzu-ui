@@ -137,11 +137,19 @@ $ piu <IP> "reason"
 
 ## Authentication
 
-Get `client_id` and `client_secret` from S3 bucket:
+Get `client_id` and `client_secret` from S3 bucket manually or using `berry`.
 
 ```bash
 $ aws s3 cp  s3://zalando-stups-mint-187355903146-eu-central-1/pazuzu-ui/client.json .
 ```
+
+To use `berry` make sure directory `meta/credentials` already exists. Afterwards execute the following.
+
+```bash
+$ berry -f berry.yaml meta/credentials --once
+```
+
+Ensure that you are logged in to AWS. Otherwise re-new your session using `zaws login mentoring PowerUser`.
 
 Developing locally
 ------------------

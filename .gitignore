@@ -7,8 +7,8 @@
 # dependencies
 /node_modules
 
-# credentials
-client.json
+# meta
+/meta
 
 # IDEs and editors
 /.idea
